@@ -26,7 +26,7 @@ apiJSON.allResources().forEach(resource => {
       const code = response.code().value();
       response.body().forEach(typeDeclaration => {
         // console.log(typeDeclaration.type())
-        console.log(typeDeclaration.schema())
+        // console.log(typeDeclaration.schema())
         const example = typeDeclaration.example();
         if (example) {
           webApi.responses.push({code, body: example.value()});

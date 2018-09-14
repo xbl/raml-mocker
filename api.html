@@ -166,37 +166,52 @@
       .resource-modal li > ul {
         margin-bottom: 1em;
       }
-    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>hello demo API API documentation <small>version v1</small></h1><p>/api/:version</p><ul><li><strong>host</strong>: <em>required (one of baidu1.com, baidu2.com)</em><p>这个host 不一定啊</p></li></ul></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">/users</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users_books"><span class="parent">/users</span>/books</a> <span class="methods"><a href="#users_books_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_users_books" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_books_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>这是描述</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_books_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/users</span>/books</h4></div><div class="modal-body"><div class="alert alert-info"><p>这是描述</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_books_get_request" data-toggle="tab">Request</a></li><li><a href="#users_books_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_books_get_request"><h3>Annotations</h3><ul><li><strong>controller</strong><pre><code>"user#getBook"</code></pre></li></ul><h3>Headers</h3><ul><li><strong>X-Auth-Token</strong>: <em>required (array)</em><p>A department code to be charged. Multiple of such headers are allowed.</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>230-OCTO</code></pre></div></li><li><strong>X-Tracker</strong>: <em>required (string - pattern: ^\w{16}$)</em><p>A code to track API calls end to end</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>abcdefghijklmnop</code></pre></div></li></ul></div><div class="tab-pane" id="users_books_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: array of json</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
-    "data": {
-        "id": "S111111111111",
-        "title": "Stiff: The Curious Lives of Human Cadavers",
-        "description": null,
-        "datetime": 1341533193,
-        "genre": "science",
-        "author": "Mary Roach",
-        "link": "http://e-bookmobile.com/books/Stiff",
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>hello demo API API documentation <small>version v1</small></h1><p>/api/:version</p><ul><li><strong>host</strong>: <em>required (one of baidu1.com, baidu2.com)</em><p>这个host 不一定啊</p></li></ul></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">/users</h3></div><div class="panel-body"><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users__user_id_books"><span class="parent">/users/:user_id</span>/books</a> <span class="methods"><a href="#users__user_id_books_get"><span class="badge badge_get">get</span></a> <a href="#users__user_id_books_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_users__user_id_books" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>books</p></div><div class="list-group"><div onclick="window.location.href = '#users__user_id_books_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>获取用户的书籍</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users__user_id_books_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>新增 books</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__user_id_books_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/users/:user_id</span>/books</h4></div><div class="modal-body"><div class="alert alert-info"><p>获取用户的书籍</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__user_id_books_get_request" data-toggle="tab">Request</a></li><li><a href="#users__user_id_books_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__user_id_books_get_request"><h3>Annotations</h3><ul><li><strong>controller</strong><pre><code>"user#getBook"</code></pre></li></ul><h3>Query Parameters</h3><ul><li><strong>pageNumber</strong>: <em>(number)</em><p>当前页数</p></li><li><strong>pageSize</strong>: <em>(number)</em><p>页面条数</p></li></ul></div><div class="tab-pane" id="users__user_id_books_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: array of json</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "title": "books title",
+      "description": "books desccription"
     },
-    "success": true,
-    "status": 200
-}</code></pre></div><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>[object Object]</code></pre></div></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users_books__id"><span class="parent">/users/books</span>/:id</a> <span class="methods"><a href="#users_books__id_get"><span class="badge badge_get">get</span></a> <a href="#users_books__id_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_users_books__id" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_books__id_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users_books__id_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_books__id_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/users/books</span>/:id</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#users_books__id_get_request" data-toggle="tab">Request</a></li><li><a href="#users_books__id_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_books__id_get_request"><h3>Headers</h3><ul><li><strong>X-Auth-Token</strong>: <em>required (array)</em><p>A department code to be charged. Multiple of such headers are allowed.</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>230-OCTO</code></pre></div></li></ul><h3>Query Parameters</h3><ul><li><strong>id</strong>: <em>(one of 131, 289, 257, 75)</em><p>用户id</p></li><li><strong>token</strong>: <em>required (number)</em><p>用户登录必须传递token</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>0321736079?</code></pre></div></li></ul></div><div class="tab-pane" id="users_books__id_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: array of json</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
-    "data": {
-        "id": "S111111111111",
-        "title": "Stiff: The Curious Lives of Human Cadavers",
-        "description": null,
-        "datetime": 1341533193,
-        "genre": "science",
-        "author": "Mary Roach",
-        "link": "http://e-bookmobile.com/books/Stiff",
+    {
+      "id": 2,
+      "title": "books title",
+      "description": "books desccription"
+    }
+  ]
+}
+</code></pre></div><h2>HTTP status code <a href="http://httpstatus.es/500" target="_blank">500</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  code: 500
+  data: "服务端错误，请稍后重试"
+}
+</code></pre></div></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__user_id_books_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/users/:user_id</span>/books</h4></div><div class="modal-body"><div class="alert alert-info"><p>新增 books</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__user_id_books_post_request" data-toggle="tab">Request</a></li><li><a href="#users__user_id_books_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__user_id_books_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: books</p></div><div class="tab-pane" id="users__user_id_books_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{ "message": "The book has been properly entered" }
+</code></pre></div></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users__user_id_books__id"><span class="parent">/users/:user_id/books</span>/:id</a> <span class="methods"><a href="#users__user_id_books__id_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#users__user_id_books__id_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_users__user_id_books__id" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users__user_id_books__id_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users__user_id_books__id_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__user_id_books__id_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users/:user_id/books</span>/:id</h4></div><div class="modal-body"><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>oauth_token</b><p>此接口需要登录</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__user_id_books__id_get_request" data-toggle="tab">Request</a></li><li><a href="#users__user_id_books__id_get_response" data-toggle="tab">Response</a></li><li><a href="#users__user_id_books__id_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__user_id_books__id_get_request"><h3>Query Parameters</h3><ul><li><strong>id</strong>: <em>(one of 131, 289, 257, 75)</em><p>用户id</p></li><li><strong>token</strong>: <em>required (number)</em><p>用户登录必须传递token</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>0321736079?</code></pre></div></li></ul></div><div class="tab-pane" id="users__user_id_books__id_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: array of json</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "title": "books title",
+      "description": "books desccription"
     },
-    "success": true,
-    "status": 200
-}</code></pre></div></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_books__id_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/users/books</span>/:id</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#users_books__id_post_request" data-toggle="tab">Request</a></li><li><a href="#users_books__id_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_books__id_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: json</p><p><strong>Content</strong>:</p><pre><code>{
+    {
+      "id": 2,
+      "title": "books title",
+      "description": "books desccription"
+    }
+  ]
+}
+</code></pre></div></div><div class="tab-pane" id="users__user_id_books__id_get_securedby"><h1>Secured by oauth_token</h1><h3>Headers</h3><ul><li><strong>token</strong>: <em>required (string)</em><p>必须携带 32 位 <code>token</code> 字符串</p></li></ul><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>没有携带 <code>token</code> 或者 <code>token</code> 过期则返回 <code>401</code></p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "code": 401,
+  "message": "请登录"
+}
+</code></pre></div></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__user_id_books__id_post"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/users/:user_id/books</span>/:id</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#users__user_id_books__id_post_request" data-toggle="tab">Request</a></li><li><a href="#users__user_id_books__id_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__user_id_books__id_post_request"><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: json</p><p><strong>Content</strong>:</p><pre><code>{
   "type": "object",
   "$schema": "http://json-schema.org/draft-03/schema",
   "id": "http://jsonschema.net",
   "required": true
 }
-</code></pre></div><div class="tab-pane" id="users_books__id_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: json</p><p><strong>Content</strong>:</p><pre><code>{
+</code></pre></div><div class="tab-pane" id="users__user_id_books__id_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: json</p><p><strong>Content</strong>:</p><pre><code>{
   "type": "object",
   "$schema": "http://json-schema.org/draft-03/schema",
   "id": "http://jsonschema.net",
@@ -215,18 +230,21 @@
   }
 }
 </code></pre><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
-    "data": {
-        "id": "S111111111111",
-        "title": "Stiff: The Curious Lives of Human Cadavers",
-        "description": null,
-        "datetime": 1341533193,
-        "genre": "science",
-        "author": "Mary Roach",
-        "link": "http://e-bookmobile.com/books/Stiff",
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "title": "books title",
+      "description": "books desccription"
     },
-    "success": true,
-    "status": 200
-}</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="song" class="panel-title">/song</h3></div><div class="panel-body"><div class="top-resource-description"><p>this is song url</p></div><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_song"><span class="parent"></span>/song</a> <span class="methods"><a href="#song_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_song" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#song_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><h1 id="-">都是测试代码：</h1><pre><code class="lang-javascript">  test(() =&gt; {
+    {
+      "id": 2,
+      "title": "books title",
+      "description": "books desccription"
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="song" class="panel-title">/song</h3></div><div class="panel-body"><div class="top-resource-description"><p>this is song url</p></div><div class="panel-group"><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_song"><span class="parent"></span>/song</a> <span class="methods"><a href="#song_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_song" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#song_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><h1 id="-">都是测试代码：</h1><pre><code class="lang-javascript">  test(() =&gt; {
     const bar = {
       foo: {
         x: 1,

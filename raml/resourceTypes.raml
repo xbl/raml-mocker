@@ -1,0 +1,44 @@
+
+# 自定义 resourceList 指令
+resourceList:
+  description: <<resourcePathName>>
+  get:
+    description: 获得 <<resourcePathName>> 列表
+    queryParameters:
+      pageNumber:
+        type: number
+        required: false
+        description: 当前页数
+      pageSize:
+        type: number
+        required: false
+        description: 页面条数
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                code: 200,
+                message: "",
+                data: <<resourcePathName>>
+              }
+      500:
+        body:
+          example: |
+            {
+              code: 500
+              data: "服务端错误，请稍后重试"
+            }
+  post:
+    description: |
+      新增 <<resourcePathName>>
+    body:
+      application/json:
+        type: <<resourcePathName>>
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              { "message": "The <<resourcePathName|!singularize>> has been properly entered" }

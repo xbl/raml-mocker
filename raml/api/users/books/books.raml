@@ -1,0 +1,44 @@
+/books:
+  type:
+    resourceList:
+  get:
+    # is: [ chargeable, traceable ]
+    description: 获取用户的书籍
+    (controller): user#getBook
+    responses:
+      200:
+        body:
+          type: song[]
+          example: !include ./books_200.json
+  /:id:
+    get:
+      securedBy: [oauth_token]
+      # is: [ chargeable ]
+      queryParameters:
+        id:
+          type: number
+          required: false
+          description: 用户id
+          enum: ['131', '289', '257', '75']
+        token:
+          type: number
+          type: string
+          minLength: 10
+          example: 0321736079?
+          description: 用户登录必须传递token
+      responses:
+        200:
+          body:
+            application/json:
+              type: song[]
+              example: !include ./books_200.json
+    post:
+      body:
+        application/json:
+          type: abc
+      responses:
+        200:
+          body:
+            application/json:
+              type: song
+              example: !include ./books_200.json
