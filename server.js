@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var raml = require('raml-1-parser');
+var { isRedirectCode } = require('./util')
 
 exports.setConfig = (config) => {
 
@@ -21,6 +22,16 @@ exports.setConfig = (config) => {
       webApi.responses = []
       method.responses().forEach(response => {
         const code = response.code().value();
+        // 30x
+        if (isRedirectCode(code)) {
+          response.headers().forEach(typeDeclaration => {
+            if (typeDeclaration.name().toLowerCase() === 'location') {
+              const redirectURL = typeDeclaration.type()[0];
+              webApi.responses.push({code, location: redirectURL});
+            }
+          });
+          return ;
+        }
         response.body().forEach(typeDeclaration => {
           const mimeType = typeDeclaration.name();
           const example = typeDeclaration.example();
@@ -44,8 +55,14 @@ exports.setConfig = (config) => {
       const response = webApi.responses[0];
       if (!response)
         return res.status(404).send('no set reponse or example');
-      res.type(response.mimeType);
-      res.send(response.body);
+
+      if (isRedirectCode(response.code)) {
+        return res.redirect(response.location);
+      }
+
+      response.mimeType && res.type(response.mimeType);
+      res.status(response.code);
+      response.body && res.send(response.body);
     });
   });
 
