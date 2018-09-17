@@ -1,14 +1,28 @@
 {
+  "name": "@xbl/raml-mocker",
+  "version": "1.0.0",
   "scripts": {
     "start": "raml2html api.raml > api.html"
   },
+  "main": "server.js",
+  "bin": {
+    "raml-mocker": "./bin/raml-mocker"
+  },
   "dependencies": {
     "express": "^4.16.3",
-    "markdown-it": "^8.4.0",
-    "raml-1-parser": "^1.1.47",
-    "raml2html": "^6.4.2"
+    "raml-1-parser": "^1.1.47"
   },
-  "devDependencies": {
-    "jest": "^22.0.4"
-  }
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xbl/raml-mocker.git"
+  },
+  "keywords": ["raml", "mock server"],
+  "author": "xbl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xbl/raml-mocker/issues"
+  },
+  "homepage": "https://github.com/xbl/raml-mocker#readme",
+  "description": "raml mock server"
 }

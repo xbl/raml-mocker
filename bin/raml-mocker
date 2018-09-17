@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const mocker = require('..');
+
+const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
+config.raml = path.resolve(config.raml);
+config.controller = path.resolve(config.controller);
+
+mocker.setConfig(config);
+
+const port = config.port || 3000;
+mocker.app.listen(port, () => console.log(`raml mock server listening on port ${port}!`));
