@@ -6,7 +6,8 @@
   },
   "main": "server.js",
   "bin": {
-    "raml-mocker": "./bin/raml-mocker"
+    "raml-mocker": "./bin/raml-mocker",
+    "publish": "npm publish --access=public"
   },
   "dependencies": {
     "express": "^4.16.3",

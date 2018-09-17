@@ -16,11 +16,8 @@ exports.setConfig = (config) => {
         if (json.name !== 'controller')
           return
         webApi.controller = json.structuredValue;
-        webApiArr.push(webApi);
       })
 
-      if (webApi.controller)
-        return ;
       webApi.responses = []
       method.responses().forEach(response => {
         const code = response.code().value();
