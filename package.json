@@ -2,12 +2,12 @@
   "name": "@xbl/raml-mocker",
   "version": "1.0.2",
   "scripts": {
-    "start": "raml2html api.raml > api.html"
+    "start": "raml2html api.raml > api.html",
+    "publish": "npm publish --access=public"
   },
   "main": "server.js",
   "bin": {
-    "raml-mocker": "./bin/raml-mocker",
-    "publish": "npm publish --access=public"
+    "raml-mocker": "./bin/raml-mocker"
   },
   "dependencies": {
     "express": "^4.16.3",
