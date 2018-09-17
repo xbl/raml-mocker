@@ -1,6 +1,6 @@
 {
   "name": "@xbl/raml-mocker",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "raml2html api.raml > api.html",
     "publish": "npm publish --access=public"
