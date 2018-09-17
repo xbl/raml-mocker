@@ -40,7 +40,7 @@ exports.setConfig = (config) => {
     app[webApi.method](webApi.absoluteUri, (req, res) => {
       if (webApi.controller) {
         const controller = webApi.controller.split('#');
-        require(`${config.config}/${controller[0]}`)[controller[1]].call(app, req, res, webApi);
+        require(`${config.controller}/${controller[0]}`)[controller[1]].call(app, req, res, webApi);
         return ;
       }
 
