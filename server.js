@@ -24,11 +24,10 @@ apiJSON.allResources().forEach(resource => {
     method.responses().forEach(response => {
       const code = response.code().value();
       response.body().forEach(typeDeclaration => {
-        // console.log(typeDeclaration.type())
-        // console.log(typeDeclaration.schema())
+        const mimeType = typeDeclaration.name();
         const example = typeDeclaration.example();
         if (example) {
-          webApi.responses.push({code, body: example.value()});
+          webApi.responses.push({code, body: example.value(), mimeType});
         }
       })
     })
@@ -49,6 +48,7 @@ webApiArr.forEach(webApi => {
     const response = webApi.responses[0];
     if (!response)
       return res.status(404).send('no set reponse or example');
+    res.type(response.mimeType);
     res.send(response.body);
   });
 });
