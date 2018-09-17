@@ -4,7 +4,6 @@ var raml = require('raml-1-parser');
 
 var apiJSON = raml.loadApiSync('./api.raml', {serializeMetadata: false});
 
-console.log(apiJSON.title());
 const webApiArr = [];
 apiJSON.allResources().forEach(resource => {
   const absoluteUri = resource.absoluteUri();
@@ -43,7 +42,7 @@ webApiArr.forEach(webApi => {
   app[webApi.method](webApi.absoluteUri, (req, res) => {
     if (webApi.controller) {
       const controller = webApi.controller.split('#');
-      require(`./controller/${controller[0]}`)[controller[1]].call(app, req, res);
+      require(`./controller/${controller[0]}`)[controller[1]].call(app, req, res, webApi);
       return ;
     }
 

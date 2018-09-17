@@ -2,7 +2,6 @@
   type:
     resourceList:
   get:
-    # is: [ chargeable, traceable ]
     description: 获取用户的书籍
     (controller): user#getBook
     responses:
@@ -13,7 +12,6 @@
   /:id:
     get:
       securedBy: [oauth_token]
-      # is: [ chargeable ]
       queryParameters:
         id:
           type: number
