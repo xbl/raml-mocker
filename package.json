@@ -2,7 +2,6 @@
   "name": "@xbl/raml-mocker",
   "version": "1.0.7",
   "scripts": {
-    "start": "raml2html api.raml > api.html",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
     "publish": "npm publish --access=public"
