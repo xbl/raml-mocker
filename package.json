@@ -12,6 +12,7 @@
     "raml-mocker": "./bin/raml-mocker"
   },
   "dependencies": {
+    "chokidar": "^2.0.4",
     "express": "^4.16.3",
     "raml-1-parser": "^1.1.47"
   },

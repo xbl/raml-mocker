@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+const chokidar = require('chokidar');
 const mocker = require('..');
 
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
@@ -13,4 +13,20 @@ config.controller = path.resolve(config.controller);
 mocker.setConfig(config);
 
 const port = config.port || 3000;
-mocker.app.listen(port, () => console.log(`raml mock server listening on port ${port}!`));
+const server = http.createServer(mocker.app);
+const startServer = () => {
+  server.listen(port, () => console.log(`raml mock server http://localhost:${port}!`));
+};
+const restartServer = () => {
+  server.close(() => {
+    startServer();
+  });
+};
+
+startServer();
+
+const watcher = chokidar.watch([config.raml, config.controller]);
+watcher
+  .on('change', restartServer)
+  .on('unlinkDir', restartServer)
+  .on('unlink', restartServer);
