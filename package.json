@@ -1,6 +1,6 @@
 {
   "name": "@xbl/raml-mocker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "start": "raml2html api.raml > api.html",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js",
