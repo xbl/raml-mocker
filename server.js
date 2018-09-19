@@ -1,7 +1,12 @@
 var express = require('express');
 var app = express();
 var raml = require('raml-1-parser');
-var { isRedirectCode } = require('./util')
+var { isRedirectCode } = require('./util');
+
+app.use(function (req, res, next) {
+  console.log('PATH: %s, METHOD: %s', req.path, req.method);
+  next();
+});
 
 exports.setConfig = (config) => {
 
