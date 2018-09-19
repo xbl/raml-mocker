@@ -19,6 +19,7 @@ const startServer = () => {
 };
 const restartServer = () => {
   server.close(() => {
+    mocker.setConfig(config);
     startServer();
   });
 };
