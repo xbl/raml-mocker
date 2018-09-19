@@ -179,11 +179,11 @@ Raml-mocker 提供了插件机制，允许我们在不使用 `controller` 指令
 ./plugins/mock.js
 
 ```javascript
-var Mock = require('mockjs');
+var { mock } = require('mockjs');
 
 module.exports = (body) => {
   try {
-    return Mock.mock(JSON.parse(body));
+    return mock(JSON.parse(body));
   } catch(e) {}
   return body;
 }
