@@ -9,6 +9,9 @@ const mocker = require('..');
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
 config.raml = path.resolve(config.raml);
 config.controller = path.resolve(config.controller);
+if (Array.isArray(config.plugins)) {
+  config.plugins = config.plugins.map(plugin => path.resolve(plugin));
+}
 
 mocker.setConfig(config);
 

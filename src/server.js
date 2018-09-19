@@ -36,7 +36,16 @@ exports.setConfig = (config) => {
 
       if (response.mimeType) res.type(response.mimeType);
       res.status(response.code);
-      if (response.body) res.send(response.body);
+      let { body } = response;
+      if (body) {
+        if (Array.isArray(config.plugins)) {
+          config.plugins.forEach((plugin) => {
+            // eslint-disable-next-line
+            body = require(plugin)(body);
+          });
+        }
+        res.send(body);
+      }
     });
   });
 };

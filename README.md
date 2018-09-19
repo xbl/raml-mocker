@@ -45,11 +45,17 @@ npm run build
 
 ```json
 {
-  "controller": "./controller",  // controller 路径
-  "raml": "./api.raml", // raml 文档入口
-  "port": 3000 // mock server 服务端口号
+  "controller": "./controller",
+  "raml": "./api.raml",
+  "port": 3000,
+  "plugins": []
 }
 ```
+
+* controller: controller 目录路径，在高级篇中会有更详细说明
+* raml: raml 文档入口
+* port:  mock server 服务端口号
+* plugins: 插件（*可能会有变动*）
 
 
 
@@ -149,3 +155,38 @@ webApi 会返回文档中的配置：
 ```
 
 如此，raml-mocker 提供了更多可扩展空间，我们甚至可以在 controller 中实现一定的逻辑判断。
+
+
+
+### 插件
+
+Raml-mocker 提供了插件机制，允许我们在不使用 `controller` 指令的时候对 response 的内容进行处理，例如使用[Mockjs](http://mockjs.com/)。
+
+**注意：插件的这种形式还没有想好，未来可能会有变动，即便有变动也会尽可能向下兼容。**
+
+.raml-config.json
+
+```json
+{
+  "controller": "./controller",
+  "raml": "./api.raml",
+  "port": 3000,
+  "plugins": ["./plugins/mock.js"]
+}
+
+```
+
+./plugins/mock.js
+
+```javascript
+var Mock = require('mockjs');
+
+module.exports = (body) => {
+  try {
+    return Mock.mock(JSON.parse(body));
+  } catch(e) {}
+  return body;
+}
+
+```
+
