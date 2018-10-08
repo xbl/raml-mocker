@@ -1,6 +1,6 @@
 {
   "name": "@xbl/raml-mocker",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "lint": "eslint -c .eslintrc.js ./src/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
