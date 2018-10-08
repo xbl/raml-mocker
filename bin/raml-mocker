@@ -2,9 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const http = require('http');
 const chokidar = require('chokidar');
-const mocker = require('..');
+const { fork } = require('child_process');
 
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
 config.raml = path.resolve(config.raml);
@@ -13,18 +12,15 @@ if (Array.isArray(config.plugins)) {
   config.plugins = config.plugins.map(plugin => path.resolve(plugin));
 }
 
-mocker.setConfig(config);
-
-const port = config.port || 3000;
-const server = http.createServer(mocker.app);
+let server = null;
 const startServer = () => {
-  server.listen(port, () => console.log(`raml mock server http://localhost:${port}!`));
+  server = fork(path.join(__dirname, './server'));
+  server.send(config);
 };
 const restartServer = () => {
-  server.close(() => {
-    mocker.setConfig(config);
-    startServer();
-  });
+  console.log('restart...');
+  server.kill('SIGHUP');
+  startServer();
 };
 
 startServer();
