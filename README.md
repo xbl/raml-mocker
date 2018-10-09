@@ -37,6 +37,11 @@ yarn run build
 npm run build
 ```
 
+![API 文档](https://ws2.sinaimg.cn/large/006tNbRwly1fw212f8r2xj30mr0i53zu.jpg)
+
+
+![API 文档](https://ws1.sinaimg.cn/large/006tNbRwly1fw212s4au3j30rg0l3wgd.jpg)
+
 此功能使用了[raml2html](https://www.npmjs.com/package/raml2html)。
 
 
