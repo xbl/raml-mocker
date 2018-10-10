@@ -1,8 +1,9 @@
+const { join } = require('path');
 const raml = require('raml-1-parser');
 const { isRedirectCode } = require('./util');
 
 module.exports = (config) => {
-  const apiJSON = raml.loadApiSync(config.raml, { serializeMetadata: false });
+  const apiJSON = raml.loadApiSync(join(config.raml, config.main), { serializeMetadata: false });
 
   const webApiArr = [];
   apiJSON.allResources().forEach((resource) => {

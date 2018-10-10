@@ -48,14 +48,16 @@ npm run build
 ```json
 {
   "controller": "./controller",
-  "raml": "./api.raml",
+  "raml": "./raml",
+  "main": "api.raml",
   "port": 3000,
   "plugins": []
 }
 ```
 
 * controller: controller 目录路径，在高级篇中会有更详细说明
-* raml: raml 文档入口
+* raml: raml 文件目录
+* main: raml 目录下的入口文件
 * port:  mock server 服务端口号
 * plugins: 插件（*可能会有变动*）
 
@@ -171,7 +173,8 @@ Raml-mocker 提供了插件机制，允许我们在不使用 `controller` 指令
 ```json
 {
   "controller": "./controller",
-  "raml": "./api.raml",
+  "raml": "./raml",
+  "main": "api.raml",
   "port": 3000,
   "plugins": ["./plugins/mock.js"]
 }
