@@ -1,6 +1,6 @@
 #%RAML 1.0
 ---
-title: mb-collection API
+title: API
 baseUri: /
 baseUriParameters:
   host:
@@ -71,6 +71,6 @@ traits:
         example: abcdefghijklmnop
 
 
-/api/collection/customer:
+/api:
   /articles: !include ./api/articles/articles.raml
   /products: !include ./api/products/products.raml
