@@ -2,31 +2,65 @@ const { join } = require('path');
 const raml = require('raml-1-parser');
 const { isRedirectCode } = require('./util');
 
-const getTypeMap = apiJSON => {
-  const typeMap = {};
+const getDefinitionSchama = apiJSON => {
+  const $id = '/definitionSchema';
+  const definitionSchama = {
+    $id,
+    definitions: {}
+  };
   const typeDeclarationArr = apiJSON.types();
-  typeDeclarationArr.forEach(type => {
-    const typeName = type.name();
-    const { properties } = type.toJSON({ serializeMetadata: false })[typeName];
+  typeDeclarationArr.forEach(clazz => {
+    const clazzName = clazz.name();
+    const jsonObj = clazz.toJSON({ serializeMetadata: false });
+    const { properties } = jsonObj[clazzName];
 
     const requiredArr = [];
+    const schamaProperties = {};
     Object.keys(properties).forEach(key => {
-      const property = properties[key];
-      // const propertyType = property.type[0];
-      // console.log(propertyType);
-      const { items, required, name } = property;
+      const {
+        items,
+        required,
+        name,
+        type,
+        maxLength,
+        minLength,
+        pattern
+      } = properties[key];
+      const property = {
+        type
+      };
+      if (maxLength) {
+        property.maxLength = maxLength;
+      }
+      if (minLength) {
+        property.minLength = minLength;
+      }
+      if (pattern) {
+        property.pattern = pattern;
+      }
       if (required) {
         requiredArr.push(name);
+        delete property.required;
       }
       if (items) {
-        console.log(items);
+        schamaProperties[name] = { $ref: `${$id}#/definitions/${name}` };
+        return;
       }
-      // console.log(property);
+      schamaProperties[name] = property;
     });
-    typeMap[typeName] = properties;
+
+    const sechemaPro = {
+      type: 'object',
+      properties: schamaProperties,
+      required: requiredArr
+    };
+
+    definitionSchama.definitions[clazzName] = sechemaPro;
   });
-  return typeMap;
+  return definitionSchama;
 };
+
+exports.getDefinitionSchama = getDefinitionSchama;
 
 const getWebApiArr = apiJSON => {
   const webApiArr = [];
@@ -56,12 +90,6 @@ const getWebApiArr = apiJSON => {
         response.body().forEach(typeDeclaration => {
           const mimeType = typeDeclaration.name();
           const example = typeDeclaration.example();
-          // const type = typeDeclaration.type()[0];
-          // if (type.includes('[]')) {
-          //   // console.log(type);
-          // } else {
-          //   console.log(typeMap[type]);
-          // }
           if (example) {
             webApi.responses.push({ code, body: example.value(), mimeType });
           }
@@ -70,14 +98,16 @@ const getWebApiArr = apiJSON => {
       webApiArr.push(webApi);
     });
   });
+  return webApiArr;
 };
 
-module.exports = config => {
+exports.getWebApiArr = getWebApiArr;
+
+exports.load = config => {
   const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
     serializeMetadata: false
   });
-  // const typeMap =
-  getTypeMap(apiJSON);
-  // console.log(typeMap);
+  // const typeMap =x
+  // getTypeMap(apiJSON);
   return getWebApiArr(apiJSON);
 };

@@ -45,7 +45,7 @@ const handler = (req, res, config, webApi) => {
 };
 
 exports.setConfig = config => {
-  const webApiArr = readRaml(config);
+  const webApiArr = readRaml.load(config);
   webApiArr.forEach(webApi => {
     app[webApi.method](webApi.absoluteUri, (req, res) => {
       handler(req, res, config, webApi);
