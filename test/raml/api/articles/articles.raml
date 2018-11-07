@@ -1,0 +1,22 @@
+/:
+  get:
+    description: 文章列表
+    responses:
+      200:
+        body:
+          type: Article[]
+          example: !include ./articles_list_200.json
+/:id:
+  get:
+    description: 文章详情
+    queryParameters:
+      id:
+        type: string
+        required: true
+        description: article id
+    responses:
+      200:
+        body:
+          type: Article
+          example: !include ./article_200.json
+

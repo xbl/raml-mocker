@@ -1,0 +1,42 @@
+{
+  "articleId": "A0002",
+  "title": "提升家里整体格调的小物件",
+  "titleImage": "https://ws2.sinaimg.cn/large/006tNbRwly1fwsczsexd5j305i01kwed.jpg",
+  "bannerImage": "https://ws4.sinaimg.cn/large/006tNbRwly1fwsczskcikj309j0cpqar.jpg",
+  "author": "梧桐",
+  "paragraphs": [
+    {
+      "title": "让你的客厅看上去大21倍",
+      "text": "荷兰Storeage设计事务所亚太区 首席代表。说到家中相互兼容的颜色，先来谈谈什么是“兼容”，简单说就是两种完全不同的东西放在一起也不碍眼。所以“兼容”首先要是两种不同的东西，同时这两个东西又有莫种关联；而兼容的颜色，往往不一样，但拼在一起又能产生某种关联的颜色。这里尝试着推荐一下绿配红（粉），及灰配铜。",
+      "image": "https://ws3.sinaimg.cn/large/006tNbRwly1fwsdymlghcj309j075tc4.jpg",
+      "imageLink": "/pages/index/index",
+      "product": {
+        "productId": "P00001",
+        "name": "水杯，生命在于喝水，你不喝就会口渴",
+        "coverImage": "https://s1.ax1x.com/2018/11/06/ioO4rn.png",
+        "description": "这是一个神奇的水杯，非常的神奇，倒进去的是热水，出来的还是热水。",
+        "price": 19700
+      }
+    },
+    {
+      "title": "让你的客厅看上去大2倍",
+      "text": "荷兰Storeage设计事务所亚太区 首席代表。说到家中相互兼容的颜色，先来谈谈什么是“兼容”，简单说就是两种完全不同的东西放在一起也不碍眼。所以“兼容”首先要是两种不同的东西，同时这两个东西又有莫种关联；而兼容的颜色，往往不一样，但拼在一起又能产生某种关联的颜色。这里尝试着推荐一下绿配红（粉），及灰配铜。",
+      "image": "https://ws2.sinaimg.cn/large/006tNbRwly1fwse2x8d6zj309j075whk.jpg",
+      "imageLink": "/pages/index/index",
+      "product": {
+        "productId": "P00001",
+        "name": "水杯，生命在于喝水，你不喝就会口渴",
+        "coverImage": "https://s1.ax1x.com/2018/11/06/ioOhKs.png",
+        "description": "这是一个神奇的水杯，非常的神奇，倒进去的是热水，出来的还是热水。",
+        "price": 999
+      }
+    },
+    {
+      "title": "让你的客厅看上去大2倍",
+      "text": "荷兰Storeage设计事务所亚太区 首席代表。说到家中相互兼容的颜色，先来谈谈什么是“兼容”，简单说就是两种完全不同的东西放在一起也不碍眼。所以“兼容”首先要是两种不同的东西，同时这两个东西又有莫种关联；而兼容的颜色，往往不一样，但拼在一起又能产生某种关联的颜色。这里尝试着推荐一下绿配红（粉），及灰配铜。",
+      "image": "https://ws2.sinaimg.cn/large/006tNbRwly1fwse2x8d6zj309j075whk.jpg",
+      "imageLink": "/pages/index/index",
+      "product": null
+    }
+  ]
+}
