@@ -34,20 +34,19 @@ const handler = (req, res, config, webApi) => {
   if (response.mimeType) res.type(response.mimeType);
   res.status(response.code);
   let { body } = response;
-  if (body) {
-    if (Array.isArray(config.plugins)) {
-      config.plugins.forEach((plugin) => {
-        // eslint-disable-next-line
-        body = require(plugin)(body);
-      });
-    }
-    res.send(body);
+  if (!body) return;
+  if (Array.isArray(config.plugins)) {
+    config.plugins.forEach(plugin => {
+      // eslint-disable-next-line
+      body = require(plugin)(body);
+    });
   }
+  res.send(body);
 };
 
-exports.setConfig = (config) => {
+exports.setConfig = config => {
   const webApiArr = readRaml(config);
-  webApiArr.forEach((webApi) => {
+  webApiArr.forEach(webApi => {
     app[webApi.method](webApi.absoluteUri, (req, res) => {
       handler(req, res, config, webApi);
     });
