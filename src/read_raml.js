@@ -1,5 +1,3 @@
-const { join } = require('path');
-const raml = require('raml-1-parser');
 const { isRedirectCode } = require('./util');
 
 const BASE_TYPE = [
@@ -125,12 +123,3 @@ const getWebApiArr = apiJSON => {
 };
 
 exports.getWebApiArr = getWebApiArr;
-
-exports.load = config => {
-  const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-    serializeMetadata: false
-  });
-  // const typeMap =x
-  // getTypeMap(apiJSON);
-  return getWebApiArr(apiJSON);
-};

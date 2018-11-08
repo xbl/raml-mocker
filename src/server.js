@@ -1,4 +1,6 @@
+const { join } = require('path');
 const express = require('express');
+const raml = require('raml-1-parser');
 
 const app = express();
 const { isRedirectCode } = require('./util');
@@ -45,7 +47,11 @@ const handler = (req, res, config, webApi) => {
 };
 
 exports.setConfig = config => {
-  const webApiArr = readRaml.load(config);
+  const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
+    serializeMetadata: false
+  });
+
+  const webApiArr = readRaml.getWebApiArr(apiJSON);
   webApiArr.forEach(webApi => {
     app[webApi.method](webApi.absoluteUri, (req, res) => {
       handler(req, res, config, webApi);
