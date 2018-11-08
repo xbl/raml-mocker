@@ -10,6 +10,10 @@ const BASE_TYPE = [
   'null'
 ];
 
+const setProps = (obj, property, value) => {
+  if (value) obj[property] = value;
+};
+
 const getDefinitionSchama = apiJSON => {
   const $id = '/definitionSchema';
   const definitionSchama = {
@@ -40,15 +44,9 @@ const getDefinitionSchama = apiJSON => {
       const property = {
         type
       };
-      if (maxLength) {
-        property.maxLength = maxLength;
-      }
-      if (minLength) {
-        property.minLength = minLength;
-      }
-      if (pattern) {
-        property.pattern = pattern;
-      }
+      setProps(property, 'maxLength', maxLength);
+      setProps(property, 'minLength', minLength);
+      setProps(property, 'pattern', pattern);
       if (required) {
         requiredArr.push(name);
         delete property.required;
