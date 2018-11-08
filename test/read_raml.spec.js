@@ -20,8 +20,7 @@ test('when read raml given Product type then get definitionSchema object', t => 
       }
     }
   };
-  const apiJSON = parseRAMLSync(
-    `
+  const ramlStr = `
 #%RAML 1.0
 ---
 types:
@@ -31,11 +30,10 @@ types:
       productId:
         type: string
       name: number
-  `,
-    {
-      serializeMetadata: false
-    }
-  );
+    `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
   t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
 });
 
