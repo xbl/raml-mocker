@@ -62,8 +62,12 @@ const getDefinitionSchama = apiJSON => {
       }
 
       if (items) {
+        const $ref = `${$id}#/definitions/${items}`;
         schamaProperties[name] = {
-          items: [{ $ref: `${$id}#/definitions/${items}` }]
+          items: [{ $ref }],
+          additionalItems: {
+            $ref
+          }
         };
       }
     });

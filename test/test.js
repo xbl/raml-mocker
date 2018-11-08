@@ -255,7 +255,10 @@ test('when read raml given Type Array then get definitionSchema object', t => {
               {
                 $ref: '/definitionSchema#/definitions/Paragraph'
               }
-            ]
+            ],
+            additionalItems: {
+              $ref: '/definitionSchema#/definitions/Paragraph'
+            }
           }
         },
         required: ['author', 'paragraphs']
