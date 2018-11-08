@@ -55,17 +55,15 @@ const getDefinitionSchama = apiJSON => {
       schamaProperties[name] = property;
 
       if (!BASE_TYPE.includes(type[0])) {
-        schamaProperties[name] = { $ref: `${$id}#/definitions/${type}` };
+        schamaProperties[name] = { $ref: `${$id}#/definitions/${type[0]}` };
         return;
       }
 
       if (items) {
-        const $ref = `${$id}#/definitions/${items}`;
+        const $ref = { $ref: `${$id}#/definitions/${items}` };
         schamaProperties[name] = {
-          items: [{ $ref }],
-          additionalItems: {
-            $ref
-          }
+          items: [$ref],
+          additionalItems: $ref
         };
       }
     });
