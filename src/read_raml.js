@@ -9,6 +9,7 @@ const BASE_TYPE = [
   'integer',
   'null'
 ];
+
 const getDefinitionSchama = apiJSON => {
   const $id = '/definitionSchema';
   const definitionSchama = {
@@ -81,10 +82,29 @@ const getDefinitionSchama = apiJSON => {
 
 exports.getDefinitionSchama = getDefinitionSchama;
 
+const getSchamaByType = type => {
+  if (!type) return undefined;
+  const newType = type.replace('[]', '');
+  const $ref = { $ref: `/definitionSchema#/definitions/${newType}` };
+  let schema = $ref;
+  if (type.includes('[]')) {
+    schema = {
+      items: [$ref],
+      additionalItems: $ref
+    };
+  }
+  return schema;
+};
+
 const getWebApiArr = apiJSON => {
   const webApiArr = [];
   apiJSON.allResources().forEach(resource => {
     const absoluteUri = resource.absoluteUri();
+    // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
+    resource.allUriParameters().forEach(parameter => {
+      console.log(parameter.toJSON());
+      console.log(parameter.description());
+    });
     resource.methods().forEach(method => {
       const webApi = { absoluteUri, method: method.method() };
       method.annotations().forEach(annotation => {
@@ -109,8 +129,15 @@ const getWebApiArr = apiJSON => {
         response.body().forEach(typeDeclaration => {
           const mimeType = typeDeclaration.name();
           const example = typeDeclaration.example();
+          const type = typeDeclaration.type().pop();
+          const schema = getSchamaByType(type);
           if (example) {
-            webApi.responses.push({ code, body: example.value(), mimeType });
+            webApi.responses.push({
+              code,
+              body: example.value(),
+              mimeType,
+              schema
+            });
           }
         });
       });

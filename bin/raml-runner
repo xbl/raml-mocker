@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const Ajv = require('ajv');
+const path = require('path');
+const axios = require('axios');
+const raml = require('raml-1-parser');
+const readRaml = require('../src/read_raml');
+
+const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
+config.raml = path.resolve(config.raml);
+config.controller = path.resolve(config.controller);
+if (Array.isArray(config.plugins)) {
+  config.plugins = config.plugins.map(plugin => path.resolve(plugin));
+}
+
+const apiJSON = raml.loadApiSync(path.join(config.raml, config.main), {
+  serializeMetadata: false
+});
+
+axios.defaults.baseURL = 'http://localhost:3001';
+
+const webApiArr = readRaml.getWebApiArr(apiJSON);
+const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
+// console.log(definitionSchema);
+
+webApiArr.forEach(webApi => {
+  webApi.responses.forEach(async resp => {
+    const response = await axios[webApi.method](webApi.absoluteUri);
+    console.log('请求：', webApi.absoluteUri);
+    if (!resp.schema) return;
+    const ajv = new Ajv();
+
+    const validate = ajv.addSchema(definitionSchema).compile(resp.schema);
+    const valid = validate(response.data);
+    let msg = '';
+    if (!valid) {
+      const [error] = validate.errors;
+      const { message } = error;
+      msg = message;
+    }
+    console.log(valid);
+    console.log(msg);
+    console.log(validate.errors);
+  });
+});

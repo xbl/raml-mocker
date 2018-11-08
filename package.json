@@ -10,15 +10,17 @@
   },
   "main": "src/server.js",
   "bin": {
-    "raml-mocker": "./bin/raml-mocker"
+    "raml-mocker": "./bin/raml-mocker",
+    "raml-runner": "./bin/raml-runner"
   },
   "dependencies": {
+    "ajv": "^6.5.5",
+    "axios": "^0.18.0",
     "chokidar": "^2.0.4",
     "express": "^4.16.3",
     "raml-1-parser": "^1.1.47"
   },
   "devDependencies": {
-    "ajv": "^6.5.5",
     "ava": "1.0.0-rc.1",
     "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
