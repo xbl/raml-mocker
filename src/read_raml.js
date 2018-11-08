@@ -2,6 +2,15 @@ const { join } = require('path');
 const raml = require('raml-1-parser');
 const { isRedirectCode } = require('./util');
 
+const BASE_TYPE = [
+  'string',
+  'number',
+  'boolean',
+  'array',
+  'object',
+  'integer',
+  'null'
+];
 const getDefinitionSchama = apiJSON => {
   const $id = '/definitionSchema';
   const definitionSchama = {
@@ -13,6 +22,8 @@ const getDefinitionSchama = apiJSON => {
     const clazzName = clazz.name();
     const jsonObj = clazz.toJSON({ serializeMetadata: false });
     const { properties } = jsonObj[clazzName];
+
+    if (!properties) return;
 
     const requiredArr = [];
     const schamaProperties = {};
@@ -26,6 +37,7 @@ const getDefinitionSchama = apiJSON => {
         minLength,
         pattern
       } = properties[key];
+
       const property = {
         type
       };
@@ -42,11 +54,18 @@ const getDefinitionSchama = apiJSON => {
         requiredArr.push(name);
         delete property.required;
       }
-      if (items) {
-        schamaProperties[name] = { $ref: `${$id}#/definitions/${name}` };
+      schamaProperties[name] = property;
+
+      if (!BASE_TYPE.includes(type[0])) {
+        schamaProperties[name] = { $ref: `${$id}#/definitions/${type}` };
         return;
       }
-      schamaProperties[name] = property;
+
+      if (items) {
+        schamaProperties[name] = {
+          items: [{ $ref: `${$id}#/definitions/${items}` }]
+        };
+      }
     });
 
     const sechemaPro = {
