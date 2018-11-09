@@ -4,8 +4,11 @@ const fs = require('fs');
 const Ajv = require('ajv');
 const path = require('path');
 const axios = require('axios');
+const chalk = require('chalk');
 const raml = require('raml-1-parser');
+
 const readRaml = require('../src/read_raml');
+const { jsonPath } = require('../src/util');
 
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
 config.raml = path.resolve(config.raml);
@@ -22,25 +25,43 @@ axios.defaults.baseURL = 'http://localhost:3001';
 
 const webApiArr = readRaml.getWebApiArr(apiJSON);
 const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
-// console.log(definitionSchema);
 
 webApiArr.forEach(webApi => {
   webApi.responses.forEach(async resp => {
-    const response = await axios[webApi.method](webApi.absoluteUri);
-    console.log('请求：', webApi.absoluteUri);
+    const response = await axios(webApi.absoluteUri, {
+      method: webApi.method,
+      data: {},
+      params: {}
+    });
     if (!resp.schema) return;
     const ajv = new Ajv();
 
     const validate = ajv.addSchema(definitionSchema).compile(resp.schema);
     const valid = validate(response.data);
-    let msg = '';
+    let color = 'green';
+    let icon = '✔';
+
+    let validInfo = '';
+
     if (!valid) {
+      color = 'red';
+      icon = '✖';
       const [error] = validate.errors;
-      const { message } = error;
-      msg = message;
+      const { message, dataPath } = error;
+      let result = response.data;
+      if (dataPath) {
+        result = jsonPath(response.data, dataPath);
+      }
+      validInfo = chalk[color](`
+${message}
+info:
+${JSON.stringify(result, null, '\t')}
+\n`);
     }
-    console.log(valid);
-    console.log(msg);
-    console.log(validate.errors);
+    console.log(
+      chalk`{${color} ${icon} 请求：} {underline ${
+        webApi.absoluteUri
+      }}  \n ${validInfo}`
+    );
   });
 });
