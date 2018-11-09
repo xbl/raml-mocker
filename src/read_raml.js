@@ -20,8 +20,8 @@ const getDefinitionSchama = apiJSON => {
     $id,
     definitions: {}
   };
-  const typeDeclarationArr = apiJSON.types();
-  typeDeclarationArr.forEach(clazz => {
+  const clazzArr = apiJSON.types();
+  clazzArr.forEach(clazz => {
     const clazzName = clazz.name();
     const jsonObj = clazz.toJSON({ serializeMetadata: false });
     const { properties } = jsonObj[clazzName];
@@ -124,19 +124,18 @@ const getWebApiArr = apiJSON => {
           });
           return;
         }
-        response.body().forEach(typeDeclaration => {
-          const mimeType = typeDeclaration.name();
-          const example = typeDeclaration.example();
-          const type = typeDeclaration.type().pop();
+        response.body().forEach(body => {
+          const example = body.example();
+          if (!example) return;
+          const mimeType = body.name();
+          const type = body.type().pop();
           const schema = getSchamaByType(type);
-          if (example) {
-            webApi.responses.push({
-              code,
-              body: example.value(),
-              mimeType,
-              schema
-            });
-          }
+          webApi.responses.push({
+            code,
+            body: example.value(),
+            mimeType,
+            schema
+          });
         });
       });
       webApiArr.push(webApi);
