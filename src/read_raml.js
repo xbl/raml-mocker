@@ -7,7 +7,8 @@ const BASE_TYPE = [
   'array',
   'object',
   'integer',
-  'null'
+  'null',
+  'any'
 ];
 
 const setProps = (obj, property, value) => {

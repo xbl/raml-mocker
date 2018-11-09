@@ -1,6 +1,6 @@
 import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
-import { getDefinitionSchama } from '../src/read_raml';
+import { getDefinitionSchama, getWebApiArr } from '../src/read_raml';
 
 test('when read raml given Product type then get definitionSchema object', t => {
   const definitionSchema = {
@@ -327,4 +327,61 @@ types:
     serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+});
+
+test.only('when read raml given /products then get webAPI array', t => {
+  const webAPIArr = [
+    {
+      absoluteUri: '/products',
+      method: 'get',
+      responses: [
+        {
+          code: '200',
+          body: `{
+  "a": 1
+}
+`,
+          mimeType: 'application/json',
+          schema: {
+            $ref: '/definitionSchema#/definitions/any'
+          }
+        }
+      ]
+    }
+  ];
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+baseUriParameters:
+  host:
+    description: 这个host 不一定啊
+    enum: ['baidu1.com', 'baidu2.com']
+version: v1
+mediaType: application/json
+/products:
+  get:
+    description: 商品列表
+    queryParameters:
+      isStar:
+        description: 是否精选
+        type: boolean
+        required: false
+        example: true
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
+
+  const result = getWebApiArr(apiJSON);
+  console.log(result);
+  t.deepEqual(result, webAPIArr);
+  // t.fail(JSON.stringify(result));
 });
