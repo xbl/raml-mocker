@@ -334,6 +334,7 @@ test('when read raml given /products then get webAPI array', t => {
     {
       absoluteUri: '/products',
       method: 'get',
+      queryParameter: {},
       responses: [
         {
           code: '200',
@@ -371,12 +372,12 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('when read raml has queryParameters given /products then get webAPI array', t => {
+test('when read raml has queryParameter given /products then get webAPI array', t => {
   const webAPIArr = [
     {
       absoluteUri: '/products',
       method: 'get',
-      queryParameters: {
+      queryParameter: {
         isStar: 'true'
       },
       responses: [

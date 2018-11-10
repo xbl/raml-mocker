@@ -96,12 +96,23 @@ const getSchamaByType = type => {
   return schema;
 };
 
+const getQueryParameter = queryParameters => {
+  if (!Array.isArray(queryParameters)) return {};
+  const newParam = {};
+  queryParameters.forEach(param => {
+    const value = param.example().value();
+    if (!value) return;
+    newParam[param.name()] = value;
+  });
+  return newParam;
+};
+
 const getWebApiArr = apiJSON => {
   const webApiArr = [];
   apiJSON.allResources().forEach(resource => {
     const absoluteUri = resource.absoluteUri();
     // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
-    resource.allUriParameters().forEach(parameter => {
+    resource.uriParameters().forEach(parameter => {
       console.log(parameter.toJSON());
       console.log(parameter.description());
     });
@@ -112,6 +123,8 @@ const getWebApiArr = apiJSON => {
         if (json.name !== 'controller') return;
         webApi.controller = json.structuredValue;
       });
+
+      webApi.queryParameter = getQueryParameter(method.queryParameters());
 
       webApi.responses = [];
       method.responses().forEach(response => {

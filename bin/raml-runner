@@ -31,7 +31,7 @@ webApiArr.forEach(webApi => {
     const response = await axios(webApi.absoluteUri, {
       method: webApi.method,
       data: {},
-      params: {}
+      params: webApi.queryParameter
     });
     if (!resp.schema) return;
     const ajv = new Ajv();
