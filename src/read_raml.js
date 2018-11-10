@@ -84,6 +84,7 @@ exports.getDefinitionSchama = getDefinitionSchama;
 const getSchamaByType = type => {
   if (!type) return undefined;
   const newType = type.replace('[]', '');
+  if (BASE_TYPE.includes(newType)) return undefined;
   const $ref = { $ref: `/definitionSchema#/definitions/${newType}` };
   let schema = $ref;
   if (type.includes('[]')) {
