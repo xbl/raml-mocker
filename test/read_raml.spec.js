@@ -342,8 +342,7 @@ test('when read raml given /products then get webAPI array', t => {
   "a": 1
 }
 `,
-          mimeType: 'application/json',
-          schema: undefined
+          mimeType: 'application/json'
         }
       ]
     }
@@ -387,8 +386,7 @@ test('when read raml given /products has queryParameter then get webAPI array', 
   "a": 1
 }
 `,
-          mimeType: 'application/json',
-          schema: undefined
+          mimeType: 'application/json'
         }
       ]
     }
@@ -442,8 +440,7 @@ test('when read raml given post /products has data then get webAPI array', t => 
   "a": 1
 }
 `,
-          mimeType: 'application/json',
-          schema: undefined
+          mimeType: 'application/json'
         }
       ]
     }

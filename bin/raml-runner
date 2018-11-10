@@ -28,9 +28,13 @@ const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
 
 webApiArr.forEach(webApi => {
   webApi.responses.forEach(async resp => {
+    let requestBody = {};
+    if (webApi.body) {
+      requestBody = webApi.body.value;
+    }
     const response = await axios(webApi.absoluteUri, {
       method: webApi.method,
-      data: webApi.body.value,
+      data: requestBody,
       params: webApi.queryParameter
     });
     if (!resp.schema) return;

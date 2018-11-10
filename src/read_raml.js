@@ -156,13 +156,14 @@ const getWebApiArr = apiJSON => {
           if (!example) return;
           const mimeType = body.name();
           const type = body.type().pop();
-          const schema = getSchamaByType(type);
-          webApi.responses.push({
+          const webApiResp = {
             code,
             body: example.value(),
-            mimeType,
-            schema
-          });
+            mimeType
+          };
+          const schema = getSchamaByType(type);
+          if (schema) webApiResp.schema = schema;
+          webApi.responses.push(webApiResp);
         });
       });
       webApiArr.push(webApi);
