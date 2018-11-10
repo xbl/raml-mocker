@@ -107,6 +107,16 @@ const getQueryParameter = queryParameters => {
   return newParam;
 };
 
+const getPostBody = ([body]) => {
+  if (!body) return undefined;
+  const value = body.example().value();
+  if (!value) return undefined;
+  return {
+    mimeType: body.name(),
+    value
+  };
+};
+
 const getWebApiArr = apiJSON => {
   const webApiArr = [];
   apiJSON.allResources().forEach(resource => {
@@ -125,6 +135,8 @@ const getWebApiArr = apiJSON => {
       });
 
       webApi.queryParameter = getQueryParameter(method.queryParameters());
+      const requestBody = getPostBody(method.body());
+      if (requestBody) webApi.body = requestBody;
 
       webApi.responses = [];
       method.responses().forEach(response => {

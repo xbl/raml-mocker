@@ -30,7 +30,7 @@ webApiArr.forEach(webApi => {
   webApi.responses.forEach(async resp => {
     const response = await axios(webApi.absoluteUri, {
       method: webApi.method,
-      data: {},
+      data: webApi.body.value,
       params: webApi.queryParameter
     });
     if (!resp.schema) return;

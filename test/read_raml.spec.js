@@ -372,7 +372,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('when read raml has queryParameter given /products then get webAPI array', t => {
+test('when read raml given /products has queryParameter then get webAPI array', t => {
   const webAPIArr = [
     {
       absoluteUri: '/products',
@@ -407,6 +407,60 @@ mediaType: application/json
         type: boolean
         required: false
         example: true
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
+
+  const result = getWebApiArr(apiJSON);
+  t.deepEqual(result, webAPIArr);
+});
+
+test('when read raml given post /products has data then get webAPI array', t => {
+  const webAPIArr = [
+    {
+      absoluteUri: '/products',
+      method: 'post',
+      queryParameter: {},
+      body: {
+        mimeType: 'application/json',
+        value: `{
+  "isStar": true
+}`
+      },
+      responses: [
+        {
+          code: '200',
+          body: `{
+  "a": 1
+}
+`,
+          mimeType: 'application/json',
+          schema: undefined
+        }
+      ]
+    }
+  ];
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+/products:
+  post:
+    description: 商品列表
+    body:
+      example:
+        {
+          isStar: true
+        }
     responses:
       200:
         body:
