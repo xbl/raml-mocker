@@ -473,3 +473,51 @@ mediaType: application/json
   const result = getWebApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
 });
+
+test('when read raml given /products has uriParameters then get webAPI array', t => {
+  const webAPIArr = [
+    {
+      absoluteUri: '/products/{productId}',
+      method: 'get',
+      uriParameters: {
+        id: 'aaaa'
+      },
+      queryParameter: {},
+      responses: [
+        {
+          code: '200',
+          body: `{
+  "a": 1
+}
+`,
+          mimeType: 'application/json'
+        }
+      ]
+    }
+  ];
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+/products/{productId}:
+  get:
+    (uriParameters):
+      id:
+        description: article id
+        example: aaaa
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
+
+  const result = getWebApiArr(apiJSON);
+  t.deepEqual(result, webAPIArr);
+});

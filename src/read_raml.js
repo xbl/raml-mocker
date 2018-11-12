@@ -118,17 +118,38 @@ const getPostBody = ([body]) => {
   };
 };
 
+const getUriParameters = (resource, method) => {
+  let uriParameters;
+  method.annotations().forEach(annotation => {
+    const json = annotation.toJSON();
+    if (json.name !== 'uriParameters') return;
+    if (!uriParameters) uriParameters = {};
+    const params = json.structuredValue;
+    Object.keys(params).forEach(key => {
+      const param = params[key];
+      if (param && param.example) uriParameters[key] = param.example;
+    });
+  });
+
+  // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
+  resource.allUriParameters().forEach(parameter => {
+    const name = parameter.name();
+    const example = parameter.example();
+    let value = '';
+    if (!example) return;
+    value = example.value();
+    if (!uriParameters) uriParameters = {};
+    uriParameters[name] = value;
+  });
+
+  return uriParameters;
+};
+
 const getWebApiArr = apiJSON => {
   const webApiArr = [];
   apiJSON.allResources().forEach(resource => {
     const absoluteUri = resource.absoluteUri();
-    // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
-    // resource.uriParameters().forEach(parameter => {
-    //   // console.log(parameter.toJSON());
-    //   const name = parameter.name();
-    //   absoluteUri = absoluteUri.replace(`{${name}}`, `:${name}`);
-    //   // console.log(parameter.description());
-    // });
+
     resource.methods().forEach(method => {
       const webApi = { absoluteUri, method: method.method() };
       method.annotations().forEach(annotation => {
@@ -136,6 +157,11 @@ const getWebApiArr = apiJSON => {
         if (json.name !== 'controller') return;
         webApi.controller = json.structuredValue;
       });
+
+      const uriParameters = getUriParameters(resource, method);
+      if (uriParameters) {
+        webApi.uriParameters = uriParameters;
+      }
 
       webApi.queryParameter = getQueryParameter(method.queryParameters());
       const requestBody = getPostBody(method.body());

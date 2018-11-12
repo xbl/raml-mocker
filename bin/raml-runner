@@ -7,7 +7,7 @@ const raml = require('raml-1-parser');
 
 const readRaml = require('../src/read_raml');
 const { validate, output } = require('../src/validate');
-const { jsonPath } = require('../src/util');
+const { jsonPath, replaceUriParmaters } = require('../src/util');
 
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
 config.raml = path.resolve(config.raml);
@@ -31,14 +31,21 @@ webApiArr.forEach(webApi => {
     if (webApi.body) {
       requestBody = webApi.body.value;
     }
+    let requestPath = '';
     try {
-      const response = await axios(webApi.absoluteUri, {
+      let uri = webApi.absoluteUri;
+      if (webApi.uriParameters) {
+        replaceUriParmaters(uri, (match, expression) => {
+          uri = uri.replace(match, webApi.uriParameters[expression]);
+        });
+      }
+      const response = await axios(uri, {
         method: webApi.method,
         data: requestBody,
         params: webApi.queryParameter
       });
       if (!resp.schema) return;
-      const { data } = response;
+      const { data, request } = response;
       const { valid, error } = validate(definitionSchema, resp.schema, data);
       let validInfo = '';
       let msg = '';
@@ -51,9 +58,10 @@ webApiArr.forEach(webApi => {
         }
         validInfo = `info:\n${JSON.stringify(result, null, '\t')}\n`;
       }
-      output(valid, msg, validInfo, webApi);
+      requestPath = request.path;
+      output(valid, msg, validInfo, requestPath);
     } catch (err) {
-      output(false, err.message, '', webApi);
+      output(false, err.message, '', requestPath);
     }
   });
 });

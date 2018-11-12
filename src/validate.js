@@ -13,7 +13,7 @@ exports.validate = (definitionSchema, schema, data) => {
   };
 };
 
-exports.output = (valid, message, validInfo, webApi) => {
+exports.output = (valid, message, validInfo, url) => {
   let color = 'green';
   let icon = '✔';
 
@@ -22,8 +22,6 @@ exports.output = (valid, message, validInfo, webApi) => {
     icon = '✖';
   }
   console.log(
-    chalk`{${color} ${icon} 请求：} {underline ${
-      webApi.absoluteUri
-    }}  \n{${color} ${message}}\n${validInfo}`
+    chalk`{${color} ${icon} 请求：} {underline ${url}}  \n{${color} ${message}}\n${validInfo}`
   );
 };
