@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const Ajv = require('ajv');
 const path = require('path');
 const axios = require('axios');
-const chalk = require('chalk');
 const raml = require('raml-1-parser');
 
 const readRaml = require('../src/read_raml');
+const { validate, output } = require('../src/validate');
 const { jsonPath } = require('../src/util');
 
 const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
@@ -32,40 +31,29 @@ webApiArr.forEach(webApi => {
     if (webApi.body) {
       requestBody = webApi.body.value;
     }
-    const response = await axios(webApi.absoluteUri, {
-      method: webApi.method,
-      data: requestBody,
-      params: webApi.queryParameter
-    });
-    if (!resp.schema) return;
-    const ajv = new Ajv();
-
-    const validate = ajv.addSchema(definitionSchema).compile(resp.schema);
-    const valid = validate(response.data);
-    let color = 'green';
-    let icon = '✔';
-
-    let validInfo = '';
-
-    if (!valid) {
-      color = 'red';
-      icon = '✖';
-      const [error] = validate.errors;
-      const { message, dataPath } = error;
-      let result = response.data;
-      if (dataPath) {
-        result = jsonPath(response.data, dataPath);
+    try {
+      const response = await axios(webApi.absoluteUri, {
+        method: webApi.method,
+        data: requestBody,
+        params: webApi.queryParameter
+      });
+      if (!resp.schema) return;
+      const { data } = response;
+      const { valid, error } = validate(definitionSchema, resp.schema, data);
+      let validInfo = '';
+      let msg = '';
+      if (!valid) {
+        let result = data;
+        const { message, dataPath } = error;
+        msg = message;
+        if (dataPath) {
+          result = jsonPath(data, dataPath);
+        }
+        validInfo = `info:\n${JSON.stringify(result, null, '\t')}\n`;
       }
-      validInfo = chalk[color](`
-${message}
-info:
-${JSON.stringify(result, null, '\t')}
-\n`);
+      output(valid, msg, validInfo, webApi);
+    } catch (err) {
+      output(false, err.message, '', webApi);
     }
-    console.log(
-      chalk`{${color} ${icon} 请求：} {underline ${
-        webApi.absoluteUri
-      }}  \n ${validInfo}`
-    );
   });
 });

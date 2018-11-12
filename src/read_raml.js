@@ -100,6 +100,7 @@ const getQueryParameter = queryParameters => {
   if (!Array.isArray(queryParameters)) return {};
   const newParam = {};
   queryParameters.forEach(param => {
+    if (!param.example()) return;
     const value = param.example().value();
     if (!value) return;
     newParam[param.name()] = value;
@@ -122,10 +123,12 @@ const getWebApiArr = apiJSON => {
   apiJSON.allResources().forEach(resource => {
     const absoluteUri = resource.absoluteUri();
     // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
-    resource.uriParameters().forEach(parameter => {
-      console.log(parameter.toJSON());
-      console.log(parameter.description());
-    });
+    // resource.uriParameters().forEach(parameter => {
+    //   // console.log(parameter.toJSON());
+    //   const name = parameter.name();
+    //   absoluteUri = absoluteUri.replace(`{${name}}`, `:${name}`);
+    //   // console.log(parameter.description());
+    // });
     resource.methods().forEach(method => {
       const webApi = { absoluteUri, method: method.method() };
       method.annotations().forEach(annotation => {
