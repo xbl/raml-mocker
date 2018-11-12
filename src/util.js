@@ -12,3 +12,8 @@ exports.jsonPath = (json, dataPath) => {
   vm.runInContext(code, sandbox);
   return sandbox.result;
 };
+
+const uriParamterRegExp = /\{((?:.|\n)+?)\}/g;
+
+exports.replaceUriParmaters = (uri, callback) =>
+  uri.replace(uriParamterRegExp, callback);
