@@ -15,5 +15,15 @@ exports.jsonPath = (json, dataPath) => {
 
 const uriParamterRegExp = /\{((?:.|\n)+?)\}/g;
 
-exports.replaceUriParmaters = (uri, callback) =>
+const replaceUriParmaters = (uri, callback) =>
   uri.replace(uriParamterRegExp, callback);
+
+exports.replaceUriParmaters = replaceUriParmaters;
+
+exports.toExpressUri = uri => {
+  let result = uri;
+  replaceUriParmaters(uri, (match, expression) => {
+    result = result.replace(match, `:${expression}`);
+  });
+  return result;
+};
