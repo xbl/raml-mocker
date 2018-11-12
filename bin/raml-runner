@@ -16,12 +16,18 @@ if (Array.isArray(config.plugins)) {
   config.plugins = config.plugins.map(plugin => path.resolve(plugin));
 }
 
+const env = process.env.NODE_ENV;
+let host = `http://localhost:${config.port}`;
+if (config.runner && env) {
+  host = config.runner[env];
+}
+
+console.log(`HOST: ${host}`);
+axios.defaults.baseURL = host;
+
 const apiJSON = raml.loadApiSync(path.join(config.raml, config.main), {
   serializeMetadata: false
 });
-
-axios.defaults.baseURL = 'http://localhost:3001';
-
 const webApiArr = readRaml.getWebApiArr(apiJSON);
 const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
 
