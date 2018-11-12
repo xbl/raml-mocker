@@ -1,5 +1,5 @@
 import test from 'ava';
-import { jsonPath, replaceUriParmaters } from '../src/util';
+import { jsonPath, replaceUriParmaters, toExpressUri } from '../src/util';
 
 test('When json object Give dataPath [0] str Then get json[0] object', t => {
   const exceptResult = {
@@ -12,7 +12,7 @@ test('When json object Give dataPath [0] str Then get json[0] object', t => {
   t.deepEqual(result, exceptResult);
 });
 
-test('When uri Given /products/{productId} Then get /products/:productId', t=> {
+test('When replaceUriParmaters Given /products/{productId} Then get /products/:productId', t=> {
   const given = '/products/{productId}';
   const exceptResult = '/products/:productId';
   let result = given;
@@ -20,4 +20,10 @@ test('When uri Given /products/{productId} Then get /products/:productId', t=> {
     result = result.replace(match, `:${expression}`);
   });
   t.is(result, exceptResult);
+});
+
+test('When toExpressUri Given /products/{productId} Then get /products/:productId', t=> {
+  const given = '/products/{productId}';
+  const exceptResult = '/products/:productId';
+  t.is(toExpressUri(given), exceptResult);
 });

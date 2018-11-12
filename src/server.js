@@ -3,8 +3,8 @@ const express = require('express');
 const raml = require('raml-1-parser');
 
 const app = express();
-const { isRedirectCode } = require('./util');
 const readRaml = require('./read_raml');
+const { isRedirectCode, toExpressUri } = require('./util');
 
 app.use((req, res, next) => {
   // eslint-disable-next-line
@@ -53,7 +53,7 @@ exports.setConfig = config => {
 
   const webApiArr = readRaml.getWebApiArr(apiJSON);
   webApiArr.forEach(webApi => {
-    app[webApi.method](webApi.absoluteUri, (req, res) => {
+    app[webApi.method](toExpressUri(webApi.absoluteUri), (req, res) => {
       handler(req, res, config, webApi);
     });
   });
