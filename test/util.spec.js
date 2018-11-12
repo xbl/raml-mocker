@@ -22,7 +22,7 @@ test('When replaceUriParmaters Given /products/{productId} Then get /products/:p
   t.is(result, exceptResult);
 });
 
-test('When toExpressUri Given /products/{productId} Then get /products/:productId', t=> {
+test('When toExpressUri Given /products/{productId} Then get /products/:productId', t => {
   const given = '/products/{productId}';
   const exceptResult = '/products/:productId';
   t.is(toExpressUri(given), exceptResult);
