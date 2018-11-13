@@ -184,7 +184,7 @@ const getWebApiArr = apiJSON => {
 
       webApi.responses = [];
       method.responses().forEach(response => {
-        const code = response.code().value();
+        const code = parseInt(response.code().value(), 10);
         // 30x
         if (isRedirectCode(code)) {
           response.headers().forEach(typeDeclaration => {

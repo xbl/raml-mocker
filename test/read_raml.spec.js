@@ -341,7 +341,7 @@ test('when read raml given /products then get webAPI array', t => {
       queryParameter: {},
       responses: [
         {
-          code: '200',
+          code: 200,
           body: `{
   "a": 1
 }
@@ -385,7 +385,7 @@ test('when read raml given /products has queryParameter then get webAPI array', 
       },
       responses: [
         {
-          code: '200',
+          code: 200,
           body: `{
   "a": 1
 }
@@ -439,7 +439,7 @@ test('when read raml given post /products has data then get webAPI array', t => 
       },
       responses: [
         {
-          code: '200',
+          code: 200,
           body: `{
   "a": 1
 }
@@ -489,7 +489,7 @@ test('when read raml given /products has uriParameters then get webAPI array', t
       queryParameter: {},
       responses: [
         {
-          code: '200',
+          code: 200,
           body: `{
   "a": 1
 }
