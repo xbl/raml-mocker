@@ -14,10 +14,10 @@ app.use((req, res, next) => {
 
 const handler = (req, res, config, webApi) => {
   if (webApi.controller) {
-    const controller = webApi.controller.split('#');
+    const [controller, methodName] = webApi.controller.split('#');
     // eslint-disable-next-line
-    const moduleCtrl = require(`${config.controller}/${controller[0]}`);
-    const fn = moduleCtrl[controller[1]];
+    const moduleCtrl = require(`${config.controller}/${controller}`);
+    const fn = moduleCtrl[methodName];
     if (typeof fn === 'function') fn.call(app, req, res, webApi);
     return;
   }
