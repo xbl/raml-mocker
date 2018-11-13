@@ -1,5 +1,6 @@
 const { isRedirectCode } = require('./util');
 
+const ANY_TYPE = 'any';
 const BASE_TYPE = [
   'string',
   'number',
@@ -8,7 +9,7 @@ const BASE_TYPE = [
   'object',
   'integer',
   'null',
-  'any'
+  ANY_TYPE
 ];
 
 const setProps = (obj, property, value) => {
@@ -84,7 +85,12 @@ exports.getDefinitionSchama = getDefinitionSchama;
 const getSchamaByType = type => {
   if (!type) return undefined;
   const newType = type.replace('[]', '');
-  if (BASE_TYPE.includes(newType)) return undefined;
+  if (newType === ANY_TYPE) {
+    return undefined;
+  }
+  if (BASE_TYPE.includes(newType)) {
+    return { type: newType };
+  }
   const $ref = { $ref: `/definitionSchema#/definitions/${newType}` };
   let schema = $ref;
   if (type.includes('[]')) {
