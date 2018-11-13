@@ -33,23 +33,23 @@ const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
 
 webApiArr.forEach(webApi => {
   webApi.responses.forEach(async resp => {
-    let requestBody = {};
-    if (webApi.body) {
-      requestBody = webApi.body.value;
-    }
-    let requestPath = '';
+    let requestPath = webApi.absoluteUri;
     try {
-      let uri = webApi.absoluteUri;
       if (webApi.uriParameters) {
-        replaceUriParmaters(uri, (match, expression) => {
-          uri = uri.replace(match, webApi.uriParameters[expression]);
+        replaceUriParmaters(requestPath, (match, expression) => {
+          requestPath = requestPath.replace(
+            match,
+            webApi.uriParameters[expression]
+          );
         });
       }
-      const response = await axios(uri, {
+
+      const response = await axios(requestPath, {
         method: webApi.method,
-        data: requestBody,
+        data: webApi.body ? webApi.body.value : {},
         params: webApi.queryParameter
       });
+
       if (!resp.schema) return;
       const { data, request } = response;
       const { valid, error } = validate(definitionSchema, resp.schema, data);
