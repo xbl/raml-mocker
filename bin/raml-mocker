@@ -4,14 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const chokidar = require('chokidar');
 const { fork } = require('child_process');
+const { loadConfig } = require('../src/util');
 
-const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
-config.raml = path.resolve(config.raml);
-config.controller = path.resolve(config.controller);
-if (Array.isArray(config.plugins)) {
-  config.plugins = config.plugins.map(plugin => path.resolve(plugin));
-}
-
+const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 let server = null;
 const startServer = () => {
   server = fork(path.join(__dirname, './server'));

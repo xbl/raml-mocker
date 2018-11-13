@@ -7,14 +7,9 @@ const raml = require('raml-1-parser');
 
 const readRaml = require('../src/read_raml');
 const { validate, output } = require('../src/validate');
-const { jsonPath, replaceUriParmaters } = require('../src/util');
+const { loadConfig, jsonPath, replaceUriParmaters } = require('../src/util');
 
-const config = JSON.parse(fs.readFileSync('./.raml-config.json', 'utf8'));
-config.raml = path.resolve(config.raml);
-config.controller = path.resolve(config.controller);
-if (Array.isArray(config.plugins)) {
-  config.plugins = config.plugins.map(plugin => path.resolve(plugin));
-}
+const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 
 const env = process.env.NODE_ENV;
 let host = `http://localhost:${config.port}`;

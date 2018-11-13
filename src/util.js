@@ -1,4 +1,5 @@
 const vm = require('vm');
+const { resolve } = require('path');
 
 exports.isRedirectCode = code => code >= 300 && code < 400;
 
@@ -26,4 +27,14 @@ exports.toExpressUri = uri => {
     result = result.replace(match, `:${expression}`);
   });
   return result;
+};
+
+exports.loadConfig = str => {
+  const config = JSON.parse(str);
+  config.raml = resolve(config.raml);
+  config.controller = resolve(config.controller);
+  if (Array.isArray(config.plugins)) {
+    config.plugins = config.plugins.map(plugin => resolve(plugin));
+  }
+  return config;
 };
