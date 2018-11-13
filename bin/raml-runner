@@ -31,43 +31,56 @@ const apiJSON = raml.loadApiSync(path.join(config.raml, config.main), {
 const webApiArr = readRaml.getWebApiArr(apiJSON);
 const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
 
-webApiArr.forEach(webApi => {
-  webApi.responses.forEach(async resp => {
-    let requestPath = webApi.absoluteUri;
-    try {
-      if (webApi.uriParameters) {
-        replaceUriParmaters(requestPath, (match, expression) => {
-          requestPath = requestPath.replace(
-            match,
-            webApi.uriParameters[expression]
-          );
-        });
-      }
-
-      const response = await axios(requestPath, {
-        method: webApi.method,
-        data: webApi.body ? webApi.body.value : {},
-        params: webApi.queryParameter
-      });
-
-      if (!resp.schema) return;
-      const { data, request } = response;
-      const { valid, error } = validate(definitionSchema, resp.schema, data);
-      let validInfo = '';
-      let msg = '';
-      if (!valid) {
-        let result = data;
-        const { message, dataPath } = error;
-        msg = message;
-        if (dataPath) {
-          result = jsonPath(data, dataPath);
-        }
-        validInfo = `info:\n${JSON.stringify(result, null, '\t')}\n`;
-      }
-      requestPath = request.path;
-      output(valid, msg, validInfo, requestPath);
-    } catch (err) {
-      output(false, err.message, '', requestPath);
+const getResponseByStatusCode = (code, responses) => {
+  let response;
+  responses.forEach(resp => {
+    if (resp.code === code) {
+      response = resp;
     }
   });
+  return response;
+};
+
+webApiArr.forEach(async webApi => {
+  let requestPath = webApi.absoluteUri;
+  try {
+    if (webApi.uriParameters) {
+      replaceUriParmaters(requestPath, (match, expression) => {
+        requestPath = requestPath.replace(
+          match,
+          webApi.uriParameters[expression]
+        );
+      });
+    }
+
+    const response = await axios(requestPath, {
+      method: webApi.method,
+      data: webApi.body ? webApi.body.value : {},
+      params: webApi.queryParameter
+    });
+
+    const resp = getResponseByStatusCode(response.status, webApi.responses);
+    if (!resp) {
+      output(false, "can't find code by responses", '', requestPath);
+    }
+
+    if (!resp.schema) return;
+    const { data, request } = response;
+    const { valid, error } = validate(definitionSchema, resp.schema, data);
+    let validInfo = '';
+    let msg = '';
+    if (!valid) {
+      let result = data;
+      const { message, dataPath } = error;
+      msg = message;
+      if (dataPath) {
+        result = jsonPath(data, dataPath);
+      }
+      validInfo = `info:\n${JSON.stringify(result, null, '\t')}\n`;
+    }
+    requestPath = request.path;
+    output(valid, msg, validInfo, requestPath);
+  } catch (err) {
+    output(false, err.message, '', requestPath);
+  }
 });
