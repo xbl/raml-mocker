@@ -169,18 +169,17 @@ const getWebApiArr = apiJSON => {
     resource.methods().forEach(method => {
       const webApi = { absoluteUri, method: method.method() };
       const controller = getAnnotationByName('controller', method);
-      if (controller) {
-        webApi.controller = controller;
-      }
+      setProps(webApi, 'controller', controller);
+
+      const runner = getAnnotationByName('runner', method);
+      setProps(webApi, 'runner', runner);
 
       const uriParameters = getUriParameters(resource, method);
-      if (uriParameters) {
-        webApi.uriParameters = uriParameters;
-      }
+      setProps(webApi, 'uriParameters', uriParameters);
 
       webApi.queryParameter = getQueryParameter(method.queryParameters());
       const requestBody = getPostBody(method.body());
-      if (requestBody) webApi.body = requestBody;
+      setProps(webApi, 'body', requestBody);
 
       webApi.responses = [];
       method.responses().forEach(response => {
