@@ -1,6 +1,10 @@
 import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
-import { getDefinitionSchama, getWebApiArr } from '../src/read_raml';
+import {
+  getDefinitionSchama,
+  getWebApiArr,
+  getAnnotationByName
+} from '../src/read_raml';
 
 test('when read raml given Product type then get definitionSchema object', t => {
   const definitionSchema = {
@@ -520,4 +524,40 @@ mediaType: application/json
 
   const result = getWebApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
+});
+
+test('When read raml given (runner) annotations then get annotation object', t => {
+  const exceptResult = {
+    id: {
+      description: 'article id',
+      example: 'aaaa'
+    }
+  };
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+/products/{productId}:
+  get:
+    (runner):
+      id:
+        description: article id
+        example: aaaa
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
+
+  const [resource] = apiJSON.allResources();
+  const [method] = resource.methods();
+  const result = getAnnotationByName('runner', method);
+  t.deepEqual(result, exceptResult);
 });
