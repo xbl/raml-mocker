@@ -44,7 +44,7 @@ const getDefinitionSchama = apiJSON => {
       } = properties[key];
 
       const property = {
-        type
+        type: type.map(String)
       };
       setProps(property, 'maxLength', maxLength);
       setProps(property, 'minLength', minLength);
