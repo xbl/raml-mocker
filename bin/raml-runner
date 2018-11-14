@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const path = require('path');
+const { join, resolve } = require('path');
 const axios = require('axios');
 const raml = require('raml-1-parser');
 
@@ -20,7 +20,7 @@ if (config.runner && env) {
 console.log(`HOST: ${host}`);
 axios.defaults.baseURL = host;
 
-const apiJSON = raml.loadApiSync(path.join(config.raml, config.main), {
+const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
   serializeMetadata: false
 });
 const webApiArr = readRaml.getWebApiArr(apiJSON);
@@ -36,7 +36,7 @@ const getResponseByStatusCode = (code, responses) => {
   return response;
 };
 
-webApiArr.forEach(async webApi => {
+const send = async webApi => {
   let requestPath = webApi.absoluteUri;
   try {
     if (webApi.uriParameters) {
@@ -53,6 +53,16 @@ webApiArr.forEach(async webApi => {
       data: webApi.body ? webApi.body.value : {},
       params: webApi.queryParameter
     });
+
+    const { runner } = webApi;
+    if (runner) {
+      const { after } = runner;
+      // eslint-disable-next-line
+      const afterModule = require(resolve(after));
+      if (typeof afterModule === 'function') {
+        afterModule(axios, response);
+      }
+    }
 
     const resp = getResponseByStatusCode(response.status, webApi.responses);
     if (!resp) {
@@ -71,11 +81,13 @@ webApiArr.forEach(async webApi => {
       if (dataPath) {
         result = jsonPath(data, dataPath);
       }
-      validInfo = `info:\n${JSON.stringify(result, null, '\t')}\n`;
+      validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
     }
     requestPath = request.path;
     output(valid, msg, validInfo, requestPath);
   } catch (err) {
     output(false, err.message, '', requestPath);
   }
-});
+};
+
+webApiArr.forEach(send);
