@@ -90,4 +90,21 @@ const send = async webApi => {
   }
 };
 
-webApiArr.forEach(send);
+webApiArr.sort(webApi => {
+  if (webApi.runner) {
+    return -1;
+  }
+  return 1;
+});
+
+const sendRunner = async () => {
+  const webApi = webApiArr.shift();
+  if (!webApi.runner) {
+    webApiArr.forEach(send);
+    return;
+  }
+  await send(webApi);
+  sendRunner();
+};
+
+sendRunner();
