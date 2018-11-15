@@ -115,7 +115,7 @@ const getQueryParameter = queryParameters => {
 };
 
 const getPostBody = ([body]) => {
-  if (!body) return undefined;
+  if (!body || !body.example()) return undefined;
   const value = body.example().value();
   if (!value) return undefined;
   return {
@@ -143,7 +143,8 @@ const getUriParameters = (resource, method) => {
     if (!uriParameters) uriParameters = {};
     Object.keys(params).forEach(key => {
       const param = params[key];
-      if (param && param.example) uriParameters[key] = param.example;
+      const example = String(param.example);
+      if (param && example) uriParameters[key] = example;
     });
   }
 
