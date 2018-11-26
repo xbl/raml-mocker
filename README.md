@@ -195,3 +195,29 @@ module.exports = (body) => {
 
 ```
 
+
+
+## API 自动化测试
+
+在 1.1.0 中增加的新功能，通过在 raml 文件中添加 response 数据的描述，来验证 response 的数据是否符合预期。
+
+```shell
+npm install @xbl/raml-mocker@next
+or
+yarn add @xbl/raml-mocker@next
+```
+
+
+
+使用
+
+## Road Map
+
+- [x] API 自动化测试
+- [x] 自动化增加前置条件，如：登录
+- [ ] 测试数据导入
+- [ ] Mock Server 增加请求参数验证
+- [ ] 上传文件的处理
+- [ ] baseUriParameters
+- [ ] [Proxy](https://github.com/chimurai/http-proxy-middleware) 代理
+
