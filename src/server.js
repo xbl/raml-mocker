@@ -36,7 +36,7 @@ const handler = (req, res, config, webApi) => {
   if (response.mimeType) res.type(response.mimeType);
   res.status(response.code);
   let { body } = response;
-  if (!body) return;
+  if (body === undefined || body === null) return;
   if (Array.isArray(config.plugins)) {
     config.plugins.forEach(plugin => {
       // eslint-disable-next-line
