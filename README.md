@@ -24,9 +24,9 @@ npm start
 ```
 #### 测试
 ```shell
-curl -i http://localhost:3000/api/v1/users/1/books/
+curl -i http://localhost:3000/api/v1/articles
 # or
-curl -i http://localhost:3000/api/v1/users/1/books/1
+curl -i http://localhost:3000/api/v1/articles/bbb
 ```
 
 ### 生成 API 可视化文档
@@ -199,17 +199,150 @@ module.exports = (body) => {
 
 ## API 自动化测试
 
-在 1.1.0 中增加的新功能，通过在 raml 文件中添加 response 数据的描述，来验证 response 的数据是否符合预期。
+在 1.1.0 中增加 API 测试，通过在 raml 文件中添加 response 数据的描述，来验证 response 的数据是否符合预期。
+
+
+![runner](https://ws3.sinaimg.cn/large/006tNbRwly1fxmfzgk4e4g30i809243q.gif)
+
+
+1. 在 types 文件中编写商品 Type，描述了返回数据的类型，以及对象中字段验证：
+
+```yaml
+Product:
+  type: object
+  properties:
+    productId:
+      type: string
+      minLength: 4
+      maxLength: 36
+      required: true
+    productName: string
+    description: string
+    price: number
+```
+
+2. 在 API Raml 中添加 type 字段：
+
+``` yaml
+get:
+  description: 商品列表
+  queryParameters:
+    isStar:
+      description: 是否精选
+      type: boolean
+      required: false
+      example: true
+  responses:
+    200:
+      body:
+        # 这里描述的商品数组
+        type: Product[]
+        example: !include ./products_200.json
+
+/{productId}:
+  get:
+    description: 商品详情
+    (controller): product#getProductDetail
+    (uriParameters):
+      productId:
+        description: productId
+        example: aaaa
+    responses:
+      200:
+        body:
+          # 这里描述的商品
+          type: Product
+          example: !include ./product_200.json
+
+```
+
+3. 启动 Mock Server，并运行测试
 
 ```shell
-npm install @xbl/raml-mocker@next
-or
-yarn add @xbl/raml-mocker@next
+# 启动 Mock Server
+npm start
+
+# 运行 API 测试
+npm test
 ```
 
 
 
-使用
+### 设置不同环境
+
+运行测试时默认会测试 Mock Server的 response，设置不同的环境方式如下：
+
+编辑 .raml-config.json 文件
+
+```json
+{
+  "controller": "./controller",
+  "raml": "./raml",
+  "main": "api.raml",
+  "port": 3000,
+  "runner": {
+    "local": "http://localhost:3000",
+    "dev": "http://abc.com:3001"
+  }
+}
+```
+
+在 runner 添加不同的环境对应的 HOST，通过 SET  `NODE_ENV`  来更改运行不同环境的测试。
+
+```shell
+cross-env NODE_ENV=dev raml-runner
+
+# 为了方便已经在模板项目中添加了 npm script，可自由更改
+npm run test:dev
+```
+
+
+
+### 前置条件
+
+以上只能满足不需要登录的 API 测试，登录的接口则需要 **优先** 执行，然后再执行其他接口，此处为了简单增加了`(runner)` 指令：
+
+```yaml
+/login
+    post:
+      description: 登录
+      body:
+        username:
+          description: 用户名
+          type: string
+          required: true
+          example: abc
+        password:
+          description: 密码
+          type: string
+          required: true
+          example: abc
+      (runner):
+        after: ./runner/afterLogin.js
+      responses:
+        200:
+          body:
+            type: string
+            example: fdafda232432fdaxfda25dfa
+
+```
+
+解析 raml 文件会优先执行带有 `(runner)` 指令的接口，并在执行完成之后调用 `after` 对应的 js 文件。
+
+afterLogin.js 
+
+```javascript
+module.exports = (axios, response) => {
+  axios.defaults.headers.common['Authorization'] = response.data;
+}
+
+```
+
+测试发请求使用的 [axios](https://www.npmjs.com/package/axios) 模块，所以这里会在函数参数中添加 axios 实例，以及执行 login 接口的 response 对象。通常，设置 Header 就可以满足登录所需要的大部分场景。
+
+
+
+
 
 ## Road Map
 
@@ -221,3 +354,18 @@ yarn add @xbl/raml-mocker@next
 - [ ] baseUriParameters
 - [ ] [Proxy](https://github.com/chimurai/http-proxy-middleware) 代理
 
+
+
+## 注意
+
+在1.1.0 以后 对原本的 raml 中 uri 动态参数有些调整：
+
+```yaml
+# 1.1.0 以前
+/products/:productId
+
+# 1.1.0 以后
+/products/{productId}
+```
+
+此调整不会 break 之前的功能，在使用API 测试的时候必须修改。
