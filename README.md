@@ -72,7 +72,7 @@ raml-mocker 可以不写 js 代码生成Mock Server，只需要在response 添�
 
 ```yaml
 /books:
-  /:id:
+  /{id}:
     post:
       body:
         application/json:
@@ -329,7 +329,7 @@ npm run test:dev
 
 解析 raml 文件会优先执行带有 `(runner)` 指令的接口，并在执行完成之后调用 `after` 对应的 js 文件。
 
-afterLogin.js 
+afterLogin.js
 
 ```javascript
 module.exports = (axios, response) => {
