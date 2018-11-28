@@ -38,6 +38,7 @@ const getResponseByStatusCode = (code, responses) => {
 
 const send = async webApi => {
   let requestPath = webApi.absoluteUri;
+  const beginTime = Date.now();
   try {
     if (webApi.uriParameters) {
       replaceUriParmaters(requestPath, (match, expression) => {
@@ -63,14 +64,14 @@ const send = async webApi => {
         afterModule(axios, response);
       }
     }
+    const { data, request } = response;
 
     const resp = getResponseByStatusCode(response.status, webApi.responses);
     if (!resp) {
-      output(false, "can't find code by responses", '', requestPath);
+      output(false, "can't find code by responses", '', request);
     }
 
     if (!resp.schema) return;
-    const { data, request } = response;
     const { valid, error } = validate(definitionSchema, resp.schema, data);
     let validInfo = '';
     let msg = '';
@@ -83,10 +84,16 @@ const send = async webApi => {
       }
       validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
     }
-    requestPath = request.path;
-    output(valid, msg, validInfo, requestPath);
+    output(valid, msg, validInfo, request, Date.now() - beginTime);
   } catch (err) {
-    output(false, err.message, '', requestPath);
+    output(
+      false,
+      err.message,
+      '',
+      // eslint-disable-next-line no-underscore-dangle
+      err.request._currentRequest,
+      Date.now() - beginTime
+    );
   }
 };
 

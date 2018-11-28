@@ -13,7 +13,7 @@ exports.validate = (definitionSchema, schema, data) => {
   };
 };
 
-exports.output = (valid, message, validInfo, url) => {
+exports.output = (valid, message, validInfo, request, time) => {
   let color = 'green';
   let icon = '✔';
 
@@ -22,6 +22,8 @@ exports.output = (valid, message, validInfo, url) => {
     icon = '✖';
   }
   console.log(
-    chalk`{${color} ${icon} 请求：} {underline ${url}}  \n{${color} ${message}}\n${validInfo}`
+    chalk`{${color} ${icon} 请求：} {underline ${
+      request.path
+    }} {gray ${time}ms} \n{${color} ${message}}\n${validInfo}`
   );
 };
