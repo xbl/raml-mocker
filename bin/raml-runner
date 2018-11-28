@@ -72,20 +72,25 @@ const send = async webApi => {
     }
 
     if (!resp.schema) return;
-    const { valid, error } = validate(definitionSchema, resp.schema, data);
-    let validInfo = '';
-    let msg = '';
-    if (!valid) {
-      let result = data;
-      const { message, dataPath } = error;
-      msg = message;
-      if (dataPath) {
-        result = jsonPath(data, dataPath);
+    try {
+      const { valid, error } = validate(definitionSchema, resp.schema, data);
+      let validInfo = '';
+      let msg = '';
+      if (!valid) {
+        let result = data;
+        const { message, dataPath } = error;
+        msg = message;
+        if (dataPath) {
+          result = jsonPath(data, dataPath);
+        }
+        validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
       }
-      validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
+      output(valid, msg, validInfo, request, Date.now() - beginTime);
+    } catch (error) {
+      output(false, error.message, '', request, Date.now() - beginTime);
     }
-    output(valid, msg, validInfo, request, Date.now() - beginTime);
   } catch (err) {
+    console.log(err);
     output(
       false,
       err.message,

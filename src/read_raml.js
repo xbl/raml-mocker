@@ -143,6 +143,7 @@ const getUriParameters = (resource, method) => {
     if (!uriParameters) uriParameters = {};
     Object.keys(params).forEach(key => {
       const param = params[key];
+      if (!param) return;
       const example = String(param.example);
       if (param && example) uriParameters[key] = example;
     });
