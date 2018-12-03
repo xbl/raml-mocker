@@ -90,7 +90,6 @@ const send = async webApi => {
       output(false, error.message, '', request, Date.now() - beginTime);
     }
   } catch (err) {
-    console.log(err);
     output(
       false,
       err.message,
@@ -113,6 +112,7 @@ const sendRunner = async () => {
   }
   await send(webApi);
   sendRunner();
+  process.exit(1);
 };
 
 sendRunner();
