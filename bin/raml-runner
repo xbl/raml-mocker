@@ -112,7 +112,6 @@ const sendRunner = async () => {
   }
   await send(webApi);
   sendRunner();
-  process.exit(1);
 };
 
 sendRunner();
