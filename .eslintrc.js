@@ -4,6 +4,7 @@ module.exports = {
     "node": true
   },
   "rules": {
-    "no-param-reassign": [2, { "props": false }]
+    "no-param-reassign": [2, { "props": false }],
+    "no-plusplus": 0
   }
 };

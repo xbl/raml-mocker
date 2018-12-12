@@ -1,5 +1,4 @@
 const Ajv = require('ajv');
-const chalk = require('chalk');
 
 exports.validate = (definitionSchema, schema, data) => {
   const ajv = new Ajv();
@@ -13,17 +12,3 @@ exports.validate = (definitionSchema, schema, data) => {
   };
 };
 
-exports.output = (valid, message, validInfo, request, time) => {
-  let color = 'green';
-  let icon = '✔';
-
-  if (!valid) {
-    color = 'red';
-    icon = '✖';
-  }
-  console.log(
-    chalk`{${color} ${icon} 请求：} {underline ${
-      request.path
-    }} {gray ${time}ms} \n{${color} ${message}}\n${validInfo}`
-  );
-};

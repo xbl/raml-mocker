@@ -6,8 +6,9 @@ const axios = require('axios');
 const raml = require('raml-1-parser');
 
 const readRaml = require('../src/read_raml');
-const { validate, output } = require('../src/validate');
+const { validate } = require('../src/validate');
 const { loadConfig, jsonPath, replaceUriParmaters } = require('../src/util');
+const Output = require('../src/output');
 
 const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 
@@ -17,7 +18,6 @@ if (config.runner && env) {
   host = config.runner[env];
 }
 
-console.log(`HOST: ${host}`);
 axios.defaults.baseURL = host;
 
 const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
@@ -25,6 +25,7 @@ const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
 });
 const webApiArr = readRaml.getWebApiArr(apiJSON);
 const definitionSchema = readRaml.getDefinitionSchama(apiJSON);
+const output = new Output(host, webApiArr.length);
 
 const getResponseByStatusCode = (code, responses) => {
   let response;
@@ -68,7 +69,13 @@ const send = async webApi => {
 
     const resp = getResponseByStatusCode(response.status, webApi.responses);
     if (!resp) {
-      output(false, "can't find code by responses", '', request);
+      output.push(
+        false,
+        "can't find code by responses",
+        '',
+        request,
+        beginTime
+      );
     }
 
     if (!resp.schema) return;
@@ -85,18 +92,18 @@ const send = async webApi => {
         }
         validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
       }
-      output(valid, msg, validInfo, request, Date.now() - beginTime);
+      output.push(valid, msg, validInfo, request, beginTime);
     } catch (error) {
-      output(false, error.message, '', request, Date.now() - beginTime);
+      output.push(false, error.message, '', request, beginTime);
     }
   } catch (err) {
-    output(
+    output.push(
       false,
       err.message,
       '',
       // eslint-disable-next-line no-underscore-dangle
       err.request._currentRequest,
-      Date.now() - beginTime
+      beginTime
     );
   }
 };
