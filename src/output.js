@@ -21,7 +21,7 @@ function Output(host, maxCount) {
       this.successCount++;
     }
     this.logArr.push(
-      chalk`{${color} ${icon} 请求：} {underline ${
+      chalk`{${color} ${icon} 请求：[${request.method}]} {underline ${
         request.path
       }} {gray ${Date.now() -
         beginTime}ms} \n{${color} ${message}}\n${validInfo}`
