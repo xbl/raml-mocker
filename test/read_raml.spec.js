@@ -333,6 +333,44 @@ types:
   t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
 });
 
+test('when read raml given string Array then get definitionSchema object', t => {
+  const definitionSchema = {
+    $id: '/definitionSchema',
+    definitions: {
+      Product: {
+        type: 'object',
+        properties: {
+          productId: {
+            type: ['string']
+          },
+          coverImage: {
+            items: [{ type: 'string' }],
+            additionalItems: {
+              type: 'string'
+            }
+          }
+        },
+        required: ['productId', 'coverImage']
+      }
+    }
+  };
+  const ramlStr = `
+#%RAML 1.0
+---
+types:
+  Product:
+    type: object
+    properties:
+      productId:
+        type: string
+      coverImage: string[]
+  `;
+  const apiJSON = parseRAMLSync(ramlStr, {
+    serializeMetadata: false
+  });
+  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+});
+
 test('when read raml given /products then get webAPI array', t => {
   const webAPIArr = [
     {

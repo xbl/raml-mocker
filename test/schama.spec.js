@@ -144,3 +144,50 @@ test('give array type then validate return true', t => {
   }
   t.true(valid, msg);
 });
+
+test('give string array type then validate return true', t => {
+  const responseBody = [
+    {
+      productId: 'P00001',
+      coverImage: ['1.png', '2.png']
+    }
+  ];
+
+  const definitionSchema = {
+    $id: '/definitionSchema',
+    definitions: {
+      Product: {
+        type: 'object',
+        properties: {
+          productId: {
+            type: ['string']
+          },
+          coverImage: {
+            items: [{ type: 'string' }],
+            additionalItems: {
+              type: 'string'
+            }
+          }
+        },
+        required: ['productId', 'coverImage']
+      }
+    }
+  };
+
+  const $ref = { $ref: '/definitionSchema#/definitions/Product' };
+  const schema = {
+    items: [$ref],
+    additionalItems: $ref
+  };
+
+  const ajv = new Ajv();
+  const validate = ajv.addSchema(definitionSchema).compile(schema);
+  const valid = validate(responseBody);
+  let msg = '';
+  if (!valid) {
+    const [error] = validate.errors;
+    const { message } = error;
+    msg = message;
+  }
+  t.true(valid, msg);
+});
