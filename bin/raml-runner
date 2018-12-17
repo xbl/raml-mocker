@@ -78,7 +78,11 @@ const send = async webApi => {
       );
     }
 
-    if (!resp.schema) return;
+    if (!resp.schema) {
+      output.push(true, '', '', request, beginTime);
+      return;
+    }
+
     try {
       const { valid, error } = validate(definitionSchema, resp.schema, data);
       let validInfo = '';
