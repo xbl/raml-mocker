@@ -65,9 +65,10 @@ const send = async webApi => {
         afterModule(axios, response);
       }
     }
-    const { data, request } = response;
+    const { data, request, status } = response;
 
-    const resp = getResponseByStatusCode(response.status, webApi.responses);
+    const resp = getResponseByStatusCode(status, webApi.responses);
+
     if (!resp) {
       output.push(
         false,
@@ -106,7 +107,7 @@ const send = async webApi => {
       err.message,
       '',
       // eslint-disable-next-line no-underscore-dangle
-      err.request._currentRequest,
+      err.request._currentRequest || err.request,
       beginTime
     );
   }
