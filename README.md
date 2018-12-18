@@ -1,5 +1,7 @@
 # Raml-mocker
 
+![version](https://img.shields.io/npm/v/@xbl/raml-mocker.svg)
+
 Raml-mocker 是基于 [Raml](https://raml.org/) 的 mock server，Raml 是 RESTfull API 描述语言，同时支持自定义指令。raml-mocker 可以根据 raml 描述文档读取到 API 中的 uri 及 response 中的 example 继而生成 mock server。
 
 ## 开始
@@ -201,8 +203,7 @@ module.exports = (body) => {
 
 在 1.1.0 中增加 API 测试，通过在 raml 文件中添加 response 数据的描述，来验证 response 的数据是否符合预期。
 
-
-![runner](https://ws3.sinaimg.cn/large/006tNbRwly1fxmfzgk4e4g30i809243q.gif)
+![runner](https://ws1.sinaimg.cn/large/006tNbRwly1fyaoa2ikfeg30i60b4afa.gif)
 
 
 1. 在 types 文件中编写商品 Type，描述了返回数据的类型，以及对象中字段验证：
@@ -350,9 +351,8 @@ module.exports = (axios, response) => {
 - [x] 自动化增加前置条件，如：登录
 - [ ] 测试数据导入
 - [ ] Mock Server 增加请求参数验证
-- [ ] 上传文件的处理
 - [ ] baseUriParameters
-- [ ] [Proxy](https://github.com/chimurai/http-proxy-middleware) 代理
+- [ ] 上传文件的处理
 
 
 
