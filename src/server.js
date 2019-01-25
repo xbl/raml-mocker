@@ -3,7 +3,7 @@ const express = require('express');
 const raml = require('raml-1-parser');
 
 const app = express();
-const readRaml = require('./read_raml');
+const readRaml = require('./read-raml');
 const { isRedirectCode, toExpressUri } = require('./util');
 
 app.use((req, res, next) => {

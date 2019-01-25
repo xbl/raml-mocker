@@ -4,7 +4,7 @@ import {
   getDefinitionSchema,
   getWebApiArr,
   getAnnotationByName
-} from '../src/read_raml';
+} from '../src/read-raml';
 
 test('when read raml given Product type then get definitionSchema object', t => {
   const definitionSchema = {
