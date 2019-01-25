@@ -24,7 +24,7 @@ const handler = (req, res, config, webApi) => {
 
   const response = webApi.responses[0];
   if (!response) {
-    res.status(404).send('no set reponse or example');
+    res.status(404).send('no set response or example');
     return;
   }
 

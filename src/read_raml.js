@@ -16,9 +16,9 @@ const setProps = (obj, property, value) => {
   if (value) obj[property] = value;
 };
 
-const getDefinitionSchama = apiJSON => {
+const getDefinitionSchema = apiJSON => {
   const $id = '/definitionSchema';
-  const definitionSchama = {
+  const definitionSchema = {
     $id,
     definitions: {}
   };
@@ -31,7 +31,7 @@ const getDefinitionSchama = apiJSON => {
     if (!properties) return;
 
     const requiredArr = [];
-    const schamaProperties = {};
+    const schemaProperties = {};
     Object.keys(properties).forEach(key => {
       const {
         items,
@@ -53,10 +53,10 @@ const getDefinitionSchama = apiJSON => {
         requiredArr.push(name);
         delete property.required;
       }
-      schamaProperties[name] = property;
+      schemaProperties[name] = property;
 
       if (!BASE_TYPE.includes(type[0])) {
-        schamaProperties[name] = { $ref: `${$id}#/definitions/${type[0]}` };
+        schemaProperties[name] = { $ref: `${$id}#/definitions/${type[0]}` };
         return;
       }
 
@@ -65,27 +65,27 @@ const getDefinitionSchama = apiJSON => {
         if (!BASE_TYPE.includes(items)) {
           $ref = { $ref: `${$id}#/definitions/${items}` };
         }
-        schamaProperties[name] = {
+        schemaProperties[name] = {
           items: [$ref],
           additionalItems: $ref
         };
       }
     });
 
-    const sechemaPro = {
+    const schemaPro = {
       type: 'object',
-      properties: schamaProperties,
+      properties: schemaProperties,
       required: requiredArr
     };
 
-    definitionSchama.definitions[clazzName] = sechemaPro;
+    definitionSchema.definitions[clazzName] = schemaPro;
   });
-  return definitionSchama;
+  return definitionSchema;
 };
 
-exports.getDefinitionSchama = getDefinitionSchama;
+exports.getDefinitionSchema = getDefinitionSchema;
 
-const getSchamaByType = type => {
+const getSchemaByType = type => {
   if (!type) return undefined;
   const newType = type.replace('[]', '');
   if (newType === ANY_TYPE) {
@@ -209,7 +209,7 @@ const getWebApiArr = apiJSON => {
             body: example.value(),
             mimeType
           };
-          const schema = getSchamaByType(type);
+          const schema = getSchemaByType(type);
           if (schema) webApiResp.schema = schema;
           webApi.responses.push(webApiResp);
         });

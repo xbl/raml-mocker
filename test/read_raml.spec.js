@@ -1,7 +1,7 @@
 import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
 import {
-  getDefinitionSchama,
+  getDefinitionSchema,
   getWebApiArr,
   getAnnotationByName
 } from '../src/read_raml';
@@ -38,7 +38,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given Product.productId no required type then get definitionSchema object', t => {
@@ -74,7 +74,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given Product.productId has minLength then get definitionSchema object', t => {
@@ -114,7 +114,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given Product and Paragraph then get definitionSchema object', t => {
@@ -172,7 +172,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given Product of Paragraph then get definitionSchema object', t => {
@@ -236,7 +236,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given Type Array then get definitionSchema object', t => {
@@ -330,7 +330,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given string Array then get definitionSchema object', t => {
@@ -368,7 +368,7 @@ types:
   const apiJSON = parseRAMLSync(ramlStr, {
     serializeMetadata: false
   });
-  t.deepEqual(getDefinitionSchama(apiJSON), definitionSchema);
+  t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
 test('when read raml given /products then get webAPI array', t => {
