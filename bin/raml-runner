@@ -67,20 +67,26 @@ const send = async webApi => {
     }
     const { data, request, status } = response;
 
+    if (!webApi.responses.length) {
+      output.push(Output.WARNING, 'no set responses', '', request, beginTime);
+      return;
+    }
+
     const resp = getResponseByStatusCode(status, webApi.responses);
 
     if (!resp) {
       output.push(
-        false,
+        Output.ERROR,
         "can't find code by responses",
         '',
         request,
         beginTime
       );
+      return;
     }
 
     if (!resp.schema) {
-      output.push(true, '', '', request, beginTime);
+      output.push(Output.SUCCESS, '', '', request, beginTime);
       return;
     }
 
@@ -97,13 +103,19 @@ const send = async webApi => {
         }
         validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
       }
-      output.push(valid, msg, validInfo, request, beginTime);
+      output.push(
+        valid ? Output.SUCCESS : Output.ERROR,
+        msg,
+        validInfo,
+        request,
+        beginTime
+      );
     } catch (error) {
-      output.push(false, error.message, '', request, beginTime);
+      output.push(Output.ERROR, error.message, '', request, beginTime);
     }
   } catch (err) {
     output.push(
-      false,
+      Output.ERROR,
       err.message,
       '',
       // eslint-disable-next-line no-underscore-dangle

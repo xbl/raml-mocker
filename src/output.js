@@ -1,5 +1,20 @@
 const chalk = require('chalk');
 
+const typeMap = {
+  '0': {
+    color: 'red',
+    icon: '✖'
+  },
+  '1': {
+    color: 'green',
+    icon: '✔'
+  },
+  '2': {
+    color: 'yellow',
+    icon: '!'
+  }
+};
+
 function Output(host, maxCount) {
   this.host = host;
   this.maxCount = maxCount;
@@ -7,13 +22,9 @@ function Output(host, maxCount) {
   this.failCount = 0;
 
   console.log(`HOST: ${this.host}`);
-  Output.prototype.push = (valid, message, validInfo, request, beginTime) => {
-    let color = 'green';
-    let icon = '✔';
-
-    if (!valid) {
-      color = 'red';
-      icon = '✖';
+  Output.prototype.push = (type, message, validInfo, request, beginTime) => {
+    const { color, icon } = typeMap[type];
+    if (type === Output.ERROR) {
       this.failCount++;
     } else {
       this.successCount++;
@@ -36,5 +47,9 @@ function Output(host, maxCount) {
     }
   };
 }
+
+Output.ERROR = 0;
+Output.SUCCESS = 1;
+Output.WARNING = 2;
 
 module.exports = Output;
