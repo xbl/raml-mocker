@@ -2,8 +2,14 @@ const Ajv = require('ajv');
 
 exports.validate = (definitionSchema, schema, data) => {
   const ajv = new Ajv();
-
-  const validate = ajv.addSchema(definitionSchema).compile(schema);
+  let validate;
+  try {
+    validate = ajv.addSchema(definitionSchema).compile(schema);
+  } catch (error) {
+    if (error.missingRef) {
+      throw Error(`Missing custom type "${error.missingRef.split('/').pop()}"`);
+    }
+  }
   const valid = validate(data);
 
   return {
@@ -11,4 +17,3 @@ exports.validate = (definitionSchema, schema, data) => {
     error: !valid && validate.errors.pop()
   };
 };
-
