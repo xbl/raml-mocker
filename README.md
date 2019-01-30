@@ -12,19 +12,46 @@ git clone https://github.com/xbl/raml-mocker-starter.git raml-api
 cd raml-api
 git remote rm origin
 ```
-#### 安装
+#### 安装方法一——NodeJs
 ```shell
 yarn
 # or
 npm install
 ```
-#### 启动 mock server
+##### 启动 mock server
 ```shell
 yarn start
 # or
 npm start
 ```
-#### 测试
+#### 安装方法二——使用 docker-compose
+
+这部分是给不太擅长折腾nodejs环境的同学准备的。在项目中增加了 `docker-compose.yml` ，需要 Docker 环境，进入目录执行
+
+``` shell
+docker-compose up
+```
+
+第一次会拉取镜像，稍稍会有些慢。
+
+##### 停止 mock server
+
+``` shell
+docker-compose down
+```
+
+##### 在 docker 中执行命令
+
+```shell
+docker-compose exec raml-mocker sh
+# 退出
+exit
+```
+
+
+
+#### 验证一下
+
 ```shell
 curl -i http://localhost:3000/api/v1/articles
 # or
