@@ -368,7 +368,19 @@ module.exports = (axios, response) => {
 
 测试发请求使用的 [axios](https://www.npmjs.com/package/axios) 模块，所以这里会在函数参数中添加 axios 实例，以及执行 login 接口的 response 对象。通常，设置 Header 就可以满足登录所需要的大部分场景。
 
+afterLogin.js 可返回 `Promise` 对象：
 
+``` js
+module.exports = (axios, response) => {
+  return new Promise((resolve, reject) => {
+    axios.defaults.headers.common['Authorization'] = response.data;
+    setTimeout(() => {
+      console.log('不仅设置了header，还吃了个饭，洗了个澡...');
+      resolve()
+    }, 3000);
+  });
+}
+```
 
 
 

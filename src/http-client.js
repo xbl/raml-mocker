@@ -1,3 +1,4 @@
+const path = require('path');
 const axios = require('axios');
 const { replaceUriParameters } = require('./util');
 
@@ -26,9 +27,9 @@ const send = async (webApi, uriParameters, queryParameter = {}, body = {}) => {
   if (runner) {
     const { after } = runner;
     // eslint-disable-next-line
-    const afterModule = require(resolve(after));
+    const afterModule = require(path.resolve(after));
     if (typeof afterModule === 'function') {
-      afterModule(axios, response);
+      await afterModule(axios, response);
     }
   }
   return response;

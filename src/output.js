@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const chalk = require('chalk');
 
 const typeMap = {
@@ -29,7 +30,7 @@ function Output(host) {
       this.successCount++;
     }
     console.log(
-      chalk`{${color} ${icon} 请求：[${request.method}]} {underline ${
+      chalk`{${color} ${icon} 请求：[${request.method.toUpperCase()}]} {underline ${
         request.path
       }} {gray ${Date.now() -
         beginTime}ms} \n{${color} ${message}}\n${validInfo}`

@@ -84,10 +84,10 @@ const send = async (webApi, uriParameters, queryParameter, body) => {
   } catch (err) {
     output.push(
       Output.ERROR,
-      err.message,
+      err.message || err,
       '',
       // eslint-disable-next-line no-underscore-dangle
-      err.request._currentRequest || err.request,
+      { path: webApi.absoluteUri, method: webApi.method },
       beginTime
     );
   }
