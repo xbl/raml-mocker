@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const { join, resolve } = require('path');
-const axios = require('axios');
+const { join } = require('path');
 const raml = require('raml-1-parser');
 
 const readRaml = require('../src/read-raml');
-const { validate } = require('../src/validate');
-const { loadConfig, jsonPath, replaceUriParameters } = require('../src/util');
+const { validateSchema } = require('../src/validate');
+const { loadConfig } = require('../src/util');
 const Output = require('../src/output');
+const HttpClient = require('../src/http-client');
 
 const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 
@@ -18,14 +18,12 @@ if (config.runner && env) {
   host = config.runner[env];
 }
 
-axios.defaults.baseURL = host;
-
 const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
   serializeMetadata: false
 });
 const webApiArr = readRaml.getWebApiArr(apiJSON);
 const definitionSchema = readRaml.getDefinitionSchema(apiJSON);
-const output = new Output(host, webApiArr.length);
+const output = new Output(host);
 
 const getResponseByStatusCode = (code, responses) => {
   let response;
@@ -37,38 +35,20 @@ const getResponseByStatusCode = (code, responses) => {
   return response;
 };
 
-const send = async webApi => {
-  let requestPath = webApi.absoluteUri;
+HttpClient.setHost(host);
+
+const send = async (webApi, uriParameters, queryParameter, body) => {
   const beginTime = Date.now();
   try {
-    if (webApi.uriParameters) {
-      replaceUriParameters(requestPath, (match, expression) => {
-        requestPath = requestPath.replace(
-          match,
-          webApi.uriParameters[expression]
-        );
-      });
-    }
-
-    const response = await axios(requestPath, {
-      method: webApi.method,
-      data: webApi.body ? webApi.body.value : {},
-      params: webApi.queryParameter
-    });
-
-    const { runner } = webApi;
-    if (runner) {
-      const { after } = runner;
-      // eslint-disable-next-line
-      const afterModule = require(resolve(after));
-      if (typeof afterModule === 'function') {
-        afterModule(axios, response);
-      }
-    }
-    const { data, request, status } = response;
+    const { data, request, status } = await HttpClient.send(
+      webApi,
+      uriParameters,
+      queryParameter,
+      body
+    );
 
     if (!webApi.responses.length) {
-      output.push(Output.WARNING, 'no set responses', '', request, beginTime);
+      output.push(Output.WARNING, 'No set responses', '', request, beginTime);
       return;
     }
 
@@ -77,7 +57,7 @@ const send = async webApi => {
     if (!resp) {
       output.push(
         Output.ERROR,
-        "can't find code by responses",
+        "Can't find code by responses",
         '',
         request,
         beginTime
@@ -91,25 +71,13 @@ const send = async webApi => {
     }
 
     try {
-      const { valid, error } = validate(definitionSchema, resp.schema, data);
-      let validInfo = '';
-      let msg = '';
-      if (!valid) {
-        let result = data;
-        const { message, dataPath } = error;
-        msg = message;
-        if (dataPath) {
-          result = jsonPath(data, dataPath);
-        }
-        validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
-      }
-      output.push(
-        valid ? Output.SUCCESS : Output.ERROR,
-        msg,
-        validInfo,
-        request,
-        beginTime
+      const { valid, message, validInfo } = validateSchema(
+        definitionSchema,
+        resp.schema,
+        data
       );
+      const type = valid ? Output.SUCCESS : Output.ERROR;
+      output.push(type, message, validInfo, request, beginTime);
     } catch (error) {
       output.push(Output.ERROR, error.message, '', request, beginTime);
     }
@@ -131,11 +99,19 @@ const sendRunner = async () => {
   const webApi = webApiArr.shift();
   if (!webApi.runner) {
     webApiArr.unshift(webApi);
-    webApiArr.forEach(send);
+    webApiArr.forEach(aa => {
+      const body = aa.body ? aa.body.value : {};
+      send(aa, aa.uriParameters, aa.queryParameter, body);
+    });
     return;
   }
-  await send(webApi);
+  const body = webApi.body ? webApi.body.value : {};
+  await send(webApi, webApi.uriParameters, webApi.queryParameter, body);
   sendRunner();
 };
 
 sendRunner();
+
+process.on('beforeExit', () => {
+  output.print();
+});
