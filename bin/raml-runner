@@ -93,7 +93,7 @@ const send = async (webApi, uriParameters, queryParameter, body) => {
   }
 };
 
-webApiArr.sort(webApi => (webApi.runner ? -1 : 1));
+webApiArr.sort(webApi => (webApi.runner && webApi.runner.after ? -1 : 1));
 
 const sendRunner = async () => {
   const webApi = webApiArr.shift();
