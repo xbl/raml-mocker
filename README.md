@@ -346,6 +346,7 @@ npm run test:dev
           required: true
           example: abc
       (runner):
+      	# 注意：这里的相对路径是相对于工程目录，而不是当前文件。
         after: ./runner/afterLogin.js
       responses:
         200:
