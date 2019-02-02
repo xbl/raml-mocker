@@ -15,9 +15,8 @@ const typeMap = {
   }
 };
 
-function Output(host, maxCount) {
+function Output(host) {
   this.host = host;
-  this.maxCount = maxCount;
   this.successCount = 0;
   this.failCount = 0;
 
@@ -35,11 +34,9 @@ function Output(host, maxCount) {
       }} {gray ${Date.now() -
         beginTime}ms} \n{${color} ${message}}\n${validInfo}`
     );
-    this.print();
   };
 
   Output.prototype.print = () => {
-    if (this.successCount + this.failCount < this.maxCount) return;
     console.log(chalk`{green ${this.successCount} tests passed}`);
     if (this.failCount > 0) {
       console.log(chalk`{red ${this.failCount} tests failed} `);
