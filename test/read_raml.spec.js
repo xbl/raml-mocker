@@ -376,6 +376,7 @@ test('when read raml given /products then get webAPI array', t => {
     {
       absoluteUri: '/products',
       method: 'get',
+      description: '商品列表',
       queryParameter: {},
       responses: [
         {
@@ -418,6 +419,7 @@ test('when read raml given /products has queryParameter then get webAPI array', 
     {
       absoluteUri: '/products',
       method: 'get',
+      description: '商品列表',
       queryParameter: {
         isStar: 'true'
       },
@@ -468,6 +470,7 @@ test('when read raml given post /products has data then get webAPI array', t => 
     {
       absoluteUri: '/products',
       method: 'post',
+      description: '商品列表',
       queryParameter: {},
       body: {
         mimeType: 'application/json',

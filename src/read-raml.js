@@ -173,6 +173,10 @@ const getWebApiArr = apiJSON => {
 
     resource.methods().forEach(method => {
       const webApi = { absoluteUri, method: method.method() };
+
+      const description = method.description() && method.description().value();
+      setProps(webApi, 'description', description);
+
       const controller = getAnnotationByName('controller', method);
       setProps(webApi, 'controller', controller);
 
