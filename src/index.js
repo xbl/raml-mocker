@@ -12,7 +12,6 @@ let projectPath;
 let webApiArr;
 
 exports.initProject = path => {
-  console.log('setup...');
   projectPath = path;
   const config = loadConfig(
     fs.readFileSync(`${projectPath}/.raml-config.json`, 'utf8')
@@ -29,7 +28,6 @@ exports.initProject = path => {
     serializeMetadata: false
   });
   webApiArr = readRaml.getWebApiArr(apiJSON);
-  console.log('done');
 };
 
 exports.loadApi = description => {
