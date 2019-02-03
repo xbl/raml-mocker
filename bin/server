@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const http = require('http');
-const mocker = require('..');
+const mocker = require('../src/server');
 
 process.on('message', config => {
   mocker.setConfig(config);

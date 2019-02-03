@@ -9,7 +9,7 @@
     "publish": "npm publish --access=public",
     "publish:next": "npm publish --access=public --tag next"
   },
-  "main": "src/server.js",
+  "main": "src/index.js",
   "bin": {
     "raml-mocker": "./bin/raml-mocker",
     "raml-runner": "./bin/raml-runner"
