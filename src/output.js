@@ -23,9 +23,7 @@ function Output(host) {
 
   console.log(`HOST: ${this.host}`);
   Output.prototype.push = (type, message, request, beginTime) => {
-    const msgArr = message.split('\n');
-    const title = msgArr.shift();
-    const validInfo = msgArr.join('\n');
+    const [, title, validInfo] = message.match(/(^.*)[\n]*([\w\W]*)/);
     const { color, icon } = typeMap[type];
     if (type === Output.ERROR) {
       this.failCount++;
