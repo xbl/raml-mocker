@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
-    "test": "ava",
+    "test": "nyc ava",
     "test:watch": "ava --watch",
     "publish": "npm publish --access=public",
     "publish:next": "npm publish --access=public --tag next"
@@ -29,6 +29,7 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "nyc": "^13.2.0",
     "prettier": "^1.15.1"
   },
   "repository": {

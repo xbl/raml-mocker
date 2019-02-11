@@ -2,3 +2,5 @@ node_modules/*
 *.lock
 *.log
 package-lock.json
+.nyc_output
+coverage
