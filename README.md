@@ -388,25 +388,10 @@ module.exports = (axios, response) => {
 ## Road Map
 
 - [x] API 自动化测试
+- [x] API 场景测试
 - [x] 自动化增加前置条件，如：登录
 - [ ] 测试数据导入
 - [ ] Mock Server 增加请求参数验证
 - [ ] baseUriParameters
 - [ ] 上传文件的处理
 - [ ] 读取 HTTP Archive (HAR) format 反向工程
-
-
-
-## 注意
-
-在1.1.0 以后 对原本的 raml 中 uri 动态参数有些调整：
-
-```yaml
-# 1.1.0 以前
-/products/:productId
-
-# 1.1.0 以后
-/products/{productId}
-```
-
-此调整不会 break 之前的功能，在使用API 测试的时候必须修改。
