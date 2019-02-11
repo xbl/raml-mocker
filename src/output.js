@@ -22,7 +22,10 @@ function Output(host) {
   this.failCount = 0;
 
   console.log(`HOST: ${this.host}`);
-  Output.prototype.push = (type, message, validInfo, request, beginTime) => {
+  Output.prototype.push = (type, message, request, beginTime) => {
+    const msgArr = message.split('\n');
+    const title = msgArr.shift();
+    const validInfo = msgArr.join('\n');
     const { color, icon } = typeMap[type];
     if (type === Output.ERROR) {
       this.failCount++;
@@ -32,9 +35,10 @@ function Output(host) {
     console.log(
       chalk`{${color} ${icon} 请求：[${request.method.toUpperCase()}]} {underline ${
         request.path
-      }} {gray ${Date.now() -
-        beginTime}ms} \n{${color} ${message}}\n${validInfo}`
+      }} {gray ${Date.now() - beginTime}ms}`
     );
+    console.log(chalk`{${color} ${title}}`);
+    console.log(validInfo);
   };
 
   Output.prototype.print = () => {

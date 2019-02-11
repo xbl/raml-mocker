@@ -66,26 +66,25 @@ const send = async (webApi, uriParameters, queryParameter, body) => {
     }
 
     if (!resp.schema) {
-      output.push(Output.SUCCESS, '', '', request, beginTime);
+      output.push(Output.SUCCESS, '', request, beginTime);
       return;
     }
 
     try {
-      const { valid, message, validInfo } = validateSchema(
+      const { valid, message } = validateSchema(
         definitionSchema,
         resp.schema,
         data
       );
       const type = valid ? Output.SUCCESS : Output.ERROR;
-      output.push(type, message, validInfo, request, beginTime);
+      output.push(type, message, request, beginTime);
     } catch (error) {
-      output.push(Output.ERROR, error.message, '', request, beginTime);
+      output.push(Output.ERROR, error.message, request, beginTime);
     }
   } catch (err) {
     output.push(
       Output.ERROR,
       err.message || err,
-      '',
       // eslint-disable-next-line no-underscore-dangle
       { path: webApi.absoluteUri, method: webApi.method },
       beginTime

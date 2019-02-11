@@ -2,7 +2,7 @@ const Ajv = require('ajv');
 const { jsonPath } = require('./util');
 
 const processMessage = (valid, error, data) => {
-  let validInfo = '';
+  const validInfo = '';
   let msg = '';
   if (!valid) {
     let result = data;
@@ -11,7 +11,7 @@ const processMessage = (valid, error, data) => {
     if (dataPath) {
       result = jsonPath(data, dataPath);
     }
-    validInfo = `info:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
+    msg += `\ninfo:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
   }
   return {
     valid,
