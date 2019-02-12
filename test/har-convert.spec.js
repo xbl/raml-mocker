@@ -8,11 +8,37 @@ test.cb('Given a har file, then get xhr request arr', t => {
     const xhrArr = [
       {
         url: '/api/test/raml/orders/T012019011828586',
-        method: 'GET'
+        method: 'GET',
+        queryString: [
+          {
+            name: 'param1',
+            value: 'value1',
+            comment: ''
+          }
+        ],
+        response: {
+          status: 200,
+          content: {
+            mimeType: 'application/json',
+            text: '{"name":"你好"}'
+          }
+        }
       },
       {
         url: '/api/test/raml/orders/T012019011828586/redeem',
-        method: 'POST'
+        method: 'POST',
+        queryString: [],
+        body: {
+          mimeType: 'application/json;charset=UTF-8',
+          text: '{"a":1,"b":2}'
+        },
+        response: {
+          status: 200,
+          content: {
+            mimeType: 'application/json',
+            text: '{}'
+          }
+        }
       }
     ];
 
