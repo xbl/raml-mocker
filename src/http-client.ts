@@ -1,6 +1,7 @@
-const path = require('path');
-const axios = require('axios');
-const { replaceUriParameters } = require('./util');
+import path from 'path';
+import axios from 'axios';
+import { replaceUriParameters } from './util';
+import RestAPI from './models/rest-api';
 
 let baseURL;
 exports.setHost = host => {
@@ -8,9 +9,9 @@ exports.setHost = host => {
   baseURL = host;
 };
 
-const send = async (webApi, uriParameters, queryParameter = {}, body = {}) => {
+export const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
   if (!baseURL) throw Error('Please set HOST!');
-  let requestPath = webApi.absoluteUri;
+  let requestPath = webApi.url;
   if (uriParameters) {
     replaceUriParameters(requestPath, (match, expression) => {
       requestPath = requestPath.replace(match, uriParameters[expression]);
@@ -34,5 +35,3 @@ const send = async (webApi, uriParameters, queryParameter = {}, body = {}) => {
   }
   return response;
 };
-
-exports.send = send;

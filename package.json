@@ -2,17 +2,36 @@
   "name": "@xbl/raml-mocker",
   "version": "1.1.6-beta",
   "scripts": {
+    "dev": "tsc --watch",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
-    "test": "nyc ava",
-    "test:watch": "ava --watch",
+    "test": "nyc ava --fail-fast -v",
+    "test:watch": "ava --watch --fail-fast -v",
     "publish": "npm publish --access=public",
     "publish:next": "npm publish --access=public --tag next"
   },
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "bin": {
     "raml-mocker": "./bin/raml-mocker",
     "raml-runner": "./bin/raml-runner"
+  },
+  "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "nyc": {
+    "include": ["src/**/*.ts"],
+    "exclude": ["**/*.d.ts"],
+    "extension": [".ts"],
+    "require": ["ts-node/register"],
+    "reporter": ["html", "text-summary"],
+    "sourceMap": true,
+    "instrument": true
   },
   "dependencies": {
     "ajv": "^6.5.5",
@@ -30,7 +49,9 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "nyc": "^13.2.0",
-    "prettier": "^1.15.1"
+    "prettier": "^1.15.1",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
-const fs = require('fs');
-const { join } = require('path');
-const raml = require('raml-1-parser');
+import fs from 'fs';
+import { join } from 'path';
+import raml from 'raml-1-parser';
 
 const readRaml = require('./read-raml');
 const { loadConfig } = require('./util');
@@ -25,7 +25,7 @@ exports.initProject = path => {
   HttpClient.setHost(host);
 
   const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   webApiArr = readRaml.getWebApiArr(apiJSON);
 };

@@ -16,7 +16,7 @@ const typeMap = {
   }
 };
 
-function Output(host) {
+export default function Output(host) {
   this.host = host;
   this.successCount = 0;
   this.failCount = 0;
@@ -54,5 +54,3 @@ Output.prototype.print = () => {
 Output.ERROR = 0;
 Output.SUCCESS = 1;
 Output.WARNING = 2;
-
-module.exports = Output;

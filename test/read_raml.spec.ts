@@ -5,6 +5,7 @@ import {
   getWebApiArr,
   getAnnotationByName
 } from '../src/read-raml';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml08parserapi';
 
 test('when read raml given Product type then get definitionSchema object', t => {
   const definitionSchema = {
@@ -36,7 +37,7 @@ types:
       name: number
     `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -72,7 +73,7 @@ types:
       name: number
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -112,7 +113,7 @@ types:
       name: number
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -170,7 +171,7 @@ types:
       text:
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -234,7 +235,7 @@ types:
         required: false
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -328,7 +329,7 @@ types:
         required: false
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -366,7 +367,7 @@ types:
       coverImage: string[]
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
@@ -374,18 +375,20 @@ types:
 test('when read raml given /products then get webAPI array', t => {
   const webAPIArr = [
     {
-      absoluteUri: '/products',
+      url: '/products',
       method: 'get',
       description: '商品列表',
       queryParameter: {},
       responses: [
         {
           code: 200,
-          body: `{
+          body: {
+            mimeType: 'application/json',
+            text:`{
   "a": 1
 }
 `,
-          mimeType: 'application/json'
+          }
         }
       ]
     }
@@ -407,7 +410,7 @@ mediaType: application/json
             }
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
 
   const result = getWebApiArr(apiJSON);
@@ -417,7 +420,7 @@ mediaType: application/json
 test('when read raml given /products has queryParameter then get webAPI array', t => {
   const webAPIArr = [
     {
-      absoluteUri: '/products',
+      url: '/products',
       method: 'get',
       description: '商品列表',
       queryParameter: {
@@ -426,11 +429,13 @@ test('when read raml given /products has queryParameter then get webAPI array', 
       responses: [
         {
           code: 200,
-          body: `{
+          body: {
+            mimeType: 'application/json',
+            text: `{
   "a": 1
 }
 `,
-          mimeType: 'application/json'
+          }
         }
       ]
     }
@@ -458,7 +463,7 @@ mediaType: application/json
             }
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
 
   const result = getWebApiArr(apiJSON);
@@ -468,24 +473,26 @@ mediaType: application/json
 test('when read raml given post /products has data then get webAPI array', t => {
   const webAPIArr = [
     {
-      absoluteUri: '/products',
+      url: '/products',
       method: 'post',
       description: '商品列表',
       queryParameter: {},
       body: {
         mimeType: 'application/json',
-        value: `{
+        text: `{
   "isStar": true
 }`
       },
       responses: [
         {
           code: 200,
-          body: `{
+          body: {
+            mimeType: 'application/json',
+            text: `{
   "a": 1
 }
 `,
-          mimeType: 'application/json'
+          }
         }
       ]
     }
@@ -512,7 +519,7 @@ mediaType: application/json
             }
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
 
   const result = getWebApiArr(apiJSON);
@@ -522,7 +529,7 @@ mediaType: application/json
 test('when read raml given /products has uriParameters then get webAPI array', t => {
   const webAPIArr = [
     {
-      absoluteUri: '/products/{productId}',
+      url: '/products/{productId}',
       method: 'get',
       uriParameters: {
         id: 'aaaa'
@@ -531,11 +538,13 @@ test('when read raml given /products has uriParameters then get webAPI array', t
       responses: [
         {
           code: 200,
-          body: `{
+          body: {
+            mimeType: 'application/json',
+            text: `{
   "a": 1
 }
 `,
-          mimeType: 'application/json'
+          }
         }
       ]
     }
@@ -560,7 +569,7 @@ mediaType: application/json
             }
   `;
   const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
 
   const result = getWebApiArr(apiJSON);
@@ -593,8 +602,8 @@ mediaType: application/json
               "a": 1
             }
   `;
-  const apiJSON = parseRAMLSync(ramlStr, {
-    serializeMetadata: false
+  const apiJSON = <Api>parseRAMLSync(ramlStr, {
+    // serializeMetadata: false
   });
 
   const [resource] = apiJSON.allResources();

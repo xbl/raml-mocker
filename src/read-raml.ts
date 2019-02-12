@@ -1,4 +1,9 @@
-const { isRedirectCode } = require('./util');
+import { isRedirectCode } from './util';
+import RestAPI from './models/rest-api';
+import Response from './models/response';
+import Schema from './models/schema';
+import $Ref from './models/$ref';
+import Body from './models/body';
 
 const ANY_TYPE = 'any';
 const BASE_TYPE = [
@@ -16,7 +21,7 @@ const setProps = (obj, property, value) => {
   if (value) obj[property] = value;
 };
 
-const getDefinitionSchema = apiJSON => {
+export const getDefinitionSchema = apiJSON => {
   const $id = '/definitionSchema';
   const definitionSchema = {
     $id,
@@ -51,7 +56,6 @@ const getDefinitionSchema = apiJSON => {
       setProps(property, 'pattern', pattern);
       if (required) {
         requiredArr.push(name);
-        delete property.required;
       }
       schemaProperties[name] = property;
 
@@ -61,7 +65,7 @@ const getDefinitionSchema = apiJSON => {
       }
 
       if (items) {
-        let $ref = { type: items };
+        let $ref: $Ref = { type: items };
         if (!BASE_TYPE.includes(items)) {
           $ref = { $ref: `${$id}#/definitions/${items}` };
         }
@@ -83,9 +87,7 @@ const getDefinitionSchema = apiJSON => {
   return definitionSchema;
 };
 
-exports.getDefinitionSchema = getDefinitionSchema;
-
-const getSchemaByType = type => {
+const getSchemaByType = (type): Schema => {
   if (!type) return undefined;
   const newType = type.replace('[]', '');
   if (newType === ANY_TYPE) {
@@ -95,7 +97,7 @@ const getSchemaByType = type => {
     return { type: newType };
   }
   const $ref = { $ref: `/definitionSchema#/definitions/${newType}` };
-  let schema = $ref;
+  let schema: Schema = $ref;
   if (type.includes('[]')) {
     schema = {
       items: [$ref],
@@ -117,17 +119,17 @@ const getQueryParameter = queryParameters => {
   return newParam;
 };
 
-const getPostBody = ([body]) => {
-  if (!body || !body.example()) return undefined;
+const getPostBody = ([body]): Body​​ => {
+  if (!body || !body.example()) return;
   const value = body.example().value();
-  if (!value) return undefined;
+  if (!value) return;
   return {
     mimeType: body.name(),
-    value
+    text: value
   };
 };
 
-const getAnnotationByName = (name, method) => {
+export const getAnnotationByName = (name, method) => {
   let annotationObj;
   method.annotations().forEach(annotation => {
     const json = annotation.toJSON();
@@ -136,8 +138,6 @@ const getAnnotationByName = (name, method) => {
   });
   return annotationObj;
 };
-
-exports.getAnnotationByName = getAnnotationByName;
 
 const getUriParameters = (resource, method) => {
   let uriParameters;
@@ -166,29 +166,34 @@ const getUriParameters = (resource, method) => {
   return uriParameters;
 };
 
-const getWebApiArr = apiJSON => {
-  const webApiArr = [];
+export const getWebApiArr = apiJSON => {
+  const webApiArr:RestAPI[] = [];
   apiJSON.allResources().forEach(resource => {
-    const absoluteUri = resource.absoluteUri();
+    const url = <string> resource.absoluteUri();
 
     resource.methods().forEach(method => {
-      const webApi = { absoluteUri, method: method.method() };
+      const webApi: RestAPI = { url, method: <string>method.method() };
 
       const description = method.description() && method.description().value();
-      setProps(webApi, 'description', description);
+      // setProps(webApi, 'description', description);
+      description && (webApi.description = description);
 
       const controller = getAnnotationByName('controller', method);
-      setProps(webApi, 'controller', controller);
+      // setProps(webApi, 'controller', controller);
+      controller && (webApi.controller = controller);
 
       const runner = getAnnotationByName('runner', method);
-      setProps(webApi, 'runner', runner);
+      // setProps(webApi, 'runner', runner);
+      runner && (webApi.runner = runner);
 
       const uriParameters = getUriParameters(resource, method);
-      setProps(webApi, 'uriParameters', uriParameters);
+      // setProps(webApi, 'uriParameters', uriParameters);
+      uriParameters && (webApi.uriParameters = uriParameters);
 
       webApi.queryParameter = getQueryParameter(method.queryParameters());
-      const requestBody = getPostBody(method.body());
-      setProps(webApi, 'body', requestBody);
+      const postBody = getPostBody(method.body());
+      // setProps(webApi, 'body', postBody);
+      postBody && (webApi.body = postBody);
 
       webApi.responses = [];
       method.responses().forEach(response => {
@@ -198,7 +203,7 @@ const getWebApiArr = apiJSON => {
           response.headers().forEach(typeDeclaration => {
             if (typeDeclaration.name().toLowerCase() === 'location') {
               const redirectURL = typeDeclaration.type()[0];
-              webApi.responses.push({ code, location: redirectURL });
+              webApi.responses.push({ code, redirectURL });
             }
           });
           return;
@@ -208,10 +213,12 @@ const getWebApiArr = apiJSON => {
           if (!example) return;
           const mimeType = body.name();
           const type = body.type().pop();
-          const webApiResp = {
+          const webApiResp: Response = {
             code,
-            body: example.value(),
-            mimeType
+            body: {
+              text: example.value(),
+              mimeType
+            }
           };
           const schema = getSchemaByType(type);
           setProps(webApiResp, 'schema', schema);
@@ -223,5 +230,3 @@ const getWebApiArr = apiJSON => {
   });
   return webApiArr;
 };
-
-exports.getWebApiArr = getWebApiArr;
