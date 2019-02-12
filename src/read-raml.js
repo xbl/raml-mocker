@@ -214,7 +214,7 @@ const getWebApiArr = apiJSON => {
             mimeType
           };
           const schema = getSchemaByType(type);
-          if (schema) webApiResp.schema = schema;
+          setProps(webApiResp, 'schema', schema);
           webApi.responses.push(webApiResp);
         });
       });
