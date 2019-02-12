@@ -1,6 +1,6 @@
 import fs from 'fs';
 import test from 'ava';
-import convert from '../src/har-convert';
+import { read } from '../src/har-convert';
 
 test.cb('Given a har file, then get xhr request arr', t => {
   fs.readFile(`${__dirname}/localhost.har`, 'utf8', (err, data) => {
@@ -42,7 +42,7 @@ test.cb('Given a har file, then get xhr request arr', t => {
       }
     ];
 
-    const result = convert(data);
+    const result = read(data);
     t.deepEqual(result, xhrArr);
     t.end();
   });

@@ -1,6 +1,10 @@
 const xhrFilter = require('./xhr');
 
-module.exports = har => {
+exports.read = har => {
   const json = JSON.parse(har);
   return xhrFilter(json);
+};
+
+exports.save = () => {
+
 };
