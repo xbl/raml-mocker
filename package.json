@@ -3,17 +3,20 @@
   "version": "1.1.6-beta",
   "scripts": {
     "dev": "tsc --watch",
+    "build": "tsc && npm run chmod",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
+    "chmod": "chmod +x ./dist/bin/*",
     "test": "nyc ava --fail-fast -v",
     "test:watch": "ava --watch --fail-fast -v",
+    "prepublish": "npm run build",
     "publish": "npm publish --access=public",
     "publish:next": "npm publish --access=public --tag next"
   },
   "main": "dist/index.js",
   "bin": {
-    "raml-mocker": "./bin/raml-mocker",
-    "raml-runner": "./bin/raml-runner"
+    "raml-mocker": "./dist/bin/raml-mocker.js",
+    "raml-runner": "./dist/bin/raml-runner.js"
   },
   "ava": {
     "compileEnhancements": false,

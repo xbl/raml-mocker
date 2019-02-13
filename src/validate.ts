@@ -20,7 +20,7 @@ const processMessage = (valid, error, data) => {
   };
 };
 
-const validateSchema = (definitionSchema, schema, data) => {
+export const validateSchema = (definitionSchema, schema, data) => {
   const ajv = new Ajv();
   let validate;
   try {
@@ -36,5 +36,3 @@ const validateSchema = (definitionSchema, schema, data) => {
 
   return processMessage(valid, error, data);
 };
-
-exports.validateSchema = validateSchema;

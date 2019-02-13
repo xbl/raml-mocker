@@ -1,10 +1,11 @@
-const { join } = require('path');
-const express = require('express');
+import { join } from 'path';
+import express from 'express';
+import { getWebApiArr } from './read-raml';
+import { isRedirectCode, toExpressUri } from './util';
+import RestAPI from './models/rest-api';
 const raml = require('raml-1-parser');
 
 const app = express();
-const readRaml = require('./read-raml');
-const { isRedirectCode, toExpressUri } = require('./util');
 
 app.use((req, res, next) => {
   // eslint-disable-next-line
@@ -12,7 +13,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const handler = (req, res, config, webApi) => {
+const handler = (req, res, config, webApi: RestAPI) => {
   if (webApi.controller) {
     const [controller, methodName] = webApi.controller.split('#');
     // eslint-disable-next-line
@@ -29,34 +30,38 @@ const handler = (req, res, config, webApi) => {
   }
 
   if (isRedirectCode(response.code)) {
-    res.redirect(response.location);
+    res.redirect(response.redirectURL);
     return;
   }
 
-  if (response.mimeType) res.type(response.mimeType);
+  const { body } = response;
+  if (body.mimeType) res.type(body.mimeType);
   res.status(response.code);
-  let { body } = response;
-  if (body === undefined || body === null) return;
   if (Array.isArray(config.plugins)) {
     config.plugins.forEach(plugin => {
       // eslint-disable-next-line
-      body = require(plugin)(body);
+      const text = require(plugin)(body);
+      res.send(text);
     });
+    return;
   }
-  res.send(body);
+  res.send(body.text);
 };
 
-exports.setConfig = config => {
+const setConfig = config => {
   const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-    serializeMetadata: false
+    // serializeMetadata: false
   });
 
-  const webApiArr = readRaml.getWebApiArr(apiJSON);
+  const webApiArr = getWebApiArr(apiJSON);
   webApiArr.forEach(webApi => {
-    app[webApi.method](toExpressUri(webApi.absoluteUri), (req, res) => {
+    app[webApi.method](toExpressUri(webApi.url), (req, res) => {
       handler(req, res, config, webApi);
     });
   });
 };
 
-exports.app = app;
+export default {
+  setConfig,
+  app
+};

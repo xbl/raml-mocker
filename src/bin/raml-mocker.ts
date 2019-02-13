@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const chokidar = require('chokidar');
-const { fork } = require('child_process');
-const { loadConfig } = require('../src/util');
+import fs from 'fs';
+import path from 'path';
+import chokidar from 'chokidar';
+import { fork } from 'child_process';
+import { loadConfig } from '../util';
 
 const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 let server = null;

@@ -1,10 +1,10 @@
 import fs from 'fs';
 import { join } from 'path';
-import raml from 'raml-1-parser';
+import HttpClient from './http-client';
+import { getWebApiArr } from './read-raml';
+import { loadConfig } from './util';
 
-const readRaml = require('./read-raml');
-const { loadConfig } = require('./util');
-const HttpClient = require('./http-client');
+const raml = require('raml-1-parser');
 
 const env = process.env.NODE_ENV;
 
@@ -27,7 +27,7 @@ exports.initProject = path => {
   const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
     // serializeMetadata: false
   });
-  webApiArr = readRaml.getWebApiArr(apiJSON);
+  webApiArr = getWebApiArr(apiJSON);
 };
 
 exports.loadApi = description => {

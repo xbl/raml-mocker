@@ -221,7 +221,7 @@ export const getWebApiArr = apiJSON => {
             }
           };
           const schema = getSchemaByType(type);
-          setProps(webApiResp, 'schema', schema);
+          schema && (webApiResp.schema = schema);
           webApi.responses.push(webApiResp);
         });
       });

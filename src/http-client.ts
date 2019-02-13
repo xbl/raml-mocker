@@ -1,15 +1,15 @@
 import path from 'path';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { replaceUriParameters } from './util';
 import RestAPI from './models/rest-api';
 
 let baseURL;
-exports.setHost = host => {
+const setHost = host => {
   axios.defaults.baseURL = host;
   baseURL = host;
 };
 
-export const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
+const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
   if (!baseURL) throw Error('Please set HOST!');
   let requestPath = webApi.url;
   if (uriParameters) {
@@ -18,7 +18,7 @@ export const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, 
     });
   }
 
-  const response = await axios(requestPath, {
+  const response: AxiosResponse<string> = await axios(requestPath, {
     method: webApi.method,
     data: body,
     params: queryParameter
@@ -35,3 +35,8 @@ export const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, 
   }
   return response;
 };
+
+export default {
+  setHost,
+  send
+}

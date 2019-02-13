@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const { join } = require('path');
+import fs from 'fs';
+import { join } from 'path';
+import { getWebApiArr, getDefinitionSchema } from '../read-raml';
+import { validateSchema } from '../validate';
+import { loadConfig } from '../util';
+import Output from '../output';
+import HttpClient from '../http-client';
+import RestAPI from '../models/rest-api';
+
 const raml = require('raml-1-parser');
-
-const readRaml = require('../src/read-raml');
-const { validateSchema } = require('../src/validate');
-const { loadConfig } = require('../src/util');
-const Output = require('../src/output');
-const HttpClient = require('../src/http-client');
-
 const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 
 const env = process.env.NODE_ENV;
@@ -19,10 +19,10 @@ if (config.runner && env) {
 }
 
 const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-  serializeMetadata: false
+  // serializeMetadata: false
 });
-const webApiArr = readRaml.getWebApiArr(apiJSON);
-const definitionSchema = readRaml.getDefinitionSchema(apiJSON);
+const webApiArr = getWebApiArr(apiJSON);
+const definitionSchema = getDefinitionSchema(apiJSON);
 const output = new Output(host);
 
 const getResponseByStatusCode = (code, responses) => {
@@ -37,7 +37,7 @@ const getResponseByStatusCode = (code, responses) => {
 
 HttpClient.setHost(host);
 
-const send = async (webApi, uriParameters, queryParameter, body) => {
+const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
   const beginTime = Date.now();
   try {
     const { data, request, status } = await HttpClient.send(
@@ -86,7 +86,7 @@ const send = async (webApi, uriParameters, queryParameter, body) => {
       Output.ERROR,
       err.message || err,
       // eslint-disable-next-line no-underscore-dangle
-      { path: webApi.absoluteUri, method: webApi.method },
+      { path: webApi.url, method: webApi.method },
       beginTime
     );
   }
@@ -99,12 +99,12 @@ const sendRunner = async () => {
   if (!webApi.runner) {
     webApiArr.unshift(webApi);
     webApiArr.forEach(aa => {
-      const body = aa.body ? aa.body.value : {};
+      const body = aa.body ? aa.body.text : {};
       send(aa, aa.uriParameters, aa.queryParameter, body);
     });
     return;
   }
-  const body = webApi.body ? webApi.body.value : {};
+  const body = webApi.body ? webApi.body.text : {};
   await send(webApi, webApi.uriParameters, webApi.queryParameter, body);
   sendRunner();
 };
