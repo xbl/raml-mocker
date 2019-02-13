@@ -1,5 +1,6 @@
 import vm from 'vm';
 import { resolve } from 'path';
+import Config from './models/config';
 
 export const isRedirectCode = code => code >= 300 && code < 400;
 
@@ -27,8 +28,8 @@ export const toExpressUri = uri => {
   return result;
 };
 
-export const loadConfig = str => {
-  const config = JSON.parse(str);
+export const loadConfig = (str): Config​​ => {
+  const config = <Config>JSON.parse(str);
   config.raml = resolve(config.raml);
   config.controller = resolve(config.controller);
   if (Array.isArray(config.plugins)) {

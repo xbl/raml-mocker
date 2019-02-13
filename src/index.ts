@@ -10,7 +10,7 @@ const env = process.env.NODE_ENV;
 let projectPath;
 let webApiArr;
 
-exports.initProject = path => {
+export const initProject = path => {
   projectPath = path;
   const config = loadConfig(
     fs.readFileSync(`${projectPath}/.raml-config.json`, 'utf8')
@@ -27,7 +27,7 @@ exports.initProject = path => {
   webApiArr = getWebApiArr(apiJSON);
 };
 
-exports.loadApi = description => {
+export const loadApi = description => {
   if (!projectPath) throw Error('Please init project first!');
   if (!description) throw Error('Please set API description!');
   if (!webApiArr) throw Error("Can't find API");
