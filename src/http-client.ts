@@ -1,5 +1,5 @@
 import path from 'path';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { replaceUriParameters } from './util';
 import RestAPI from './models/rest-api';
 
@@ -18,7 +18,7 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = 
     });
   }
 
-  const response: AxiosResponse<string> = await axios(requestPath, {
+  const response = await axios(requestPath, {
     method: webApi.method,
     data: body,
     params: queryParameter
