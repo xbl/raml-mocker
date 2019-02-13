@@ -28,11 +28,22 @@
     ]
   },
   "nyc": {
-    "include": ["src/**/*.ts"],
-    "exclude": ["**/*.d.ts"],
-    "extension": [".ts"],
-    "require": ["ts-node/register"],
-    "reporter": ["html", "text-summary"],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
     "sourceMap": true,
     "instrument": true
   },
@@ -45,12 +56,14 @@
     "raml-1-parser": "^1.1.47"
   },
   "devDependencies": {
+    "@types/node": "^11.9.3",
     "ava": "1.0.0-rc.1",
     "eslint": "^5.6.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "lodash": "^4.17.11",
     "nyc": "^13.2.0",
     "prettier": "^1.15.1",
     "ts-node": "^8.0.2",
