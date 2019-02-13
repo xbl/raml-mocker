@@ -1,0 +1,13 @@
+<% restAPIArr.forEach(restAPI => { %>
+<%- restAPI.url %>:
+  <%- restAPI.method.toLocaleLowerCase() %>:
+    description: 商品列表
+    queryParameters:
+      param1:
+        example: value1
+    responses:
+      200:
+        body:
+          example: |
+            {"name":"你好"}
+<% }) %>
