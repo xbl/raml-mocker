@@ -3,8 +3,7 @@ import { join } from 'path';
 import HttpClient from './http-client';
 import { getWebApiArr } from './read-raml';
 import { loadConfig } from './util';
-
-const raml = require('raml-1-parser');
+import { loadApiSync } from 'raml-1-parser';
 
 const env = process.env.NODE_ENV;
 
@@ -24,7 +23,7 @@ exports.initProject = path => {
     throw Error(`Can't find host in .raml-config.json when env is "${env}"`);
   HttpClient.setHost(host);
 
-  const apiJSON = raml.loadApiSync(join(config.raml, config.main));
+  const apiJSON = loadApiSync(join(config.raml, config.main));
   webApiArr = getWebApiArr(apiJSON);
 };
 

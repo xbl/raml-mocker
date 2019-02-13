@@ -1,5 +1,5 @@
-const vm = require('vm');
-const { resolve } = require('path');
+import vm from 'vm';
+import { resolve } from 'path';
 
 export const isRedirectCode = code => code >= 300 && code < 400;
 

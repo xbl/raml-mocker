@@ -3,7 +3,7 @@ import express from 'express';
 import { getWebApiArr } from './read-raml';
 import { isRedirectCode, toExpressUri } from './util';
 import RestAPI from './models/rest-api';
-const raml = require('raml-1-parser');
+import { loadApiSync } from 'raml-1-parser';
 
 const app = express();
 
@@ -49,7 +49,7 @@ const handler = (req, res, config, webApi: RestAPI) => {
 };
 
 const setConfig = config => {
-  const apiJSON = raml.loadApiSync(join(config.raml, config.main));
+  const apiJSON = loadApiSync(join(config.raml, config.main));
 
   const webApiArr = getWebApiArr(apiJSON);
   webApiArr.forEach(webApi => {

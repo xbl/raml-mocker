@@ -8,8 +8,8 @@ import { loadConfig } from '../util';
 import Output from '../output';
 import HttpClient from '../http-client';
 import RestAPI from '../models/rest-api';
+import { loadApiSync } from 'raml-1-parser';
 
-const raml = require('raml-1-parser');
 const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
 
 const env = process.env.NODE_ENV;
@@ -18,7 +18,7 @@ if (config.runner && env) {
   host = config.runner[env];
 }
 
-const apiJSON = raml.loadApiSync(join(config.raml, config.main));
+const apiJSON = loadApiSync(join(config.raml, config.main));
 const webApiArr = getWebApiArr(apiJSON);
 const definitionSchema = getDefinitionSchema(apiJSON);
 const output = new Output(host);
