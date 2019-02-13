@@ -18,9 +18,7 @@ if (config.runner && env) {
   host = config.runner[env];
 }
 
-const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-  // serializeMetadata: false
-});
+const apiJSON = raml.loadApiSync(join(config.raml, config.main));
 const webApiArr = getWebApiArr(apiJSON);
 const definitionSchema = getDefinitionSchema(apiJSON);
 const output = new Output(host);

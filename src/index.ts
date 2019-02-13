@@ -24,9 +24,7 @@ exports.initProject = path => {
     throw Error(`Can't find host in .raml-config.json when env is "${env}"`);
   HttpClient.setHost(host);
 
-  const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-    // serializeMetadata: false
-  });
+  const apiJSON = raml.loadApiSync(join(config.raml, config.main));
   webApiArr = getWebApiArr(apiJSON);
 };
 

@@ -49,9 +49,7 @@ const handler = (req, res, config, webApi: RestAPI) => {
 };
 
 const setConfig = config => {
-  const apiJSON = raml.loadApiSync(join(config.raml, config.main), {
-    // serializeMetadata: false
-  });
+  const apiJSON = raml.loadApiSync(join(config.raml, config.main));
 
   const webApiArr = getWebApiArr(apiJSON);
   webApiArr.forEach(webApi => {
