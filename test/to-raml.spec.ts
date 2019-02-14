@@ -62,5 +62,5 @@ test('Given restAPI array, then get raml str', async t => {
             {}
 `.trim();
   const result = await toRaml(restAPIArr);
-  t.is(result, expectResult);
+  t.is(result.trim(), expectResult);
 });
