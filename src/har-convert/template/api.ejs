@@ -1,13 +1,23 @@
 <% restAPIArr.forEach(restAPI => { %>
-<%- restAPI.url %>:
-  <%- restAPI.method.toLocaleLowerCase() %>:
-    description: 商品列表
-    queryParameters:
-      param1:
-        example: value1
-    responses:
-      200:
+<%= restAPI.url %>:
+  <%= restAPI.method.toLocaleLowerCase() %>:
+    description: <%= restAPI.description %><%
+    if (!_.isEmpty(restAPI.queryParameter)) {
+%>
+    queryParameters:<%
+      _.forEach(restAPI.queryParameter, (value, key) => {%>
+      <%= key %>:
+        example: <%= value %><%
+      });
+    }
+%>
+    responses:<%
+    restAPI.responses.forEach(response => {
+%>
+      <%= response.code %>:
         body:
           example: |
-            {"name":"你好"}
+            <%= response.body.text %><%
+    });
+%>
 <% }) %>

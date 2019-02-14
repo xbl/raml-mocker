@@ -6,6 +6,7 @@ test('Given restAPI array, then get raml str', async t => {
   const restAPIArr: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586',
+      description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
       queryParameter: {
         param1: 'value1'
@@ -19,13 +20,29 @@ test('Given restAPI array, then get raml str', async t => {
           }
         }
       ]
+    }, {
+      url: '/api/test/raml/orders/T012019011828586/redeem',
+      description: 'post_api_test_raml_orders_T012019011828586_redeem',
+      method: 'POST',
+      queryParameter: {},
+      body: {
+        mimeType: 'application/json;charset=UTF-8',
+        text: '{"a":1,"b":2}'
+      },
+      responses: [{
+        code: 200,
+        body: {
+          mimeType: 'application/json',
+          text: '{}'
+        }
+      }]
     }
   ];
 
   const expectResult = `
 /api/test/raml/orders/T012019011828586:
   get:
-    description: 商品列表
+    description: get_api_test_raml_orders_T012019011828586
     queryParameters:
       param1:
         example: value1
@@ -33,7 +50,17 @@ test('Given restAPI array, then get raml str', async t => {
       200:
         body:
           example: |
-            {"name":"你好"}`.trim();
+            {"name":"你好"}
+
+/api/test/raml/orders/T012019011828586/redeem:
+  post:
+    description: post_api_test_raml_orders_T012019011828586_redeem
+    responses:
+      200:
+        body:
+          example: |
+            {}
+`.trim();
   const result = await toRaml(restAPIArr);
   t.is(result, expectResult);
 });
