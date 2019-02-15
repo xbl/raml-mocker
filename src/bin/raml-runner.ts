@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import { join } from 'path';
-import { getWebApiArr, getDefinitionSchema } from '../read-raml';
+import { getRestApiArr, getDefinitionSchema } from '../read-raml';
 import { validateSchema } from '../validate';
 import { loadConfig } from '../util';
 import Output from '../output';
@@ -19,7 +19,7 @@ if (config.runner && env) {
 }
 
 const apiJSON = loadApiSync(join(config.raml, config.main));
-const webApiArr = getWebApiArr(apiJSON);
+const webApiArr = getRestApiArr(apiJSON);
 const definitionSchema = getDefinitionSchema(apiJSON);
 const output = new Output(host);
 

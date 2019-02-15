@@ -1,6 +1,6 @@
 import { join } from 'path';
 import express from 'express';
-import { getWebApiArr } from './read-raml';
+import { getRestApiArr } from './read-raml';
 import { isRedirectCode, toExpressUri } from './util';
 import RestAPI from './models/rest-api';
 import { loadApiSync } from 'raml-1-parser';
@@ -51,7 +51,7 @@ const handler = (req, res, config, webApi: RestAPI) => {
 const setConfig = config => {
   const apiJSON = loadApiSync(join(config.raml, config.main));
 
-  const webApiArr = getWebApiArr(apiJSON);
+  const webApiArr = getRestApiArr(apiJSON);
   webApiArr.forEach(webApi => {
     app[webApi.method](toExpressUri(webApi.url), (req, res) => {
       handler(req, res, config, webApi);

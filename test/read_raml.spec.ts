@@ -2,7 +2,7 @@ import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
 import {
   getDefinitionSchema,
-  getWebApiArr,
+  getRestApiArr,
   getAnnotationByName
 } from '../src/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml08parserapi';
@@ -397,7 +397,7 @@ mediaType: application/json
   `;
   const apiJSON = parseRAMLSync(ramlStr);
 
-  const result = getWebApiArr(apiJSON);
+  const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
 });
 
@@ -448,7 +448,7 @@ mediaType: application/json
   `;
   const apiJSON = parseRAMLSync(ramlStr);
 
-  const result = getWebApiArr(apiJSON);
+  const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
 });
 
@@ -502,7 +502,7 @@ mediaType: application/json
   `;
   const apiJSON = parseRAMLSync(ramlStr);
 
-  const result = getWebApiArr(apiJSON);
+  const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
 });
 
@@ -550,12 +550,12 @@ mediaType: application/json
   `;
   const apiJSON = parseRAMLSync(ramlStr);
 
-  const result = getWebApiArr(apiJSON);
+  const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
 });
 
 test('When read raml given (runner) annotations then get annotation object', t => {
-  const exceptResult = {
+  const expectResult = {
     id: {
       description: 'article id',
       example: 'aaaa'
@@ -585,5 +585,5 @@ mediaType: application/json
   const [resource] = apiJSON.allResources();
   const [method] = resource.methods();
   const result = getAnnotationByName('runner', method);
-  t.deepEqual(result, exceptResult);
+  t.deepEqual(result, expectResult);
 });

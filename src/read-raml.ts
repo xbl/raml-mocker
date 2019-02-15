@@ -166,7 +166,7 @@ const getUriParameters = (resource, method) => {
   return uriParameters;
 };
 
-export const getWebApiArr = apiJSON => {
+export const getRestApiArr = apiJSON => {
   const webApiArr:RestAPI[] = [];
   apiJSON.allResources().forEach(resource => {
     const url = <string> resource.absoluteUri();
