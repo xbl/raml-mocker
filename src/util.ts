@@ -1,5 +1,7 @@
 import vm from 'vm';
 import { resolve } from 'path';
+import { readFile } from 'fs';
+import { promisify } from 'util';
 import Config from './models/config';
 
 export const isRedirectCode = code => code >= 300 && code < 400;
@@ -64,3 +66,5 @@ export const indentString = (str: string, count: number = 1, opts: object = {ind
 	const regex = options.includeEmptyLines ? /^/mg : /^(?!\s*$)/mg;
 	return str.replace(regex, options.indent.repeat(count));
 }
+
+export const readFileAsync = promisify(readFile);

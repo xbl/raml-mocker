@@ -1,10 +1,7 @@
-import fs from 'fs';
 import test from 'ava';
-import { promisify } from 'util';
-import { read, save } from '../src/har-convert';
+import { readFileAsync } from '../src/util';
+import { read } from '../src/har-convert';
 import RestAPI from '../src/models/rest-api';
-
-const readFileAsync = promisify(fs.readFile);
 
 test('Given a har file, then get xhr request arr', async t => {
   const restAPIArr: RestAPI[] = [

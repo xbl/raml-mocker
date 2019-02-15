@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import { promisify } from 'util';
+import { readFileAsync } from '../util';
 import { read, save } from '../har-convert';
-
-const readFileAsync = promisify(fs.readFile);
 
 const argsMap = {};
 const args = process.argv.splice(2);
