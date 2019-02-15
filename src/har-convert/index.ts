@@ -5,6 +5,7 @@ import xhrFilter from './xhr';
 import urlUtil from 'url';
 import RestAPI from '../models/rest-api';
 import toRaml from './to-raml';
+import toSpec from './to-spec';
 
 const appendFileAsync = promisify(appendFile);
 
@@ -47,8 +48,13 @@ export const read = (har: string): RestAPI[] => {
 };
 
 export const save = async (restAPIArr: RestAPI[], target: string) => {
-  const ramlStr = await toRaml(restAPIArr);
-  if (extname(target) === '.raml') {
+  const ext = extname(target);
+  if (ext === '.raml') {
+    const ramlStr = await toRaml(restAPIArr);
     await appendFileAsync(target, ramlStr);
+  }
+  if (['.js', '.ts'].includes(ext)) {
+    const specStr = await toSpec(restAPIArr);
+    await appendFileAsync(target, specStr);
   }
 };

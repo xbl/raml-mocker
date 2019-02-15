@@ -1,0 +1,14 @@
+const assert = require('assert');
+const { loadApi } = require('@xbl/raml-mocker');
+
+it('从文章列表到文章详情', async () => {<%
+  restAPIArr.forEach((restAPI, index) => {
+    const methodName = `${restAPI.method.toLowerCase()}Fn${index}`;
+  %>
+  const <%= methodName %> = loadApi('<%= restAPI.description %>');
+  const { status: status<%= index%>, data: data<%= index%> } = await <%= methodName %>();
+
+  assert.equal(status<%= index%>, 200);
+  // TODO: assert
+<% }) %>
+});
