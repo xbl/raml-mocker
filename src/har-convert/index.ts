@@ -54,7 +54,7 @@ export const save = async (restAPIArr: RestAPI[], target: string) => {
     await appendFileAsync(target, ramlStr);
   }
   if (['.js', '.ts'].includes(ext)) {
-    const specStr = await toSpec(restAPIArr);
+    const specStr = await toSpec(restAPIArr, target);
     await appendFileAsync(target, specStr);
   }
 };

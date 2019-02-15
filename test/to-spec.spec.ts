@@ -43,7 +43,7 @@ test('Given restAPI array, then get spec str', async t => {
 const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
-it('从文章列表到文章详情', async () => {
+it('abc.js', async () => {
   const getFn0 = loadApi('get_api_test_raml_orders_T012019011828586');
   const { status: status0, data: data0 } = await getFn0();
 
@@ -58,6 +58,6 @@ it('从文章列表到文章详情', async () => {
 
 });
 `.trim();
-  const result = await toSpec(restAPIArr);
+  const result = await toSpec(restAPIArr, '/a/b/d/abc.js');
   t.is(result.trim(), expectResult);
 });
