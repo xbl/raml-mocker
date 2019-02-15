@@ -29,11 +29,11 @@ test('When toExpressUri Given /products/{productId} Then get /products/:productI
 });
 
 test('When indentString Given json str Then got format json', t => {
-  const given = "{\n  \"realName\": \"王金金\",\n  \"mobile\": \"18217521607\",\n  \"avatar\": \"\",\n  \"nickName\": \"\",\n  \"born\": null,\n  \"gender\": \"MALE\",\n  \"email\": \"\",\n  \"address\": \"\",\n  \"occupation\": \"\",\n  \"interestedClasses\": [\"\"],\n  \"hobbies\": [\"\"],\n  \"ownModels\": [\"\"]\n}\n";
+  const given = "{\n  \"realName\": \"金金\",\n  \"mobile\": \"15811111111\",\n  \"avatar\": \"\",\n  \"nickName\": \"\",\n  \"born\": null,\n  \"gender\": \"MALE\",\n  \"email\": \"\",\n  \"address\": \"\",\n  \"occupation\": \"\",\n  \"interestedClasses\": [\"\"],\n  \"hobbies\": [\"\"],\n  \"ownModels\": [\"\"]\n}\n";
   const exceptResult = `
     {
-      "realName": "王金金",
-      "mobile": "18217521607",
+      "realName": "金金",
+      "mobile": "15811111111",
       "avatar": "",
       "nickName": "",
       "born": null,
