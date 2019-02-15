@@ -40,7 +40,7 @@ const toRestAPI = (entries: any[]) => entries.map(entry => {
   });
 });
 
-export const read = (har): RestAPI[] => {
+export const read = (har: string): RestAPI[] => {
   const json = JSON.parse(har);
   const entries = xhrFilter(json.log.entries);
   return toRestAPI(entries);
