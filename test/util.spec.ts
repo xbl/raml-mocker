@@ -1,5 +1,5 @@
 import test from 'ava';
-import { jsonPath, replaceUriParameters, toExpressUri } from '../src/util';
+import { jsonPath, replaceUriParameters, toExpressUri, indentString } from '../src/util';
 
 test('When json object Give dataPath [0] str Then get json[0] object', t => {
   const exceptResult = {
@@ -26,4 +26,24 @@ test('When toExpressUri Given /products/{productId} Then get /products/:productI
   const given = '/products/{productId}';
   const exceptResult = '/products/:productId';
   t.is(toExpressUri(given), exceptResult);
+});
+
+test('When indentString Given json str Then got format json', t => {
+  const given = "{\n  \"realName\": \"王金金\",\n  \"mobile\": \"18217521607\",\n  \"avatar\": \"\",\n  \"nickName\": \"\",\n  \"born\": null,\n  \"gender\": \"MALE\",\n  \"email\": \"\",\n  \"address\": \"\",\n  \"occupation\": \"\",\n  \"interestedClasses\": [\"\"],\n  \"hobbies\": [\"\"],\n  \"ownModels\": [\"\"]\n}\n";
+  const exceptResult = `
+    {
+      "realName": "王金金",
+      "mobile": "18217521607",
+      "avatar": "",
+      "nickName": "",
+      "born": null,
+      "gender": "MALE",
+      "email": "",
+      "address": "",
+      "occupation": "",
+      "interestedClasses": [""],
+      "hobbies": [""],
+      "ownModels": [""]
+    }`;
+  t.is(indentString(given, 4).trim(), exceptResult.trim());
 });
