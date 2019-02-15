@@ -13,11 +13,16 @@ args.forEach((val, index) => {
 
 const harPath = argsMap['-f'];
 const target = argsMap['-o'];
+const project = argsMap['-p'];
 
 const convert​​ = async () => {
+  if (!harPath || !target) {
+    console.log('请指定 -f 入口文件及 -o 输出文件');
+    return ;
+  }
   const har = await readFileAsync(harPath, 'utf-8');
   const RestAPIArr = read(har);
-  save(RestAPIArr, target);
+  save(RestAPIArr, target, project);
 }
 
 convert​​();

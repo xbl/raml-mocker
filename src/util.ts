@@ -72,15 +72,19 @@ export const indentString = (str: string, count: number = 1, opts: object = {ind
 export const readFileAsync = promisify(readFile);
 
 export const mergeRestApi = (newRestAPIArr: RestAPI[], existRestAPIArr: RestAPI[]): RestAPI[] => {
-  return newRestAPIArr.map((restAPI​​) => {
+  return newRestAPIArr.map(restAPI​​ => {
+    let result;
     existRestAPIArr.forEach(existRestApi => {
       const urlMap = urlCompare(restAPI.url, existRestApi.url);
       if (!urlMap) return ;
       restAPI.url = existRestApi.url;
       restAPI.uriParameters = urlMap;
       restAPI.description = existRestApi.description;
+      result = restAPI;
     });
-    return restAPI
+    return result
+  }).filter(restAPI​​ => {
+    return !!restAPI​​;
   });
 };
 
