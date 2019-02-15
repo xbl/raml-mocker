@@ -3,8 +3,9 @@
   "version": "1.1.6-beta",
   "scripts": {
     "copy-assets": "ts-node build/copy",
+    "clean": "ts-node build/clean",
     "dev": "tsc --watch",
-    "build": "tsc && npm run chmod && npm run copy-assets",
+    "build": "npm run clean && tsc && npm run chmod && npm run copy-assets",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
     "chmod": "chmod +x ./dist/bin/*",
