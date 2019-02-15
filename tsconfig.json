@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "allowJs": true,
+    "declaration": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
     "target": "es6",

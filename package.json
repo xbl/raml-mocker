@@ -2,8 +2,9 @@
   "name": "@xbl/raml-mocker",
   "version": "1.1.6-beta",
   "scripts": {
+    "copy-assets": "ts-node build/copy",
     "dev": "tsc --watch",
-    "build": "tsc && npm run chmod",
+    "build": "tsc && npm run chmod && npm run copy-assets",
     "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
     "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
     "chmod": "chmod +x ./dist/bin/*",
@@ -16,7 +17,8 @@
   "main": "dist/index.js",
   "bin": {
     "raml-mocker": "./dist/bin/raml-mocker.js",
-    "raml-runner": "./dist/bin/raml-runner.js"
+    "raml-runner": "./dist/bin/raml-runner.js",
+    "har-convert": "./dist/bin/har-convert.js"
   },
   "ava": {
     "compileEnhancements": false,
@@ -66,6 +68,7 @@
     "lodash": "^4.17.11",
     "nyc": "^13.2.0",
     "prettier": "^1.15.1",
+    "shelljs": "^0.8.3",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3"
   },
