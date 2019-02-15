@@ -3,6 +3,8 @@ import { resolve } from 'path';
 import { readFile } from 'fs';
 import { promisify } from 'util';
 import Config from './models/config';
+import RestAPI from './models/rest-api';
+import pathToRegexp from 'path-to-regexp';
 
 export const isRedirectCode = code => code >= 300 && code < 400;
 
@@ -22,7 +24,7 @@ const uriParamterRegExp = /\{((?:.|\n)+?)\}/g;
 export const replaceUriParameters = (uri, callback) =>
   uri.replace(uriParamterRegExp, callback);
 
-export const toExpressUri = uri => {
+export const toExpressUri = (uri: string): string => {
   let result = uri;
   replaceUriParameters(uri, (match, expression) => {
     result = result.replace(match, `:${expression}`);
@@ -68,3 +70,31 @@ export const indentString = (str: string, count: number = 1, opts: object = {ind
 }
 
 export const readFileAsync = promisify(readFile);
+
+export const mergeRestApi = (newRestAPIArr: RestAPI[], existRestAPIArr: RestAPI[]): RestAPI[] => {
+  return newRestAPIArr.map((restAPI​​) => {
+    existRestAPIArr.forEach(existRestApi => {
+      const urlMap = urlCompare(restAPI.url, existRestApi.url);
+      if (!urlMap) return ;
+      restAPI.url = existRestApi.url;
+      restAPI.uriParameters = urlMap;
+      restAPI.description = existRestApi.description;
+    });
+    return restAPI
+  });
+};
+
+export const urlCompare = (url: string, ramlUrlExpression: string): object => {
+  const urlExpression = toExpressUri(ramlUrlExpression);
+  const keys = [];
+  const regexp = pathToRegexp(urlExpression, keys);
+
+  if (!regexp.test(url))
+    return ;
+  const result = regexp.exec(url);
+  const uriMap = {};
+  keys.forEach((key, i) => {
+    uriMap[key.name.trim()] = result[i + 1];
+  });
+  return uriMap;
+};
