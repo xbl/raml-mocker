@@ -1,7 +1,7 @@
 
 import { template } from 'lodash';
 import RestAPI from '../models/rest-api';
-import { indentString, readFileAsync } from '../util';
+import { indentString, readFileAsync, isJSONType } from '../util';
 
 const filter = (restApiArr) => {
   const map = {};
@@ -13,7 +13,7 @@ const filter = (restApiArr) => {
 
 const toRaml = async (restAPIArr: RestAPI[]) => {
   const str = await readFileAsync(`${__dirname}/template/api.ejs`, 'utf-8');
-  const compiled = template(str, { 'imports' : { 'indentString': indentString }});
+  const compiled = template(str, { 'imports' : { indentString, isJSONType }});
   return compiled({ restAPIArr: filter(restAPIArr) });
 };
 

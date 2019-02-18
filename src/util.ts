@@ -102,3 +102,5 @@ export const urlCompare = (url: string, ramlUrlExpression: string): object => {
   });
   return uriMap;
 };
+
+export const isJSONType = mimeType => /\/json/.test(mimeType);

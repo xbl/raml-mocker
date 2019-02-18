@@ -7,7 +7,11 @@ it('<%= name %>', async () => {<%
     const uriParam = JSON.stringify(restAPI.uriParameters) || '{}';
     let bodyData = '{}';
     if (restAPI.body) {
-      bodyData = restAPI.body.text;
+      if (isJSONType(restAPI.body.mimeType)) {
+        bodyData = restAPI.body.text;
+      } else {
+        bodyData = `'${restAPI.body.text}'`;
+      }
     }
     const params = [uriParam, JSON.stringify(restAPI.queryParameter), bodyData].join(',');
   %>

@@ -1,8 +1,8 @@
-const isXHR = mimeType => /\/json/.test(mimeType);
+import { isJSONType } from '../util';
 
 export default (entries) =>
   entries
     .filter(({ response }) => {
       const { mimeType } = response.content;
-      return isXHR(mimeType);
+      return isJSONType(mimeType);
     });

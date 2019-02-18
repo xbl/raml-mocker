@@ -55,6 +55,9 @@ test('Given restAPI array, then get raml str', async t => {
 /api/test/raml/orders/T012019011828586/redeem:
   post:
     description: post_api_test_raml_orders_T012019011828586_redeem
+    body:
+      example: |
+        {"a":1,"b":2}
     responses:
       200:
         body:
@@ -134,6 +137,9 @@ test('Given restAPI duplicate array, then get raml str', async t => {
 /api/test/raml/orders/T012019011828586/redeem:
   post:
     description: post_api_test_raml_orders_T012019011828586_redeem
+    body:
+      example: |
+        {"a":1,"b":2}
     responses:
       200:
         body:
