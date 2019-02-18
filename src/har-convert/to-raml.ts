@@ -6,7 +6,8 @@ import { indentString, readFileAsync } from '../util';
 const filter = (restApiArr) => {
   const map = {};
   return restApiArr.filter(restAPI => {
-    return map[`${restAPI.method}_${restAPI.url} `] ? false : (map[`${restAPI.method}_${restAPI.url} `] = true);
+    const key = `${restAPI.method}_${restAPI.url}`;
+    return map[key] ? false : (map[key] = true);
   })
 };
 
