@@ -17,7 +17,7 @@ const filterEmpty = obj => JSON.parse(JSON.stringify(obj));
 
 const toParameter = (queryStrings: any[]) =>
   queryStrings.reduce((accumulator, {name, value}) => {
-    return Object.assign(accumulator, {[name]: value})
+    return Object.assign(accumulator, {[name]: decodeURIComponent(value)})
   }, {});
 
 const toRestAPI = (entries: any[]) => entries.map(entry => {

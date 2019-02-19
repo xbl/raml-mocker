@@ -10,7 +10,7 @@ test('Given a har file, then get xhr request arr', async t => {
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
       queryParameter: {
-        param1: 'value1',
+        param1: ':hello:city:Beijing:model:',
       },
       responses: [
         {
