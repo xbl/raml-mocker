@@ -17,3 +17,15 @@ ${expectValidInfo}`;
   t.is(title, expectTitle);
   t.is(validInfo, expectValidInfo);
 });
+
+test('Give push error , then get failCount 1', (t) => {
+  const failCount = 1;
+  const output = new Output('host');
+  const request = {method: '', path: ''};
+  output.push(Output.ERROR, '', request, 0);
+  t.is(output.failCount, failCount);
+  t.is(output.successCount, 0);
+
+  output.push(Output.SUCCESS, '', request, 0);
+  t.is(output.successCount, 1);
+});

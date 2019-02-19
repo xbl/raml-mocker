@@ -23,7 +23,7 @@ export default class Output {
   static WARNING = 2;
   static processMessage = (message) => message.match(/(^.*)[\n]*([\w\W]*)/);
 
-  host:string;
+  host: string;
   successCount = 0;
   failCount = 0;
 
@@ -33,7 +33,7 @@ export default class Output {
   }
 
 
-  push = (type, message, request, beginTime: number) => {
+  push = (type, message, request: {method: string, path: string }, beginTime: number) => {
     const [, title, validInfo] = Output.processMessage(message);
     const { color, icon } = typeMap[type];
     if (type === Output.ERROR) {
