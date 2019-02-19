@@ -1,6 +1,7 @@
 # Raml-mocker
 
 ![version](https://img.shields.io/npm/v/@xbl/raml-mocker.svg)
+![node (scoped)](https://img.shields.io/node/v/@xbl/raml-mocker.svg?style=flat)
 [![Build Status](https://travis-ci.org/xbl/raml-mocker.svg?branch=master)](https://travis-ci.org/xbl/raml-mocker)
 [![codecov](https://codecov.io/gh/xbl/raml-mocker/branch/master/graph/badge.svg)](https://codecov.io/gh/xbl/raml-mocker)
 

@@ -13,7 +13,6 @@ args.forEach((val, index) => {
 
 const harPath = argsMap['-f'];
 const target = argsMap['-o'];
-const project = argsMap['-p'];
 const filter = argsMap['-filter'];
 
 const convert = async () => {
@@ -24,7 +23,7 @@ const convert = async () => {
   }
   const har = await readFileAsync(harPath, 'utf-8');
   const restAPIArr = read(har, filter);
-  save(restAPIArr, target, project);
+  save(restAPIArr, target);
 };
 
 convert();
