@@ -9,6 +9,7 @@ import toSpec from './to-spec';
 import { loadApiSync } from 'raml-1-parser';
 import { loadConfig, mergeRestApi } from '../util';
 import { getRestApiArr } from '../read-raml';
+import filterPath from './filter-path';
 
 const appendFileAsync = promisify(appendFile);
 const readFileSync = promisify(readFile);
@@ -58,9 +59,12 @@ const saveToSpec = async (newRestAPIArr: RestAPI[], target: string, project?: st
   await appendFileAsync(target, specStr);
 };
 
-export const read = (har: string): RestAPI[] => {
+export const read = (har: string, filter?: string): RestAPI[] => {
   const json = JSON.parse(har);
-  const entries = xhrFilter(json.log.entries);
+  let entries = xhrFilter(json.log.entries);
+  if (filter) {
+    entries = filterPath(entries, filter);
+  }
   return toRestAPI(entries);
 };
 
@@ -68,7 +72,7 @@ export const save = async (restAPIArr: RestAPI[], target: string, project?: stri
   const ext = extname(target);
   if (ext === '.raml') {
     const ramlStr = await toRaml(restAPIArr);
-    await appendFileAsync(target, ramlStr);
+    appendFileAsync(target, ramlStr);
     return ;
   }
   if (['.js', '.ts'].includes(ext)) {

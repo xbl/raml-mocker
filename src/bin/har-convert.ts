@@ -14,6 +14,7 @@ args.forEach((val, index) => {
 const harPath = argsMap['-f'];
 const target = argsMap['-o'];
 const project = argsMap['-p'];
+const filter = argsMap['-filter'];
 
 const convert​​ = async () => {
   if (!harPath || !target) {
@@ -21,7 +22,7 @@ const convert​​ = async () => {
     return ;
   }
   const har = await readFileAsync(harPath, 'utf-8');
-  const RestAPIArr = read(har);
+  const RestAPIArr = read(har, filter);
   save(RestAPIArr, target, project);
 }
 

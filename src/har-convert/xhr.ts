@@ -1,6 +1,6 @@
 import { isJSONType } from '../util';
 
-export default (entries) =>
+export default (entries: any[]): any[] =>
   entries
     .filter(({ response }) => {
       const { mimeType } = response.content;
