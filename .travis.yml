@@ -9,6 +9,5 @@ install:
   - yarn global add codecov
 scripts:
   - yarn test
-  - codecov -f coverage/*.json
 after_success:
-  - codecov
+  - codecov -f coverage/*.json
