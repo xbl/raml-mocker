@@ -32,7 +32,8 @@ export const toExpressUri = (uri: string): string => {
   return result;
 };
 
-export const loadConfig = (str): Config => {
+export const loadConfig = async (): Promise<Config> => {
+  const str = await readFileAsync(resolve(process.cwd(), './.raml-config.json'), 'utf8');
   const config = JSON.parse(str) as Config;
   config.raml = resolve(config.raml);
   config.controller = resolve(config.controller);

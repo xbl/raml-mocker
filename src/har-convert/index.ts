@@ -50,8 +50,7 @@ const saveToSpec = async (newRestAPIArr: RestAPI[], target: string, project?: st
   let apiJSON;
   let restApiArr = newRestAPIArr;
   if (project) {
-    const data = await readFileSync('./.raml-config.json', 'utf8');
-    const config = loadConfig(data);
+    const config = await loadConfig();
     apiJSON = loadApiSync(join(config.raml, config.main));
     restApiArr = mergeRestApi(restApiArr, getRestApiArr(apiJSON));
   }

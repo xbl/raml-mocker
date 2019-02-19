@@ -7,14 +7,10 @@ import { loadApiSync } from 'raml-1-parser';
 
 const env = process.env.NODE_ENV;
 
-let projectPath;
 let webApiArr;
 
-export const initProject = (path) => {
-  projectPath = path;
-  const config = loadConfig(
-    fs.readFileSync(`${projectPath}/.raml-config.json`, 'utf8'),
-  );
+export const initProject = async () => {
+  const config = await loadConfig();
   let host = `http://localhost:${config.port}`;
   if (config.runner && env) {
     host = config.runner[env];
@@ -29,7 +25,6 @@ export const initProject = (path) => {
 };
 
 export const loadApi = (description) => {
-  if (!projectPath) { throw Error('Please init project first!'); }
   if (!description) { throw Error('Please set API description!'); }
   if (!webApiArr) { throw Error('Can\'t find API'); }
   const api = webApiArr

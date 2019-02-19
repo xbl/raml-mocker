@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
 import { join } from 'path';
 import { getRestApiArr, getDefinitionSchema } from '../read-raml';
 import { validateSchema } from '../validate';
@@ -10,7 +9,7 @@ import HttpClient from '../http-client';
 import RestAPI from '../models/rest-api';
 import { loadApiSync } from 'raml-1-parser';
 
-const config = loadConfig(fs.readFileSync('./.raml-config.json', 'utf8'));
+const config = loadConfig();
 
 const env = process.env.NODE_ENV;
 let host = `http://localhost:${config.port}`;
