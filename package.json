@@ -1,6 +1,9 @@
 {
   "name": "@xbl/raml-mocker",
   "version": "1.1.6-beta",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
     "copy-assets": "ts-node build/copy",
     "clean": "ts-node build/clean",
