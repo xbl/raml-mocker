@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
 import { join } from 'path';
-import { getRestApiArr, getDefinitionSchema } from '../read-raml';
-import { validateSchema } from '../validate';
+import { loadApi as loadRamlApi } from 'raml-1-parser';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+
 import Output from '../output';
+import Config from '../models/config';
 import HttpClient from '../http-client';
 import RestAPI from '../models/rest-api';
-import { loadApi as loadRamlApi } from 'raml-1-parser';
-import Config from '../models/config';
-import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { validateSchema } from '../validate';
+import { getRestApiArr, getDefinitionSchema } from '../read-raml';
 
 const getResponseByStatusCode = (code, responses) => {
   let response;
@@ -34,13 +35,12 @@ export default async (config: Config) => {
   const restApiArr = sortByRunner(getRestApiArr(apiJSON));
   const definitionSchema = getDefinitionSchema(apiJSON);
   const output = new Output(host);
-
-  HttpClient.setHost(host);
+  const httpClient = new HttpClient(host);
 
   const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
     const beginTime = Date.now();
     try {
-      const { data, request, status } = await HttpClient.send(
+      const { data, request, status } = await httpClient.send(
         webApi,
         uriParameters,
         queryParameter,
