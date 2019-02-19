@@ -35,6 +35,11 @@ export const loadApi = description => {
     .filter(webApi => webApi.description === description)
     .pop();
   if (!api) throw Error(`Can't find API by '${description}'!`);
-  return (uriParameters, queryParameter, body) =>
-    HttpClient.send(api, uriParameters, queryParameter, body);
+  return async (uriParameters, queryParameter, body) => {
+    try {
+      return await HttpClient.send(api, uriParameters, queryParameter, body);
+    } catch (error) {
+      throw new Error(`description: '${description}' ${error.message}`);
+    }
+  }
 };
