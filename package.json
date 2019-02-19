@@ -61,11 +61,6 @@
   "devDependencies": {
     "@types/node": "^11.9.3",
     "ava": "1.0.0-rc.1",
-    "eslint": "^5.6.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^3.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-prettier": "^3.0.0",
     "lodash": "^4.17.11",
     "nyc": "^13.2.0",
     "path-to-regexp": "^3.0.0",
@@ -73,7 +68,6 @@
     "shelljs": "^0.8.3",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
-    "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.3.3"
   },
   "repository": {

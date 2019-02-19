@@ -8,7 +8,7 @@ import { loadApiSync } from 'raml-1-parser';
 const app = express();
 
 app.use((req, res, next) => {
-  // eslint-disable-next-line
+  // tslint:disable no-console
   console.log('PATH: %s, METHOD: %s', req.path, req.method);
   next();
 });
@@ -16,7 +16,6 @@ app.use((req, res, next) => {
 const handler = (req, res, config, webApi: RestAPI) => {
   if (webApi.controller) {
     const [controller, methodName] = webApi.controller.split('#');
-    // eslint-disable-next-line
     const moduleCtrl = require(`${config.controller}/${controller}`);
     const fn = moduleCtrl[methodName];
     if (typeof fn === 'function') { fn.call(app, req, res, webApi); }

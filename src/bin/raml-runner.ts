@@ -46,7 +46,7 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
     );
 
     if (!webApi.responses.length) {
-      output.push(Output.WARNING, 'No set responses', '', request, beginTime);
+      output.push(Output.WARNING, 'No set responses', request, beginTime);
       return;
     }
 
@@ -56,7 +56,6 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
       output.push(
         Output.ERROR,
         'Can\'t find code by responses',
-        '',
         request,
         beginTime,
       );
@@ -83,7 +82,6 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
     output.push(
       Output.ERROR,
       err.message || err,
-      // eslint-disable-next-line no-underscore-dangle
       { path: webApi.url, method: webApi.method },
       beginTime,
     );
@@ -97,8 +95,7 @@ const sendRunner = async () => {
   if (!webApi.runner) {
     webApiArr.unshift(webApi);
     webApiArr.forEach((aa) => {
-      const body = aa.body ? aa.body.text : {};
-      send(aa, aa.uriParameters, aa.queryParameter, body);
+      send(aa, aa.uriParameters, aa.queryParameter, aa.body ? aa.body.text : {});
     });
     return;
   }

@@ -13,6 +13,7 @@ const startServer = () => {
   server.send(config);
 };
 const restartServer = () => {
+  // tslint:disable no-console
   console.log('restart...');
   server.kill('SIGHUP');
   startServer();

@@ -18,12 +18,13 @@ const filter = argsMap['-filter'];
 
 const convert = async () => {
   if (!harPath || !target) {
+    // tslint:disable no-console
     console.log('请指定 -f 入口文件及 -o 输出文件');
     return;
   }
   const har = await readFileAsync(harPath, 'utf-8');
-  const RestAPIArr = read(har, filter);
-  save(RestAPIArr, target, project);
+  const restAPIArr = read(har, filter);
+  save(restAPIArr, target, project);
 };
 
 convert();

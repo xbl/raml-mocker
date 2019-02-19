@@ -1,5 +1,5 @@
-const Ajv = require('ajv');
-const { jsonPath } = require('./util');
+import Ajv from 'ajv';
+import { jsonPath } from './util';
 
 const processMessage = (valid, error, data) => {
   const validInfo = '';

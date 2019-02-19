@@ -6,6 +6,7 @@ import mocker from '../server';
 process.on('message', (config) => {
   mocker.setConfig(config);
   const port = config.port || 3000;
+  // tslint:disable no-console
   http
     .createServer(mocker.app)
     .listen(port, () =>
