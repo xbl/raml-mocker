@@ -1,5 +1,5 @@
 import { extname, join } from 'path';
-import { appendFile, readFile } from 'fs';
+import { appendFile } from 'fs';
 import { promisify } from 'util';
 import xhrFilter from './xhr';
 import urlUtil from 'url';

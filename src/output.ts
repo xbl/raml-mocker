@@ -49,7 +49,7 @@ export default class Output {
     );
     console.log(chalk`{${color} ${title}}`);
     console.log(validInfo);
-  };
+  }
 
   print = () => {
     console.log(chalk`{green ${this.successCount.toString()} tests passed}`);
@@ -57,6 +57,6 @@ export default class Output {
       console.log(chalk`{red ${this.failCount.toString()} tests failed} `);
       process.exit(1);
     }
-  };
+  }
 
 }
