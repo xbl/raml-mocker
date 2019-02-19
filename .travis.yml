@@ -5,3 +5,9 @@ env:
   - CODECOV_TOKEN="718a1aed-7418-4bb6-8047-d2dddc6a2006"
 install:
   - yarn
+  - npm install codecov -g
+scripts:
+  - yarn test
+  - codecov -f coverage/*.json
+after_success:
+  - codecov
