@@ -12,7 +12,6 @@ import { getRestApiArr } from '../read-raml';
 import filterPath from './filter-path';
 
 const appendFileAsync = promisify(appendFile);
-const readFileSync = promisify(readFile);
 
 const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
 
