@@ -1,15 +1,14 @@
-import fs from 'fs';
 import { join } from 'path';
 import HttpClient from './http-client';
 import { getRestApiArr } from './read-raml';
 import { loadConfig } from './util';
-import { loadApiSync } from 'raml-1-parser';
-
-const env = process.env.NODE_ENV;
+import { loadApi as loadRamlApi } from 'raml-1-parser';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 let webApiArr;
 
 export const initProject = async () => {
+  const env = process.env.NODE_ENV;
   const config = await loadConfig();
   let host = `http://localhost:${config.port}`;
   if (config.runner && env) {
@@ -20,7 +19,7 @@ export const initProject = async () => {
   }
   HttpClient.setHost(host);
 
-  const apiJSON = loadApiSync(join(config.raml, config.main));
+  const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
   webApiArr = getRestApiArr(apiJSON);
 };
 

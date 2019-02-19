@@ -4,6 +4,8 @@ import Response from './models/response';
 import Schema from './models/schema';
 import $Ref from './models/$ref';
 import Body from './models/body';
+import { TypeDeclaration } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const ANY_TYPE = 'any';
 const BASE_TYPE = [
@@ -21,7 +23,7 @@ const setProps = (obj, property, value) => {
   if (value) { obj[property] = value; }
 };
 
-export const getDefinitionSchema = (apiJSON) => {
+export const getDefinitionSchema = (apiJSON: Api) => {
   const $id = '/definitionSchema';
   const definitionSchema = {
     $id,
@@ -119,7 +121,7 @@ const getQueryParameter = (queryParameters) => {
   return newParam;
 };
 
-const getPostBody = ([body]): Body​​ => {
+const getPostBody = ([body]: TypeDeclaration[]): Body​​ => {
   if (!body || !body.example()) { return; }
   const value = body.example().value();
   if (!value) { return; }
@@ -166,8 +168,8 @@ const getUriParameters = (resource, method) => {
   return uriParameters;
 };
 
-export const getRestApiArr = (apiJSON) => {
-  const webApiArr: RestAPI[] = [];
+export const getRestApiArr = (apiJSON: Api) => {
+  const restApiArr: RestAPI[] = [];
   apiJSON.allResources().forEach((resource) => {
     const url = resource.absoluteUri() as string;
 
@@ -225,8 +227,8 @@ export const getRestApiArr = (apiJSON) => {
           webApi.responses.push(webApiResp);
         });
       });
-      webApiArr.push(webApi);
+      restApiArr.push(webApi);
     });
   });
-  return webApiArr;
+  return restApiArr;
 };

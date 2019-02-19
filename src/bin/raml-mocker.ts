@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
 import path from 'path';
 import chokidar from 'chokidar';
 import { fork } from 'child_process';

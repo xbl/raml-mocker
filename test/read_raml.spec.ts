@@ -5,7 +5,7 @@ import {
   getRestApiArr,
   getAnnotationByName,
 } from '../src/read-raml';
-import { Api } from 'raml-1-parser/dist/parser/artifacts/raml08parserapi';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 test('when read raml given Product type then get definitionSchema object', (t) => {
   const definitionSchema = {
@@ -36,7 +36,7 @@ types:
         type: string
       name: number
     `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -70,7 +70,7 @@ types:
         required: false
       name: number
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -108,7 +108,7 @@ types:
         maxLength: 22
       name: number
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -164,7 +164,7 @@ types:
       title:
       text:
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -226,7 +226,7 @@ types:
         type: Product
         required: false
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -318,7 +318,7 @@ types:
         type: Product
         required: false
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -354,7 +354,7 @@ types:
         type: string
       coverImage: string[]
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
@@ -395,7 +395,7 @@ mediaType: application/json
               "a": 1
             }
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
 
   const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
@@ -446,7 +446,7 @@ mediaType: application/json
               "a": 1
             }
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
 
   const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
@@ -500,7 +500,7 @@ mediaType: application/json
               "a": 1
             }
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
 
   const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
@@ -548,7 +548,7 @@ mediaType: application/json
               "a": 1
             }
   `;
-  const apiJSON = parseRAMLSync(ramlStr);
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
 
   const result = getRestApiArr(apiJSON);
   t.deepEqual(result, webAPIArr);
