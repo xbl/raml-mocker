@@ -1,6 +1,8 @@
 # Raml-mocker
 
 ![version](https://img.shields.io/npm/v/@xbl/raml-mocker.svg)
+[![Build Status](https://travis-ci.org/xbl/raml-mocker.svg?branch=master)](https://travis-ci.org/xbl/raml-mocker)
+[![codecov](https://codecov.io/gh/xbl/raml-mocker/branch/master/graph/badge.svg)](https://codecov.io/gh/xbl/raml-mocker)
 
 Raml-mocker 是基于 [Raml](https://raml.org/) 的 mock server，Raml 是 RESTfull API 描述语言，同时支持自定义指令。raml-mocker 可以根据 raml 描述文档读取到 API 中的 uri 及 response 中的 example 继而生成 mock server。
 
