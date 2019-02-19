@@ -16,7 +16,7 @@ const processMessage = (valid, error, data) => {
   return {
     valid,
     message: msg,
-    validInfo
+    validInfo,
   };
 };
 

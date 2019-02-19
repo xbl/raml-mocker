@@ -6,8 +6,8 @@
     "clean": "ts-node build/clean",
     "dev": "tsc --watch",
     "build": "npm run clean && tsc && npm run chmod && npm run copy-assets",
-    "lint": "eslint -c .eslintrc.js ./src/**/*.js ./test/**/*.js",
-    "lint:fix": "eslint -c .eslintrc.js ./src/**/*.js --fix",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts",
+    "lint:fix": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts --fix",
     "chmod": "chmod +x ./dist/bin/*",
     "test": "nyc ava --fail-fast -v",
     "test:watch": "ava --watch --fail-fast -v",
@@ -72,6 +72,8 @@
     "prettier": "^1.15.1",
     "shelljs": "^0.8.3",
     "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "tslint-eslint-rules": "^5.4.0",
     "typescript": "^3.3.3"
   },
   "repository": {

@@ -2,24 +2,24 @@ import test from 'ava';
 import toRaml from '../src/har-convert/to-raml';
 import RestAPI from '../src/models/rest-api';
 
-test('Given restAPI array, then get raml str', async t => {
+test('Given restAPI array, then get raml str', async (t) => {
   const restAPIArr: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
       queryParameter: {
-        param1: 'value1'
+        param1: 'value1',
       },
       responses: [
         {
           code: 200,
           body: {
             mimeType: 'application/json',
-            text: '{"name":"你好"}'
-          }
-        }
-      ]
+            text: '{"name":"你好"}',
+          },
+        },
+      ],
     }, {
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
@@ -27,16 +27,16 @@ test('Given restAPI array, then get raml str', async t => {
       queryParameter: {},
       body: {
         mimeType: 'application/json;charset=UTF-8',
-        text: '{"a":1,"b":2}'
+        text: '{"a":1,"b":2}',
       },
       responses: [{
         code: 200,
         body: {
           mimeType: 'application/json',
-          text: '{}'
-        }
-      }]
-    }
+          text: '{}',
+        },
+      }],
+    },
   ];
 
   const expectResult = `
@@ -68,40 +68,40 @@ test('Given restAPI array, then get raml str', async t => {
   t.is(result.trim(), expectResult);
 });
 
-test('Given restAPI duplicate array, then get raml str', async t => {
+test('Given restAPI duplicate array, then get raml str', async (t) => {
   const restAPIArr: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
       queryParameter: {
-        param1: 'value1'
+        param1: 'value1',
       },
       responses: [
         {
           code: 200,
           body: {
             mimeType: 'application/json',
-            text: '{"name":"你好"}'
-          }
-        }
-      ]
-    },{
+            text: '{"name":"你好"}',
+          },
+        },
+      ],
+    }, {
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
       queryParameter: {
-        param1: 'value2'
+        param1: 'value2',
       },
       responses: [
         {
           code: 200,
           body: {
             mimeType: 'application/json',
-            text: '{"name":"你好"}'
-          }
-        }
-      ]
+            text: '{"name":"你好"}',
+          },
+        },
+      ],
     }, {
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
@@ -109,16 +109,16 @@ test('Given restAPI duplicate array, then get raml str', async t => {
       queryParameter: {},
       body: {
         mimeType: 'application/json;charset=UTF-8',
-        text: '{"a":1,"b":2}'
+        text: '{"a":1,"b":2}',
       },
       responses: [{
         code: 200,
         body: {
           mimeType: 'application/json',
-          text: '{}'
-        }
-      }]
-    }
+          text: '{}',
+        },
+      }],
+    },
   ];
 
   const expectResult = `

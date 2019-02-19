@@ -19,7 +19,7 @@ const handler = (req, res, config, webApi: RestAPI) => {
     // eslint-disable-next-line
     const moduleCtrl = require(`${config.controller}/${controller}`);
     const fn = moduleCtrl[methodName];
-    if (typeof fn === 'function') fn.call(app, req, res, webApi);
+    if (typeof fn === 'function') { fn.call(app, req, res, webApi); }
     return;
   }
 
@@ -35,10 +35,10 @@ const handler = (req, res, config, webApi: RestAPI) => {
   }
 
   const { body } = response;
-  if (body.mimeType) res.type(body.mimeType);
+  if (body.mimeType) { res.type(body.mimeType); }
   res.status(response.code);
   if (Array.isArray(config.plugins)) {
-    config.plugins.forEach(plugin => {
+    config.plugins.forEach((plugin) => {
       // eslint-disable-next-line
       const text = require(plugin)(body);
       res.send(text);
@@ -48,11 +48,11 @@ const handler = (req, res, config, webApi: RestAPI) => {
   res.send(body.text);
 };
 
-const setConfig = config => {
+const setConfig = (config) => {
   const apiJSON = loadApiSync(join(config.raml, config.main));
 
   const webApiArr = getRestApiArr(apiJSON);
-  webApiArr.forEach(webApi => {
+  webApiArr.forEach((webApi) => {
     app[webApi.method](toExpressUri(webApi.url), (req, res) => {
       handler(req, res, config, webApi);
     });
@@ -61,5 +61,5 @@ const setConfig = config => {
 
 export default {
   setConfig,
-  app
+  app,
 };

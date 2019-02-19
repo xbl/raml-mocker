@@ -4,13 +4,13 @@ import { replaceUriParameters } from './util';
 import RestAPI from './models/rest-api';
 
 let baseURL;
-const setHost = host => {
+const setHost = (host) => {
   axios.defaults.baseURL = host;
   baseURL = host;
 };
 
 const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
-  if (!baseURL) throw Error('Please set HOST!');
+  if (!baseURL) { throw Error('Please set HOST!'); }
   let requestPath = webApi.url;
   if (uriParameters) {
     replaceUriParameters(requestPath, (match, expression) => {
@@ -21,7 +21,7 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = 
   const response = await axios(requestPath, {
     method: webApi.method,
     data: body,
-    params: queryParameter
+    params: queryParameter,
   });
 
   const { runner } = webApi;
@@ -38,5 +38,5 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = 
 
 export default {
   setHost,
-  send
-}
+  send,
+};

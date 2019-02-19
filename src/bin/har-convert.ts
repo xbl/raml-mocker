@@ -16,14 +16,14 @@ const target = argsMap['-o'];
 const project = argsMap['-p'];
 const filter = argsMap['-filter'];
 
-const convert​​ = async () => {
+const convert = async () => {
   if (!harPath || !target) {
     console.log('请指定 -f 入口文件及 -o 输出文件');
-    return ;
+    return;
   }
   const har = await readFileAsync(harPath, 'utf-8');
   const RestAPIArr = read(har, filter);
   save(RestAPIArr, target, project);
-}
+};
 
-convert​​();
+convert();

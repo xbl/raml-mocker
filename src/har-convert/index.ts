@@ -14,21 +14,21 @@ import filterPath from './filter-path';
 const appendFileAsync = promisify(appendFile);
 const readFileSync = promisify(readFile);
 
-const filterEmpty = obj => JSON.parse(JSON.stringify(obj));
+const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
 
 const toParameter = (queryStrings: any[]) =>
   queryStrings.reduce((accumulator, {name, value}) => {
-    return Object.assign(accumulator, {[name]: decodeURIComponent(value)})
+    return Object.assign(accumulator, {[name]: decodeURIComponent(value)});
   }, {});
 
-const toRestAPI = (entries: any[]) => entries.map(entry => {
+const toRestAPI = (entries: any[]) => entries.map((entry) => {
   const { request, response } = entry;
   const { url, method, queryString, postData } = request;
   const newUrl = urlUtil.parse(url);
 
   const {
     status,
-    content: { mimeType, text }
+    content: { mimeType, text },
   } = response;
 
   return filterEmpty({
@@ -40,9 +40,9 @@ const toRestAPI = (entries: any[]) => entries.map(entry => {
     responses: [
       {
         code: status,
-        body: { mimeType, text }
-      }
-    ]
+        body: { mimeType, text },
+      },
+    ],
   });
 });
 

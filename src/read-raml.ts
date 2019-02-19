@@ -14,30 +14,30 @@ const BASE_TYPE = [
   'object',
   'integer',
   'null',
-  ANY_TYPE
+  ANY_TYPE,
 ];
 
 const setProps = (obj, property, value) => {
-  if (value) obj[property] = value;
+  if (value) { obj[property] = value; }
 };
 
-export const getDefinitionSchema = apiJSON => {
+export const getDefinitionSchema = (apiJSON) => {
   const $id = '/definitionSchema';
   const definitionSchema = {
     $id,
-    definitions: {}
+    definitions: {},
   };
   const clazzArr = apiJSON.types();
-  clazzArr.forEach(clazz => {
+  clazzArr.forEach((clazz) => {
     const clazzName = clazz.name();
     const jsonObj = clazz.toJSON({ serializeMetadata: false });
     const { properties } = jsonObj[clazzName];
 
-    if (!properties) return;
+    if (!properties) { return; }
 
     const requiredArr = [];
     const schemaProperties = {};
-    Object.keys(properties).forEach(key => {
+    Object.keys(properties).forEach((key) => {
       const {
         items,
         required,
@@ -45,11 +45,11 @@ export const getDefinitionSchema = apiJSON => {
         type,
         maxLength,
         minLength,
-        pattern
+        pattern,
       } = properties[key];
 
       const property = {
-        type: type.map(String)
+        type: type.map(String),
       };
       setProps(property, 'maxLength', maxLength);
       setProps(property, 'minLength', minLength);
@@ -71,7 +71,7 @@ export const getDefinitionSchema = apiJSON => {
         }
         schemaProperties[name] = {
           items: [$ref],
-          additionalItems: $ref
+          additionalItems: $ref,
         };
       }
     });
@@ -79,7 +79,7 @@ export const getDefinitionSchema = apiJSON => {
     const schemaPro = {
       type: 'object',
       properties: schemaProperties,
-      required: requiredArr
+      required: requiredArr,
     };
 
     definitionSchema.definitions[clazzName] = schemaPro;
@@ -88,7 +88,7 @@ export const getDefinitionSchema = apiJSON => {
 };
 
 const getSchemaByType = (type): Schema => {
-  if (!type) return undefined;
+  if (!type) { return undefined; }
   const newType = type.replace('[]', '');
   if (newType === ANY_TYPE) {
     return undefined;
@@ -101,39 +101,39 @@ const getSchemaByType = (type): Schema => {
   if (type.includes('[]')) {
     schema = {
       items: [$ref],
-      additionalItems: $ref
+      additionalItems: $ref,
     };
   }
   return schema;
 };
 
-const getQueryParameter = queryParameters => {
-  if (!Array.isArray(queryParameters)) return {};
+const getQueryParameter = (queryParameters) => {
+  if (!Array.isArray(queryParameters)) { return {}; }
   const newParam = {};
-  queryParameters.forEach(param => {
-    if (!param.example()) return;
+  queryParameters.forEach((param) => {
+    if (!param.example()) { return; }
     const value = param.example().value();
-    if (!value) return;
+    if (!value) { return; }
     newParam[param.name()] = value;
   });
   return newParam;
 };
 
 const getPostBody = ([body]): Body​​ => {
-  if (!body || !body.example()) return;
+  if (!body || !body.example()) { return; }
   const value = body.example().value();
-  if (!value) return;
+  if (!value) { return; }
   return {
     mimeType: body.name(),
-    text: value
+    text: value,
   };
 };
 
 export const getAnnotationByName = (name, method) => {
   let annotationObj;
-  method.annotations().forEach(annotation => {
+  method.annotations().forEach((annotation) => {
     const json = annotation.toJSON();
-    if (json.name !== name) return;
+    if (json.name !== name) { return; }
     annotationObj = json.structuredValue;
   });
   return annotationObj;
@@ -143,36 +143,36 @@ const getUriParameters = (resource, method) => {
   let uriParameters;
   const params = getAnnotationByName('uriParameters', method);
   if (params) {
-    if (!uriParameters) uriParameters = {};
-    Object.keys(params).forEach(key => {
+    if (!uriParameters) { uriParameters = {}; }
+    Object.keys(params).forEach((key) => {
       const param = params[key];
-      if (!param) return;
+      if (!param) { return; }
       const example = String(param.example);
-      if (param && example) uriParameters[key] = example;
+      if (param && example) { uriParameters[key] = example; }
     });
   }
 
   // has bug: https://github.com/raml-org/raml-js-parser-2/issues/829
-  resource.allUriParameters().forEach(parameter => {
+  resource.allUriParameters().forEach((parameter) => {
     const name = parameter.name();
     const example = parameter.example();
     let value = '';
-    if (!example) return;
+    if (!example) { return; }
     value = example.value();
-    if (!uriParameters) uriParameters = {};
+    if (!uriParameters) { uriParameters = {}; }
     uriParameters[name] = value;
   });
 
   return uriParameters;
 };
 
-export const getRestApiArr = apiJSON => {
-  const webApiArr:RestAPI[] = [];
-  apiJSON.allResources().forEach(resource => {
-    const url = <string> resource.absoluteUri();
+export const getRestApiArr = (apiJSON) => {
+  const webApiArr: RestAPI[] = [];
+  apiJSON.allResources().forEach((resource) => {
+    const url = resource.absoluteUri() as string;
 
-    resource.methods().forEach(method => {
-      const webApi: RestAPI = { url, method: <string>method.method() };
+    resource.methods().forEach((method) => {
+      const webApi: RestAPI = { url, method: method.method() as string };
 
       const description = method.description() && method.description().value();
       // setProps(webApi, 'description', description);
@@ -196,11 +196,11 @@ export const getRestApiArr = apiJSON => {
       postBody && (webApi.body = postBody);
 
       webApi.responses = [];
-      method.responses().forEach(response => {
+      method.responses().forEach((response) => {
         const code = parseInt(response.code().value(), 10);
         // 30x
         if (isRedirectCode(code)) {
-          response.headers().forEach(typeDeclaration => {
+          response.headers().forEach((typeDeclaration) => {
             if (typeDeclaration.name().toLowerCase() === 'location') {
               const redirectURL = typeDeclaration.type()[0];
               webApi.responses.push({ code, redirectURL });
@@ -208,17 +208,17 @@ export const getRestApiArr = apiJSON => {
           });
           return;
         }
-        response.body().forEach(body => {
+        response.body().forEach((body) => {
           const example = body.example();
-          if (!example) return;
+          if (!example) { return; }
           const mimeType = body.name();
           const type = body.type().pop();
           const webApiResp: Response = {
             code,
             body: {
               text: example.value(),
-              mimeType
-            }
+              mimeType,
+            },
           };
           const schema = getSchemaByType(type);
           schema && (webApiResp.schema = schema);

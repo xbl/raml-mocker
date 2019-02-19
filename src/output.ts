@@ -2,18 +2,18 @@
 const chalk = require('chalk');
 
 const typeMap = {
-  '0': {
+  0: {
     color: 'red',
-    icon: '✖'
+    icon: '✖',
   },
-  '1': {
+  1: {
     color: 'green',
-    icon: '✔'
+    icon: '✔',
   },
-  '2': {
+  2: {
     color: 'yellow',
-    icon: '!'
-  }
+    icon: '!',
+  },
 };
 
 export default function Output(host) {
@@ -24,7 +24,7 @@ export default function Output(host) {
   console.log(`HOST: ${this.host}`);
 }
 
-Output.processMessage = message => message.match(/(^.*)[\n]*([\w\W]*)/);
+Output.processMessage = (message) => message.match(/(^.*)[\n]*([\w\W]*)/);
 
 Output.prototype.push = (type, message, request, beginTime) => {
   const [, title, validInfo] = Output.processMessage(message);
@@ -37,7 +37,7 @@ Output.prototype.push = (type, message, request, beginTime) => {
   console.log(
     chalk`{${color} ${icon} 请求：[${request.method.toUpperCase()}]} {underline ${
       request.path
-    }} {gray ${Date.now() - beginTime}ms}`
+    }} {gray ${Date.now() - beginTime}ms}`,
   );
   console.log(chalk`{${color} ${title}}`);
   console.log(validInfo);

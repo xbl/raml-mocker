@@ -25,7 +25,7 @@ const output = new Output(host);
 
 const getResponseByStatusCode = (code, responses) => {
   let response;
-  responses.forEach(resp => {
+  responses.forEach((resp) => {
     if (resp.code === code) {
       response = resp;
     }
@@ -42,7 +42,7 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
       webApi,
       uriParameters,
       queryParameter,
-      body
+      body,
     );
 
     if (!webApi.responses.length) {
@@ -55,10 +55,10 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
     if (!resp) {
       output.push(
         Output.ERROR,
-        "Can't find code by responses",
+        'Can\'t find code by responses',
         '',
         request,
-        beginTime
+        beginTime,
       );
       return;
     }
@@ -72,7 +72,7 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
       const { valid, message } = validateSchema(
         definitionSchema,
         resp.schema,
-        data
+        data,
       );
       const type = valid ? Output.SUCCESS : Output.ERROR;
       output.push(type, message, request, beginTime);
@@ -85,18 +85,18 @@ const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
       err.message || err,
       // eslint-disable-next-line no-underscore-dangle
       { path: webApi.url, method: webApi.method },
-      beginTime
+      beginTime,
     );
   }
 };
 
-webApiArr.sort(webApi => (webApi.runner && webApi.runner.after ? -1 : 1));
+webApiArr.sort((webApi) => (webApi.runner && webApi.runner.after ? -1 : 1));
 
 const sendRunner = async () => {
   const webApi = webApiArr.shift();
   if (!webApi.runner) {
     webApiArr.unshift(webApi);
-    webApiArr.forEach(aa => {
+    webApiArr.forEach((aa) => {
       const body = aa.body ? aa.body.text : {};
       send(aa, aa.uriParameters, aa.queryParameter, body);
     });
