@@ -34,7 +34,7 @@ export const loadApi = description => {
   const api = webApiArr
     .filter(webApi => webApi.description === description)
     .pop();
-
+  if (!api) throw Error(`Can't find API by '${description}'!`);
   return (uriParameters, queryParameter, body) =>
     HttpClient.send(api, uriParameters, queryParameter, body);
 };
