@@ -40,6 +40,7 @@ export default async (config: Config) => {
 
   const send = async (webApi: RestAPI) => {
     const beginTime = Date.now();
+    let absoluteUri = webApi.url;
     try {
       const body = webApi.body ? webApi.body.text : {};
       const { data, request, status } = await httpClient.send(
@@ -49,6 +50,7 @@ export default async (config: Config) => {
         body,
       );
 
+      absoluteUri = request.path;
       if (!webApi.responses.length) {
         output.push(Output.WARNING, 'No set responses', request, beginTime);
         return;
@@ -57,31 +59,19 @@ export default async (config: Config) => {
       const resp = getResponseByStatusCode(status, webApi.responses);
 
       if (!resp) {
-        output.push(
-          Output.ERROR,
-          'Can\'t find code by responses',
-          request,
-          beginTime,
-        );
-        return;
+        throw new Error('Can\'t find code by responses');
       }
 
-      if (!resp.schema) {
-        output.push(Output.SUCCESS, '', request, beginTime);
-        return;
-      }
-
-      try {
+      if (resp.schema) {
         validateSchema(definitionSchema, resp.schema, data);
-        output.push(Output.SUCCESS, '', request, beginTime);
-      } catch (error) {
-        output.push(Output.ERROR, error.message, request, beginTime);
       }
+
+      output.push(Output.SUCCESS, '', request, beginTime);
     } catch (err) {
       output.push(
         Output.ERROR,
         err.message || err,
-        { path: webApi.url, method: webApi.method },
+        { path: absoluteUri, method: webApi.method },
         beginTime,
       );
     }
