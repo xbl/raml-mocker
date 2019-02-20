@@ -27,7 +27,7 @@ export const validateSchema = (definitionSchema, schema: Schema, data): boolean 
   }
   const valid = validate(data) as boolean;
   if (!valid) {
-    const error = !valid && validate.errors.pop();
+    const error = validate.errors.pop();
     throw new Error(buildErrorMessage(error, data));
   }
   return valid;
