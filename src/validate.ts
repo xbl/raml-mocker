@@ -1,28 +1,22 @@
 import Ajv from 'ajv';
 import { jsonPath } from './util';
+import Schema from './models/schema';
 
-const processMessage = (valid, error, data) => {
-  const validInfo = '';
+const buildErrorMessage = (error: Ajv.ErrorObject, data): string => {
   let msg = '';
-  if (!valid) {
-    let result = data;
-    const { message, dataPath } = error;
-    msg = message;
-    if (dataPath) {
-      result = jsonPath(data, dataPath);
-    }
-    msg += `\ninfo:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
+  let result = data;
+  const { message, dataPath } = error;
+  msg = message;
+  if (dataPath) {
+    result = jsonPath(data, dataPath);
   }
-  return {
-    valid,
-    message: msg,
-    validInfo,
-  };
+  msg += `\ninfo:${dataPath}\n${JSON.stringify(result, null, '\t')}\n`;
+  return msg;
 };
 
-export const validateSchema = (definitionSchema, schema, data) => {
+export const validateSchema = (definitionSchema, schema: Schema, data): boolean => {
   const ajv = new Ajv();
-  let validate;
+  let validate: Ajv.ValidateFunction;
   try {
     validate = ajv.addSchema(definitionSchema).compile(schema);
   } catch (error) {
@@ -31,8 +25,10 @@ export const validateSchema = (definitionSchema, schema, data) => {
     }
     throw error;
   }
-  const valid = validate(data);
-  const error = !valid && validate.errors.pop();
-
-  return processMessage(valid, error, data);
+  const valid = validate(data) as boolean;
+  if (!valid) {
+    const error = !valid && validate.errors.pop();
+    throw new Error(buildErrorMessage(error, data));
+  }
+  return valid;
 };

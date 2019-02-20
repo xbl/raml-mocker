@@ -1,5 +1,6 @@
 import test from 'ava';
 import Ajv from 'ajv';
+import { validateSchema } from '../src/validate';
 
 test('give single type then validate return true', (t) => {
   const responseBody = {
@@ -190,4 +191,127 @@ test('give string array type then validate return true', (t) => {
     msg = message;
   }
   t.true(valid, msg);
+});
+
+
+test('give string array type then validateSchema return true', (t) => {
+  const responseBody = [
+    {
+      productId: 'P00001',
+      coverImage: ['1.png', '2.png'],
+    },
+  ];
+
+  const definitionSchema = {
+    $id: '/definitionSchema',
+    definitions: {
+      Product: {
+        type: 'object',
+        properties: {
+          productId: {
+            type: ['string'],
+          },
+          coverImage: {
+            items: [{ type: 'string' }],
+            additionalItems: {
+              type: 'string',
+            },
+          },
+        },
+        required: ['productId', 'coverImage'],
+      },
+    },
+  };
+
+  const $ref = { $ref: '/definitionSchema#/definitions/Product' };
+  const schema = {
+    items: [$ref],
+    additionalItems: $ref,
+  };
+
+  const valid = validateSchema(definitionSchema, schema, responseBody);
+  t.true(valid);
+});
+
+test('give string array type then validateSchema throws error', (t) => {
+  const responseBody = [
+    {
+      productId: 1,
+      coverImage: ['1.png', '2.png'],
+    },
+  ];
+
+  const definitionSchema = {
+    $id: '/definitionSchema',
+    definitions: {
+      Product: {
+        type: 'object',
+        properties: {
+          productId: {
+            type: ['string'],
+          },
+          coverImage: {
+            items: [{ type: 'string' }],
+            additionalItems: {
+              type: 'string',
+            },
+          },
+        },
+        required: ['productId', 'coverImage'],
+      },
+    },
+  };
+
+  const $ref = { $ref: '/definitionSchema#/definitions/Product' };
+  const schema = {
+    items: [$ref],
+    additionalItems: $ref,
+  };
+
+  const error = t.throws(() => {
+    validateSchema(definitionSchema, schema, responseBody)
+  });
+  t.truthy(error.message);
+});
+
+
+test('give string array type then validateSchema throws error Missing custom type', (t) => {
+  const responseBody = [
+    {
+      productId: 1,
+      coverImage: ['1.png', '2.png'],
+    },
+  ];
+
+  const definitionSchema = {
+    $id: '/definitionSchema',
+    definitions: {
+      Product: {
+        type: 'object',
+        properties: {
+          productId: {
+            type: ['string'],
+          },
+          coverImage: {
+            items: [{ type: 'string' }],
+            additionalItems: {
+              type: 'string',
+            },
+          },
+        },
+        required: ['productId', 'coverImage'],
+      },
+    },
+  };
+
+  const $ref = { $ref: '/definitionSchema#/definitions/Product1' };
+  const schema = {
+    items: [$ref],
+    additionalItems: $ref,
+  };
+
+  const error = t.throws(() => {
+    validateSchema(definitionSchema, schema, responseBody);
+  });
+  t.truthy(error.message.includes('Missing custom type'));
 });

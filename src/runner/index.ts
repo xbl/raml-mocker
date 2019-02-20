@@ -8,10 +8,11 @@ import Output from '../output';
 import Config from '../models/config';
 import HttpClient from '../http-client';
 import RestAPI from '../models/rest-api';
+import Response from '../models/response';
 import { validateSchema } from '../validate';
 import { getRestApiArr, getDefinitionSchema } from '../read-raml';
 
-const getResponseByStatusCode = (code, responses) => {
+const getResponseByStatusCode = (code: number, responses: Response[]): Response => {
   let response;
   responses.forEach((resp) => {
     if (resp.code === code) {
@@ -37,13 +38,14 @@ export default async (config: Config) => {
   const output = new Output(host);
   const httpClient = new HttpClient(host);
 
-  const send = async (webApi: RestAPI, uriParameters, queryParameter, body) => {
+  const send = async (webApi: RestAPI) => {
     const beginTime = Date.now();
     try {
+      const body = webApi.body ? webApi.body.text : {};
       const { data, request, status } = await httpClient.send(
         webApi,
-        uriParameters,
-        queryParameter,
+        webApi.uriParameters,
+        webApi.queryParameter,
         body,
       );
 
@@ -70,13 +72,8 @@ export default async (config: Config) => {
       }
 
       try {
-        const { valid, message } = validateSchema(
-          definitionSchema,
-          resp.schema,
-          data,
-        );
-        const type = valid ? Output.SUCCESS : Output.ERROR;
-        output.push(type, message, request, beginTime);
+        validateSchema(definitionSchema, resp.schema, data);
+        output.push(Output.SUCCESS, '', request, beginTime);
       } catch (error) {
         output.push(Output.ERROR, error.message, request, beginTime);
       }
@@ -94,13 +91,10 @@ export default async (config: Config) => {
     const webApi = restApiArr.shift();
     if (!webApi.runner) {
       restApiArr.unshift(webApi);
-      restApiArr.forEach((aa) => {
-        send(aa, aa.uriParameters, aa.queryParameter, aa.body ? aa.body.text : {});
-      });
+      restApiArr.forEach(send);
       return;
     }
-    const body = webApi.body ? webApi.body.text : {};
-    await send(webApi, webApi.uriParameters, webApi.queryParameter, body);
+    await send(webApi);
     sendRunner();
   };
 
