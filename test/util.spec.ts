@@ -30,6 +30,7 @@ test('When toExpressUri Given /products/{productId} Then get /products/:productI
 });
 
 test('When indentString Given json str Then got format json', (t) => {
+  // tslint:disable:max-line-length
   const given = '{\n  "realName": "金金",\n  "mobile": "15811111111",\n  "avatar": "",\n  "nickName": "",\n  "born": null,\n  "gender": "MALE",\n  "email": "",\n  "address": "",\n  "occupation": "",\n  "interestedClasses": [""],\n  "hobbies": [""],\n  "ownModels": [""]\n}\n';
   const expectResult = `
     {
