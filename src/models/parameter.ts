@@ -16,6 +16,6 @@ export default class Parameter {
   name: string;
   type?: string;
   description?: string;
-  example?: string;
+  example?: any;
   required?: boolean;
 }
