@@ -1,6 +1,7 @@
 import Body from './body';
 import Response from './response';
 import Runner from './runner';
+import Parameter from './parameter';
 
 export default class RestAPI {
   url: string;
@@ -9,7 +10,7 @@ export default class RestAPI {
   controller?: string;
   runner?: Runner;
   uriParameters?: object;
-  queryParameter?: object;
+  queryParameters?: Parameter[];
   body?: Body;
   responses?: Response[];
 

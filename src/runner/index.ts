@@ -6,6 +6,7 @@ import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 import Output from '../output';
 import Config from '../models/config';
+import Parameter from '../models/parameter';
 import HttpClient from '../http-client';
 import RestAPI from '../models/rest-api';
 import Response from '../models/response';
@@ -46,7 +47,7 @@ export default async (config: Config) => {
       const { data, request, status } = await httpClient.send(
         webApi,
         webApi.uriParameters,
-        webApi.queryParameter,
+        Parameter.toJSON(webApi.queryParameters),
         body,
       );
 

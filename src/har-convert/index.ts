@@ -11,15 +11,16 @@ import { loadConfig, mergeRestApi } from '../util';
 import { getRestApiArr } from '../read-raml';
 import filterPath from './filter-path';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import Parameter​​ from '../models/parameter';
 
 const appendFileAsync = promisify(appendFile);
 
 const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
 
-const toParameter = (queryStrings: any[]) =>
-  queryStrings.reduce((accumulator, {name, value}) => {
-    return Object.assign(accumulator, {[name]: decodeURIComponent(value)});
-  }, {});
+const toParameter = (queryStrings: any[]): Parameter​​[] =>
+  queryStrings.map(({name, value}) => {
+    return { name, example: decodeURIComponent(value)};
+  });
 
 const toRestAPI = (entries: any[]) => entries.map((entry) => {
   const { request, response } = entry;
@@ -35,7 +36,7 @@ const toRestAPI = (entries: any[]) => entries.map((entry) => {
     url: newUrl.pathname,
     description: `${method.toLowerCase()}${ newUrl.pathname.replace(/\//g, '_') }`,
     method,
-    queryParameter: toParameter(queryString),
+    queryParameters: toParameter(queryString),
     body: postData,
     responses: [
       {

@@ -8,9 +8,10 @@ test('Given restAPI array, then get spec str', async (t) => {
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -24,7 +25,7 @@ test('Given restAPI array, then get spec str', async (t) => {
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',
@@ -72,9 +73,10 @@ test('Given restAPI array and urlParameters, then get spec str', async (t) => {
       uriParameters: {
         id: 'T012019011828586',
       },
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -88,7 +90,7 @@ test('Given restAPI array and urlParameters, then get spec str', async (t) => {
       url: '/api/test/raml/orders/1234/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',
@@ -136,9 +138,10 @@ test('Given restAPI post body is not JSON str, then get spec str', async (t) => 
       uriParameters: {
         id: 'T012019011828586',
       },
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -152,7 +155,7 @@ test('Given restAPI post body is not JSON str, then get spec str', async (t) => 
       url: '/api/test/raml/orders/1234/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/x-www-form-urlencoded;charset=UTF-8',
         text: 'a=1&b=2',

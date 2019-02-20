@@ -2,12 +2,12 @@
 <%= restAPI.url %>:
   <%= restAPI.method.toLocaleLowerCase() %>:
     description: <%= restAPI.description %><%
-    if (!_.isEmpty(restAPI.queryParameter)) {
+    if (!_.isEmpty(restAPI.queryParameters)) {
 %>
     queryParameters:<%
-      _.forEach(restAPI.queryParameter, (value, key) => {%>
-      <%= key %>:
-        example: <%= value %><%
+      _.forEach(restAPI.queryParameters, (param) => {%>
+      <%= param.name %>:
+        example: <%= param.example %><%
       });
     }
     if (!_.isEmpty(restAPI.body)) {

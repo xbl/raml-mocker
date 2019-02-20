@@ -9,9 +9,10 @@ test('Given a har file, then get xhr request arr', async (t) => {
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
-      queryParameter: {
-        param1: ':hello:city:Beijing:model:',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: ':hello:city:Beijing:model:',
+      }],
       responses: [
         {
           code: 200,
@@ -25,7 +26,7 @@ test('Given a har file, then get xhr request arr', async (t) => {
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',
@@ -51,7 +52,7 @@ test('Given a har file and use filter, then get filter arr', async (t) => {
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',

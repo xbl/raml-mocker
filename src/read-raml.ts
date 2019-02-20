@@ -4,8 +4,8 @@ import Response from './models/response';
 import Schema from './models/schema';
 import $Ref from './models/$ref';
 import Body from './models/body';
-import { TypeDeclaration } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
-import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import Parameter from './models/parameter';
+import { TypeDeclaration, Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const ANY_TYPE = 'any';
 const BASE_TYPE = [
@@ -109,16 +109,22 @@ const getSchemaByType = (type): Schema => {
   return schema;
 };
 
-const getQueryParameter = (queryParameters) => {
-  if (!Array.isArray(queryParameters)) { return {}; }
-  const newParam = {};
+const getQueryParameters = (queryParameters): Parameter[] => {
+  if (!Array.isArray(queryParameters)) { return; }
+  const newParams: Parameter[] = [];
   queryParameters.forEach((param) => {
     if (!param.example()) { return; }
     const value = param.example().value();
     if (!value) { return; }
-    newParam[param.name()] = value;
+    // TODO: 文档中说返回的是字符串，结果返回的是数组：
+    // https://raml-org.github.io/raml-js-parser-2/interfaces/_src_raml1_artifacts_raml08parserapi_.parameter.html#type
+    let type = param.type();
+    if (Array.isArray(param.type())) {
+      type = param.type().pop();
+    }
+    newParams.push({name: param.name(), example: value, required: param.required(), type });
   });
-  return newParam;
+  return newParams;
 };
 
 const getPostBody = ([body]: TypeDeclaration[]): Body​​ => {
@@ -192,7 +198,7 @@ export const getRestApiArr = (apiJSON: Api) => {
       // setProps(webApi, 'uriParameters', uriParameters);
       uriParameters && (webApi.uriParameters = uriParameters);
 
-      webApi.queryParameter = getQueryParameter(method.queryParameters());
+      webApi.queryParameters = getQueryParameters(method.queryParameters());
       const postBody = getPostBody(method.body());
       // setProps(webApi, 'body', postBody);
       postBody && (webApi.body = postBody);

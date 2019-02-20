@@ -56,9 +56,10 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       url: '/api/test/raml/orders/T012019011828586',
       description: 'get_api_test_raml_orders_T012019011828586',
       method: 'GET',
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -72,7 +73,7 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       url: '/api/test/raml/orders/T012019011828586/redeem',
       description: 'post_api_test_raml_orders_T012019011828586_redeem',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',
@@ -92,9 +93,10 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       url: '/api/test/raml/orders/{id}',
       description: '获得',
       method: 'GET',
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -108,7 +110,7 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       url: '/api/test/raml/orders/{id}/redeem',
       description: '保存',
       method: 'POST',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',
@@ -123,7 +125,7 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
     },
   ];
 
-  const expectResult = [
+  const expectResult: RestAPI[] = [
     {
       url: '/api/test/raml/orders/{id}',
       description: '获得',
@@ -131,9 +133,10 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       uriParameters: {
         id: 'T012019011828586',
       },
-      queryParameter: {
-        param1: 'value1',
-      },
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
       responses: [
         {
           code: 200,
@@ -150,7 +153,7 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
       uriParameters: {
         id: 'T012019011828586',
       },
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json;charset=UTF-8',
         text: '{"a":1,"b":2}',

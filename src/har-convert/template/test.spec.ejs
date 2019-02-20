@@ -13,7 +13,8 @@ it('<%= name %>', async () => {<%
         bodyData = `'${restAPI.body.text}'`;
       }
     }
-    const params = [uriParam, JSON.stringify(restAPI.queryParameter), bodyData].join(',');
+    const queryParameters = Parameter.toJSON(restAPI.queryParameters);
+    const params = [uriParam, JSON.stringify(queryParameters), bodyData].join(',');
   %>
   const <%= methodName %> = loadApi('<%= restAPI.description %>');
   const { status: status<%= index%>, data: data<%= index%> } = await <%= methodName %>(<%= params %>);

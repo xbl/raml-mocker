@@ -364,7 +364,7 @@ test('when read raml given /products then get webAPI array', (t) => {
       url: '/products',
       method: 'get',
       description: '商品列表',
-      queryParameter: {},
+      queryParameters: [],
       responses: [
         {
           code: 200,
@@ -407,9 +407,12 @@ test('when read raml given /products has queryParameter then get webAPI array', 
       url: '/products',
       method: 'get',
       description: '商品列表',
-      queryParameter: {
-        isStar: 'true',
-      },
+      queryParameters: [{
+        name: 'isStar',
+        example: 'true',
+        required: false,
+        type: 'boolean',
+      }],
       responses: [
         {
           code: 200,
@@ -458,7 +461,7 @@ test('when read raml given post /products has data then get webAPI array', (t) =
       url: '/products',
       method: 'post',
       description: '商品列表',
-      queryParameter: {},
+      queryParameters: [],
       body: {
         mimeType: 'application/json',
         text: `{
@@ -514,7 +517,7 @@ test('when read raml given /products has uriParameters then get webAPI array', (
       uriParameters: {
         id: 'aaaa',
       },
-      queryParameter: {},
+      queryParameters: [],
       responses: [
         {
           code: 200,
