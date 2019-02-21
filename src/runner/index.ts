@@ -5,26 +5,13 @@ import { loadApi as loadRamlApi } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 import Output from '../output';
-import Config from '../models/config';
-import Parameter from '../models/parameter';
 import HttpClient from '../http-client';
+import Config from '../models/config';
 import RestAPI from '../models/rest-api';
-import Response from '../models/response';
+import Parameter from '../models/parameter';
 import { validateSchema } from '../validate';
 import { getRestApiArr, getDefinitionSchema } from '../read-raml';
-
-const getResponseByStatusCode = (code: number, responses: Response[]): Response => {
-  let response;
-  responses.forEach((resp) => {
-    if (resp.code === code) {
-      response = resp;
-    }
-  });
-  return response;
-};
-
-const sortByRunner = (restApiArr) =>
-  restApiArr.sort((webApi) => (webApi.runner && webApi.runner.after ? -1 : 1));
+import { getResponseByStatusCode, sortByRunner } from './runner-util';
 
 export default async (config: Config) => {
   const env = process.env.NODE_ENV;
