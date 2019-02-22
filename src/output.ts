@@ -1,6 +1,5 @@
 /* tslint:disable no-console */
 import chalk from 'chalk';
-import { TypeConstructor } from 'raml-typesystem';
 
 const typeMap = {
   0: {

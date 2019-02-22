@@ -11,6 +11,9 @@ let httpClient: HttpClient;
 export const initProject = async () => {
   const env = process.env.NODE_ENV;
   const config = await loadConfig();
+  if (!config) {
+    return ;
+  }
   let host = `http://localhost:${config.port}`;
   if (config.runner && env) {
     host = config.runner[env];

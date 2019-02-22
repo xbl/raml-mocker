@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import Config from './models/config';
 import RestAPI from './models/rest-api';
 import pathToRegexp from 'path-to-regexp';
+import chalk from 'chalk';
 
 export const isRedirectCode = (code) => code >= 300 && code < 400;
 
@@ -33,8 +34,26 @@ export const toExpressUri = (uri: string): string => {
 };
 
 export const loadConfig = async (): Promise<Config> => {
-  const str = await readFileAsync(resolve(process.cwd(), './.raml-config.json'), 'utf8');
-  const config = JSON.parse(str) as Config;
+  let str;
+  const configFile = '.raml-config.json';
+  const currentPath = process.cwd();
+  try {
+    str = await readFileAsync(resolve(currentPath, `./${configFile}`), 'utf8');
+  } catch (error) {
+    // tslint:disable-next-line no-console
+    console.log(chalk`{red 在当前目录(${currentPath})没有找到${configFile}配置文件}`);
+    process.exit(1);
+    return;
+  }
+  let config;
+  try {
+    config = JSON.parse(str) as Config;
+  } catch (error) {
+    // tslint:disable-next-line no-console
+    console.error(chalk`{red 解析${configFile}配置文件出错，不是正确的 JSON 格式。}`);
+    process.exit(1);
+    return;
+  }
   config.raml = resolve(config.raml);
   config.controller = resolve(config.controller);
   if (Array.isArray(config.plugins)) {
