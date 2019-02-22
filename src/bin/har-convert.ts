@@ -20,7 +20,7 @@ const convert = async () => {
     // tslint:disable no-console
     console.log(`
   har 转 raml:
-  har-convert -f ./[har 文件].har -o ./api/[目标].raml -filter /api/v1
+  har-convert -f ./[har 文件].har -o ./raml/[目标].raml -filter /api/v1
 
   har 转 *.spec.js:
   har-convert -f ./[har 文件].har -o ./test/[目标].spec.js

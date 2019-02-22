@@ -15,7 +15,7 @@ git clone https://github.com/xbl/raml-mocker-starter.git raml-api
 cd raml-api
 git remote rm origin
 ```
-#### 安装方法一——NodeJs
+#### 安装
 ```shell
 yarn
 # or
@@ -27,31 +27,7 @@ yarn start
 # or
 npm start
 ```
-#### 安装方法二——使用 docker-compose
-
-这部分是给不太擅长折腾nodejs环境的同学准备的。在项目中增加了 `docker-compose.yml` ，需要 Docker 环境，进入目录执行
-
-``` shell
-docker-compose up
-```
-
-第一次会拉取镜像，稍稍会有些慢。
-
-##### 停止 mock server
-
-``` shell
-docker-compose down
-```
-
-##### 在 docker 中执行命令
-
-```shell
-docker-compose exec raml-mocker sh
-# 退出
-exit
-```
-
-
+不熟悉 Nodejs 的同学可以参考[这里](https://github.com/xbl/raml-mocker/wiki/%E4%BD%BF%E7%94%A8Docker%E5%90%AF%E5%8A%A8)，使用 Docker 启动。
 
 #### 验证一下
 
@@ -192,46 +168,9 @@ webApi 会返回文档中的配置：
 
 如此，raml-mocker 提供了更多可扩展空间，我们甚至可以在 controller 中实现一定的逻辑判断。
 
-
-
-### 插件
-
-Raml-mocker 提供了插件机制，允许我们在不使用 `controller` 指令的时候对 response 的内容进行处理，例如使用[Mockjs](http://mockjs.com/)。
-
-**注意：插件的这种形式还没有想好，未来可能会有变动，即便有变动也会尽可能向下兼容。**
-
-.raml-config.json
-
-```json
-{
-  "controller": "./controller",
-  "raml": "./raml",
-  "main": "api.raml",
-  "port": 3000,
-  "plugins": ["./plugins/mock.js"]
-}
-
-```
-
-./plugins/mock.js
-
-```javascript
-var { mock } = require('mockjs');
-
-module.exports = (body) => {
-  try {
-    return mock(JSON.parse(body));
-  } catch(e) {}
-  return body;
-}
-
-```
-
-
-
 ## API 自动化测试
 
-在 1.1.0 中增加 API 测试，通过在 raml 文件中添加 response 数据的描述，来验证 response 的数据是否符合预期。
+在 1.1.0 中增加 API 测试，通过在 raml 文件中添加 response 数据格式描述，raml-runner 会发送请求，来验证 response 的数据格式是否符合预期。
 
 ![runner](https://ws1.sinaimg.cn/large/006tNbRwly1fyaoa2ikfeg30i60b4afa.gif)
 
@@ -281,7 +220,7 @@ get:
     responses:
       200:
         body:
-          # 这里描述的商品
+          # type 这里描述的商品
           type: Product
           example: !include ./product_200.json
 
@@ -388,6 +327,58 @@ module.exports = (axios, response) => {
 
 
 
+## API 场景测试
+
+在 2.0 中增加了 API  的场景测试，在目录中增加了 `test` 文件夹。
+
+1. 在 raml 中增加 description
+
+```yaml
+get:
+  description: 商品列表
+  queryParameters:
+    isStar:
+      description: 是否精选
+      type: boolean
+      required: false
+      example: true
+    isOk:
+      description: 是否精选2
+      type: boolean
+      required: false
+      example: true
+  responses:
+    200:
+      body:
+        type: Product[]
+        example: !include ./products_200.json
+```
+
+**注意：**description 的字符串会在 loadApi 时使用，所以请保证唯一。
+
+2. 在 test 目录新增 article.spec.js 
+
+```javascript
+const assert = require('assert');
+const { loadApi } = require('@xbl/raml-mocker');
+
+it('从文章列表到文章详情', async () => {
+  // 根据 `文章列表` 的description 找到 raml 描述的 API
+  const getList = loadApi('文章列表');
+  const { status, data: list } = await getList();
+  const articleId = list[0].articleId;
+
+  assert.equal(status, 200);
+  assert.equal(articleId, 'A00001');
+
+  const getDetail = loadApi('文章详情');
+  const { data: detail } = await getDetail({ id: articleId });
+  assert.equal(detail.title, '提升家里整体格调的小物件');
+});
+```
+
+
+
 ## Road Map
 
 - [x] API 自动化测试
@@ -397,5 +388,4 @@ module.exports = (axios, response) => {
 - [ ] Mock Server 增加请求参数验证
 - [ ] baseUriParameters
 - [ ] 上传文件的处理
-- [ ] ~~测试数据导入~~
 
