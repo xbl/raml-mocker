@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { join } from 'path';
+import { isEmpty } from 'lodash';
 import { loadApi as loadRamlApi } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
@@ -11,7 +12,7 @@ import RestAPI from '../models/rest-api';
 import Parameter from '../models/parameter';
 import { validateSchema } from '../validate';
 import { getRestApiArr, getDefinitionSchema } from '../read-raml';
-import { getResponseByStatusCode, sortByRunner } from './runner-util';
+import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
 
 export default async (config: Config) => {
   const env = process.env.NODE_ENV;
@@ -19,11 +20,21 @@ export default async (config: Config) => {
   if (config.runner && env) {
     host = config.runner[env];
   }
+  const output = new Output(host);
+  process.on('beforeExit', () => {
+    output.print();
+  });
 
   const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
-  const restApiArr = sortByRunner(getRestApiArr(apiJSON));
+  const splitRestApiArr = [];
+  getRestApiArr(apiJSON).forEach((restApi: RestAPI) => {
+    splitRestApiArr.push(...splitByParameter(restApi));
+  });
+  const restApiArr = sortByRunner(splitRestApiArr);
+  if (isEmpty(restApiArr)) {
+    return ;
+  }
   const definitionSchema = getDefinitionSchema(apiJSON);
-  const output = new Output(host);
   const httpClient = new HttpClient(host);
 
   const send = async (webApi: RestAPI) => {
@@ -77,9 +88,4 @@ export default async (config: Config) => {
   };
 
   sendRunner();
-
-  process.on('beforeExit', () => {
-    output.print();
-  });
-
 };
