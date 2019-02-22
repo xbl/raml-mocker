@@ -18,7 +18,19 @@ const filter = argsMap['-filter'];
 const convert = async () => {
   if (!harPath || !target) {
     // tslint:disable no-console
-    console.log('请指定 -f 入口文件及 -o 输出文件');
+    console.log(`
+  har 转 raml:
+  har-convert -f ./[har 文件].har -o ./api/[目标].raml -filter /api/v1
+
+  har 转 *.spec.js:
+  har-convert -f ./[har 文件].har -o ./test/[目标].spec.js
+
+  Options:
+
+  -f         入口文件
+  -o         输出文件
+  -filter    只过滤带有过滤条件的请求（可选），如: -filter /api/v1
+`);
     return;
   }
   const har = await readFileAsync(harPath, 'utf-8');
