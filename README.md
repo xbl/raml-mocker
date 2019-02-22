@@ -393,8 +393,9 @@ module.exports = (axios, response) => {
 - [x] API 自动化测试
 - [x] API 场景测试
 - [x] 自动化增加前置条件，如：登录
-- [ ] 测试数据导入
+- [x] 读取 HTTP Archive (HAR) format 反向工程
 - [ ] Mock Server 增加请求参数验证
 - [ ] baseUriParameters
 - [ ] 上传文件的处理
-- [ ] 读取 HTTP Archive (HAR) format 反向工程
+- [ ] ~~测试数据导入~~
+
