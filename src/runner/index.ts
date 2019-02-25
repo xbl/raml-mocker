@@ -14,23 +14,17 @@ import { validateSchema } from '../validate';
 import { getRestApiArr, getDefinitionSchema } from '../read-raml';
 import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
 
-export default async (config: Config) => {
-  const env = process.env.NODE_ENV;
-  let host = `http://localhost:${config.port}`;
-  if (config.runner && env) {
-    host = config.runner[env];
-  }
-  const output = new Output(host);
-  process.on('beforeExit', () => {
-    output.print();
-  });
-
-  const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
-  const splitRestApiArr = [];
+const splitRestApiArr = (apiJSON: Api) => {
+  const result = [];
   getRestApiArr(apiJSON).forEach((restApi: RestAPI) => {
-    splitRestApiArr.push(...splitByParameter(restApi));
+    result.push(...splitByParameter(restApi));
   });
-  const restApiArr = sortByRunner(splitRestApiArr);
+  return result;
+};
+
+export default async (config: Config, output: Output, host: string) => {
+  const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
+  const restApiArr = sortByRunner(splitRestApiArr(apiJSON));
   if (isEmpty(restApiArr)) {
     return ;
   }
@@ -56,7 +50,6 @@ export default async (config: Config) => {
       }
 
       const resp = getResponseByStatusCode(status, webApi.responses);
-
       if (!resp) {
         throw new Error('Can\'t find code by responses');
       }
@@ -76,16 +69,15 @@ export default async (config: Config) => {
     }
   };
 
-  const sendRunner = async () => {
-    const webApi = restApiArr.shift();
-    if (!webApi.runner) {
-      restApiArr.unshift(webApi);
-      restApiArr.forEach(send);
-      return;
-    }
-    await send(webApi);
-    sendRunner();
+  const runByRunner = async () => {
+    restApiArr.forEach(async (webApi) => {
+      if (webApi.runner) {
+        await send(webApi);
+        return;
+      }
+      send(webApi);
+    });
   };
 
-  sendRunner();
+  runByRunner();
 };
