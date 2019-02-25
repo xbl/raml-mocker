@@ -354,7 +354,7 @@ get:
         example: !include ./products_200.json
 ```
 
-**注意：**description 的字符串会在 loadApi 时使用，所以请保证唯一。
+**注意：** description 的字符串会在 loadApi 时使用，所以请保证唯一。
 
 2. 在 test 目录新增 article.spec.js 
 
@@ -377,7 +377,64 @@ it('从文章列表到文章详情', async () => {
 });
 ```
 
+测试框架集成了 [Mocha](https://mochajs.org/)，断言使用 nodejs 自带的 [Assert](https://nodejs.org/dist/latest-v10.x/docs/api/assert.html#assert_assert) 模块，开发者可以选择自己喜欢的断言库。
 
+运行测试
+
+```shell
+yarn run test:api
+```
+
+![运行测试](https://ws3.sinaimg.cn/large/006tKfTcly1g0iq4fyubng30sg0lcqja.gif)
+
+
+
+### API 
+
+```javascript
+loadApi(description: string): Function;
+// loadApi 接收一个字符串参数，返回一个函数
+
+anonymousFn (uriParameters, queryParameter, body): Promise<AxiosResponse>
+
+/**
+ * uriParameters: {
+ *  id: 1
+ *  ...
+ * }
+ * 
+ * queryParameter: {
+ *  pageSize: 20
+ *  ...
+ * }
+ * 
+ * body 是 POST 的数据
+ */
+```
+
+AioseResponse 文档可参考[这里](https://www.npmjs.com/package/axios#response-schema)。
+
+
+
+## HTTP Archive (HAR) 反向工程
+
+这部分同样是 2.0 新增的功能，帮助开发者和测试同学可以在已有的历史项目中快速使用 raml-mocker，并生成测试代码片段。关于 har 可参考[这里](https://github.com/xbl/raml-mocker/wiki/HTTP-Archive-(HAR)--%E8%AF%B4%E6%98%8E)。
+
+[![视频](http://img.alicdn.com/tfs/TB1ZbM.lOqAXuNjy1XdXXaYcVXa-160-90.png)](http://v.youku.com/v_show/id_XNDA3NzYzOTM2MA==.html?spm=a2h3j.8428770.3416059.1)
+
+### 通过 har 文件生成 raml
+
+以 npm 为例：
+
+``` shell
+har-convert -f ./www.npmjs.com.har -o ./raml/api.raml -filter www.npmjs.com
+```
+
+### 通过 har 文件生成测试片段
+
+```shell
+har-convert -f ./www.npmjs.com.har -o ./test/search.spec.js
+```
 
 ## Road Map
 
