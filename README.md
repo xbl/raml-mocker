@@ -148,23 +148,6 @@ exports.getBook = (req, res, webApi) => {
 
 Raml-mocker 是在 [expressjs](http://expressjs.com/) 基础上进行开发，req、res 可以参考 express 文档。
 
-webApi 会返回文档中的配置：
-
-```json
-{
-  "absoluteUri": "/api/:version/users/:user_id/books",
-  "method": "get",
-  "controller": "user#getBook",
-  "responses": [
-    {
-      "code": "200",
-      "body": "... example ...",
-      "mimeType": "application/json"
-    }
-  ]
-}
-
-```
 
 如此，raml-mocker 提供了更多可扩展空间，我们甚至可以在 controller 中实现一定的逻辑判断。
 
