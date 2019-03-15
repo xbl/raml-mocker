@@ -1,3 +1,5 @@
+
+
 # Raml-mocker
 
 ![version](https://img.shields.io/npm/v/@xbl/raml-mocker.svg)
@@ -44,6 +46,8 @@ yarn run build
 # or
 npm run build
 ```
+
+会在工程下面生成一个 api.html 文件，双击打开即可看到一个 html 文档，如图：
 
 ![API 文档](https://ws1.sinaimg.cn/large/006tNbRwly1fw2w6al0lfg30dw0bob0f.gif)
 
