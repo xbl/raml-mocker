@@ -30,7 +30,8 @@
       "ts"
     ],
     "require": [
-      "ts-node/register"
+      "ts-node/register",
+      "tsconfig-paths/register"
     ]
   },
   "nyc": {
