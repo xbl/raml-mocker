@@ -1,6 +1,4 @@
 import { extname, join } from 'path';
-import { appendFile } from 'fs';
-import { promisify } from 'util';
 import xhrFilter from './xhr';
 import urlUtil from 'url';
 import RestAPI from '@/models/rest-api';
@@ -8,12 +6,12 @@ import toRaml from './to-raml';
 import toSpec from './to-spec';
 import { loadApi } from 'raml-1-parser';
 import { loadConfig, mergeRestApi } from '@/util';
+import fs from '@/util/fs';
 import { getRestApiArr } from '@/read-raml';
 import filterPath from './filter-path';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 import Parameter from '@/models/parameter';
 
-const appendFileAsync = promisify(appendFile);
 
 const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
 
@@ -52,7 +50,7 @@ const saveToSpec = async (newRestAPIArr: RestAPI[], target: string) => {
   const apiJSON = await loadApi(join(config.raml, config.main)) as Api;
   const restApiArr = mergeRestApi(newRestAPIArr, getRestApiArr(apiJSON));
   const specStr = await toSpec(restApiArr, target);
-  await appendFileAsync(target, specStr);
+  await fs.appendFile(target, specStr);
 };
 
 export const read = (har: string, filter?: string): RestAPI[] => {
@@ -68,7 +66,7 @@ export const save = async (restAPIArr: RestAPI[], target: string) => {
   const ext = extname(target);
   if (ext === '.raml') {
     const ramlStr = await toRaml(restAPIArr);
-    appendFileAsync(target, ramlStr);
+    fs.appendFile(target, ramlStr);
     return ;
   }
   if (['.js', '.ts'].includes(ext)) {

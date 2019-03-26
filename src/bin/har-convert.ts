@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { readFileAsync } from '../util';
+import fs from '@/util/fs';
 import { read, save } from '../har-convert';
 
 const argsMap = {};
@@ -33,7 +33,7 @@ const convert = async () => {
 `);
     return;
   }
-  const har = await readFileAsync(harPath, 'utf-8');
+  const har = await fs.readFile(harPath, 'utf-8');
   const restAPIArr = read(har, filter);
   save(restAPIArr, target);
 };

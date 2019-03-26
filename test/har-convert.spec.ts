@@ -1,5 +1,5 @@
 import test from 'ava';
-import { readFileAsync } from '@/util';
+import fs from '@/util/fs';
 import { read } from '@/har-convert';
 import RestAPI from '@/models/rest-api';
 
@@ -40,7 +40,7 @@ test('Given a har file, then get xhr request arr', async (t) => {
       }],
     },
   ];
-  const data = await readFileAsync(`${__dirname}/localhost.har`, 'utf8');
+  const data = await fs.readFile(`${__dirname}/localhost.har`, 'utf8');
   const result = read(data);
   t.deepEqual(result, restAPIArr);
 });
@@ -66,7 +66,7 @@ test('Given a har file and use filter, then get filter arr', async (t) => {
       }],
     },
   ];
-  const data = await readFileAsync(`${__dirname}/localhost.har`, 'utf8');
+  const data = await fs.readFile(`${__dirname}/localhost.har`, 'utf8');
   const result = read(data, '/orders/T012019011828586/redeem');
   t.deepEqual(result, restAPIArr);
 });

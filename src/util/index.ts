@@ -1,11 +1,10 @@
 import vm from 'vm';
 import { resolve } from 'path';
-import { readFile } from 'fs';
-import { promisify } from 'util';
 import Config from '@/models/config';
 import RestAPI from '@/models/rest-api';
 import pathToRegexp from 'path-to-regexp';
 import chalk from 'chalk';
+import fs from '@/util/fs';
 
 export const isRedirectCode = (code) => code >= 300 && code < 400;
 
@@ -38,7 +37,7 @@ export const loadConfig = async (): Promise<Config> => {
   const configFile = '.raml-config.json';
   const currentPath = process.cwd();
   try {
-    str = await readFileAsync(resolve(currentPath, `./${configFile}`), 'utf8');
+    str = await fs.readFile(resolve(currentPath, `./${configFile}`), 'utf8');
   } catch (error) {
     // tslint:disable-next-line no-console
     console.log(chalk`{red 在当前目录 ${currentPath} 没有找到${configFile}配置文件}`);
@@ -100,8 +99,6 @@ export const indentString = (
   const regex = options.includeEmptyLines ? /^/gm : /^(?!\s*$)/gm;
   return str.replace(regex, options.indent.repeat(count));
 };
-
-export const readFileAsync = promisify(readFile);
 
 export const mergeRestApi = (
   newRestAPIArr: RestAPI[],
