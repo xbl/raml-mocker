@@ -72,6 +72,7 @@
     "path-to-regexp": "^3.0.0",
     "prettier": "^1.15.1",
     "shelljs": "^0.8.3",
+    "sinon": "^7.3.0",
     "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.8.0",
     "tslint": "^5.12.1",

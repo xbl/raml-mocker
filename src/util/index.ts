@@ -42,7 +42,7 @@ export const loadConfig = async (): Promise<Config> => {
     // tslint:disable-next-line no-console
     console.log(chalk`{red 在当前目录 ${currentPath} 没有找到${configFile}配置文件}`);
     process.exit(1);
-    return;
+    return Promise.reject(error);
   }
   let config: Config;
   try {
@@ -51,7 +51,7 @@ export const loadConfig = async (): Promise<Config> => {
     // tslint:disable-next-line no-console
     console.log(chalk`{red 解析${configFile}配置文件出错，不是正确的 JSON 格式。}`);
     process.exit(1);
-    return;
+    return Promise.reject(error);
   }
   config.raml = resolve(config.raml);
   config.controller = resolve(config.controller);
