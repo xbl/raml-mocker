@@ -1,16 +1,16 @@
-import { extname, join } from 'path';
-import xhrFilter from './xhr';
 import urlUtil from 'url';
-import RestAPI from '@/models/rest-api';
+import fs from '@/util/fs';
+import xhrFilter from './xhr';
 import toRaml from './to-raml';
 import toSpec from './to-spec';
-import { loadApi } from 'raml-1-parser';
-import { loadConfig, mergeRestApi } from '@/util';
-import fs from '@/util/fs';
-import { getRestApiArr } from '@/read-raml';
+import { extname, join } from 'path';
 import filterPath from './filter-path';
-import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import RestAPI from '@/models/rest-api';
+import { loadApi } from 'raml-1-parser';
+import { getRestApiArr } from '@/read-raml';
 import Parameter from '@/models/parameter';
+import { loadConfig, mergeRestApi } from '@/util';
+import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 
 const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
