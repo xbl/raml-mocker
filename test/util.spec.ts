@@ -1,8 +1,8 @@
 import test from 'ava';
-import RestAPI from '../src/models/rest-api';
+import RestAPI from '@/models/rest-api';
 import { jsonPath, replaceUriParameters, toExpressUri,
-  indentString, mergeRestApi, urlCompare, getHost } from '../src/util';
-import Config from '../src/models/config';
+  indentString, mergeRestApi, urlCompare, getHost } from '@/util';
+import Config from '@/models/config';
 
 test('Given json object When dataPath [0] str Then get json[0] object', (t) => {
   const expectResult = {
@@ -189,7 +189,7 @@ test('Given a url and raml url When urlCompare Then get null', (t) => {
 });
 
 test('Given Config When getHost Then get http://localhost', (t) => {
-  const config: Config​​ = {
+  const config: Config = {
     controller: '',
     raml: '',
     main: '',
@@ -207,7 +207,7 @@ test('Given Config When getHost Then get http://localhost', (t) => {
 });
 
 test('Given Config has no runner NODE_ENV is dev1 When getHost Then got Error', (t) => {
-  const config: Config​​ = {
+  const config: Config = {
     controller: '',
     raml: '',
     main: '',

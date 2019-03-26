@@ -4,7 +4,7 @@ import {
   getDefinitionSchema,
   getRestApiArr,
   getAnnotationByName,
-} from '../src/read-raml';
+} from '@/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 test('when read raml given Product type then get definitionSchema object', (t) => {

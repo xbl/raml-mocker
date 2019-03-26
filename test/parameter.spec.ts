@@ -1,5 +1,5 @@
 import test from 'ava';
-import Parameter from '../src/models/parameter';
+import Parameter from '@/models/parameter';
 
 test('When Parameter.build, Give json object, Then get Parameter Array', (t) => {
   const json = {

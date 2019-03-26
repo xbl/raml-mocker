@@ -1,6 +1,6 @@
 import test from 'ava';
-import toSpec from '../src/har-convert/to-spec';
-import RestAPI from '../src/models/rest-api';
+import toSpec from '@/har-convert/to-spec';
+import RestAPI from '@/models/rest-api';
 
 test('Given restAPI array, then get spec str', async (t) => {
   const restAPIArr: RestAPI[] = [

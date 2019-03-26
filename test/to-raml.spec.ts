@@ -1,6 +1,6 @@
 import test from 'ava';
-import toRaml from '../src/har-convert/to-raml';
-import RestAPI from '../src/models/rest-api';
+import toRaml from '@/har-convert/to-raml';
+import RestAPI from '@/models/rest-api';
 
 test('Given restAPI array, then get raml str', async (t) => {
   const restAPIArr: RestAPI[] = [

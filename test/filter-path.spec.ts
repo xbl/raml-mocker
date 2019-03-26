@@ -1,5 +1,5 @@
 import test from 'ava';
-import filterPath from '../src/har-convert/filter-path';
+import filterPath from '@/har-convert/filter-path';
 
 test('Given entries, then get filter path entries', async (t) => {
   // tslint:disable:max-line-length

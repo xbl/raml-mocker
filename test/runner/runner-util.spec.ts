@@ -1,7 +1,7 @@
 import test from 'ava';
-import { getResponseByStatusCode, sortByRunner, splitByParameter } from '../../src/runner/runner-util';
-import Response from '../../src/models/response';
-import RestAPI from '../../src/models/rest-api';
+import { getResponseByStatusCode, sortByRunner, splitByParameter } from '@/runner/runner-util';
+import Response from '@/models/response';
+import RestAPI from '@/models/rest-api';
 
 test('When getResponseByStatusCode, Given Response Array, Then get a Response', async (t) => {
   const respArr: Response[] = [

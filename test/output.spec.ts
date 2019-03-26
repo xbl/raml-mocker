@@ -1,5 +1,5 @@
 import test from 'ava';
-import Output from '../src/output';
+import Output from '@/output';
 
 test('When message one line , then title is message', (t) => {
   const message = 'abc';

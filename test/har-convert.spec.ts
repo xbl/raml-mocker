@@ -1,7 +1,7 @@
 import test from 'ava';
-import { readFileAsync } from '../src/util';
-import { read } from '../src/har-convert';
-import RestAPI from '../src/models/rest-api';
+import { readFileAsync } from '@/util';
+import { read } from '@/har-convert';
+import RestAPI from '@/models/rest-api';
 
 test('Given a har file, then get xhr request arr', async (t) => {
   const restAPIArr: RestAPI[] = [

@@ -1,6 +1,6 @@
 import test from 'ava';
 import Ajv from 'ajv';
-import { validateSchema } from '../src/validate';
+import { validateSchema } from '@/validate';
 
 test('give single type then validate return true', (t) => {
   const responseBody = {
