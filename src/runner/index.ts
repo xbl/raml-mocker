@@ -5,13 +5,13 @@ import { isEmpty } from 'lodash';
 import { loadApi as loadRamlApi } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
-import Output from '../output';
-import HttpClient from '../http-client';
-import Config from '../models/config';
-import RestAPI from '../models/rest-api';
-import Parameter from '../models/parameter';
-import { validateSchema } from '../validate';
-import { getRestApiArr, getDefinitionSchema } from '../read-raml';
+import Output from '@/output';
+import HttpClient from '@/http-client';
+import Config from '@/models/config';
+import RestAPI from '@/models/rest-api';
+import Parameter from '@/models/parameter';
+import { validateSchema } from '@/validate';
+import { getRestApiArr, getDefinitionSchema } from '@/read-raml';
 import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
 
 const splitRestApiArr = (apiJSON: Api) => {

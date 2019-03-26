@@ -3,21 +3,21 @@ import { appendFile } from 'fs';
 import { promisify } from 'util';
 import xhrFilter from './xhr';
 import urlUtil from 'url';
-import RestAPI from '../models/rest-api';
+import RestAPI from '@/models/rest-api';
 import toRaml from './to-raml';
 import toSpec from './to-spec';
 import { loadApi } from 'raml-1-parser';
-import { loadConfig, mergeRestApi } from '../util';
-import { getRestApiArr } from '../read-raml';
+import { loadConfig, mergeRestApi } from '@/util';
+import { getRestApiArr } from '@/read-raml';
 import filterPath from './filter-path';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
-import Parameter​​ from '../models/parameter';
+import Parameter from '@/models/parameter';
 
 const appendFileAsync = promisify(appendFile);
 
 const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
 
-const toParameter = (queryStrings: any[]): Parameter​​[] =>
+const toParameter = (queryStrings: any[]): Parameter[] =>
   queryStrings.map(({name, value}) => {
     return { name, example: decodeURIComponent(value)};
   });

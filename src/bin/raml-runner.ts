@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { loadConfig, getHost } from '../util';
-import runner from '../runner';
-import Output from '../output';
+import { loadConfig, getHost } from '@/util';
+import runner from '@/runner';
+import Output from '@/output';
 
 const start = async () => {
   const config = await loadConfig();

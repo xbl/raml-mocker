@@ -2,8 +2,8 @@ import vm from 'vm';
 import { resolve } from 'path';
 import { readFile } from 'fs';
 import { promisify } from 'util';
-import Config from './models/config';
-import RestAPI from './models/rest-api';
+import Config from '@/models/config';
+import RestAPI from '@/models/rest-api';
 import pathToRegexp from 'path-to-regexp';
 import chalk from 'chalk';
 
@@ -62,7 +62,7 @@ export const loadConfig = async (): Promise<Config> => {
   return config;
 };
 
-export const getHost = (config: Config​​): string => {
+export const getHost = (config: Config): string => {
   const env = process.env.NODE_ENV;
   let host = `http://localhost:${config.port}`;
   if (config.runner && env) {
