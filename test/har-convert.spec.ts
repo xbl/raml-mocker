@@ -1,6 +1,7 @@
 import test from 'ava';
+import sinon from 'sinon';
 import fs from '@/util/fs';
-import { read } from '@/har-convert';
+import { read, save } from '@/har-convert';
 import RestAPI from '@/models/rest-api';
 
 test('Given a har file, then get xhr request arr', async (t) => {
@@ -46,7 +47,7 @@ test('Given a har file, then get xhr request arr', async (t) => {
 });
 
 
-test('Given a har file and use filter, then get filter arr', async (t) => {
+test('Given a har file and use filter, When read Then get filter arr', async (t) => {
   const restAPIArr: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586/redeem',
