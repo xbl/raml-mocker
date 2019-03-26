@@ -1,8 +1,10 @@
 import test from 'ava';
 import RestAPI from '../src/models/rest-api';
-import { jsonPath, replaceUriParameters, toExpressUri, indentString, mergeRestApi, urlCompare } from '../src/util';
+import { jsonPath, replaceUriParameters, toExpressUri,
+  indentString, mergeRestApi, urlCompare, getHost } from '../src/util';
+import Config from '../src/models/config';
 
-test('When json object Give dataPath [0] str Then get json[0] object', (t) => {
+test('Given json object When dataPath [0] str Then get json[0] object', (t) => {
   const expectResult = {
     a: 1,
     b: 2,
@@ -13,7 +15,7 @@ test('When json object Give dataPath [0] str Then get json[0] object', (t) => {
   t.deepEqual(result, expectResult);
 });
 
-test('When replaceUriParameters Given /products/{productId} Then get /products/:productId', (t) => {
+test('Given /products/{productId} When replaceUriParameters Then get /products/:productId', (t) => {
   const given = '/products/{productId}';
   const expectResult = '/products/:productId';
   let result = given;
@@ -23,13 +25,13 @@ test('When replaceUriParameters Given /products/{productId} Then get /products/:
   t.is(result, expectResult);
 });
 
-test('When toExpressUri Given /products/{productId} Then get /products/:productId', (t) => {
+test('Given /products/{productId} When toExpressUri Then get /products/:productId', (t) => {
   const given = '/products/{productId}';
   const expectResult = '/products/:productId';
   t.is(toExpressUri(given), expectResult);
 });
 
-test('When indentString Given json str Then got format json', (t) => {
+test('Given json str When indentString Then got format json', (t) => {
   // tslint:disable:max-line-length
   const given = '{\n  "realName": "金金",\n  "mobile": "15811111111",\n  "avatar": "",\n  "nickName": "",\n  "born": null,\n  "gender": "MALE",\n  "email": "",\n  "address": "",\n  "occupation": "",\n  "interestedClasses": [""],\n  "hobbies": [""],\n  "ownModels": [""]\n}\n';
   const expectResult = `
@@ -50,7 +52,7 @@ test('When indentString Given json str Then got format json', (t) => {
   t.is(indentString(given, 4).trim(), expectResult.trim());
 });
 
-test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (t) => {
+test('Given newRestApi and oldRestApi When mergeRestApi Then get newRestApi ', (t) => {
   const newRestApi: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586',
@@ -171,7 +173,7 @@ test('When mergeRestApi Given newRestApi and oldRestApi Then get newRestApi ', (
 });
 
 
-test('When urlCompare Given a url and raml url, Then get uriMap', (t) => {
+test('Given a url and raml url When urlCompare Then get uriMap', (t) => {
   const uriMap = urlCompare('/abc/def/hello/jack', '/abc/{id}/hello/{name}');
   const expectResult = {
     id: 'def',
@@ -180,8 +182,45 @@ test('When urlCompare Given a url and raml url, Then get uriMap', (t) => {
   t.deepEqual(expectResult, uriMap);
 });
 
-test('When urlCompare Given a url and raml url, Then get null', (t) => {
+test('Given a url and raml url When urlCompare Then get null', (t) => {
   const uriMap = urlCompare('/abc', '/abc/{id}/hello/{name}');
   const expectResult = undefined;
   t.is(expectResult, uriMap);
+});
+
+test('Given Config When getHost Then get http://localhost', (t) => {
+  const config: Config​​ = {
+    controller: '',
+    raml: '',
+    main: '',
+    port: 3000,
+    runner: {
+      dev: 'http://localhost',
+      test: 'http://127.0.0.1',
+    },
+  };
+
+  process.env.NODE_ENV = 'dev';
+  const host = getHost(config);
+  const expectResult = 'http://localhost';
+  t.is(host, expectResult);
+});
+
+test('Given Config has no runner NODE_ENV is dev1 When getHost Then got Error', (t) => {
+  const config: Config​​ = {
+    controller: '',
+    raml: '',
+    main: '',
+    port: 3000,
+    runner: {
+      dev: 'http://localhost',
+      test: 'http://127.0.0.1',
+    },
+  };
+
+  process.env.NODE_ENV = 'dev1';
+  const error = t.throws(() => {
+    getHost(config);
+  });
+  t.truthy(error.message);
 });

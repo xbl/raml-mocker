@@ -41,16 +41,16 @@ export const loadConfig = async (): Promise<Config> => {
     str = await readFileAsync(resolve(currentPath, `./${configFile}`), 'utf8');
   } catch (error) {
     // tslint:disable-next-line no-console
-    console.log(chalk`{red 在当前目录(${currentPath})没有找到${configFile}配置文件}`);
+    console.log(chalk`{red 在当前目录 ${currentPath} 没有找到${configFile}配置文件}`);
     process.exit(1);
     return;
   }
-  let config;
+  let config: Config;
   try {
     config = JSON.parse(str) as Config;
   } catch (error) {
     // tslint:disable-next-line no-console
-    console.error(chalk`{red 解析${configFile}配置文件出错，不是正确的 JSON 格式。}`);
+    console.log(chalk`{red 解析${configFile}配置文件出错，不是正确的 JSON 格式。}`);
     process.exit(1);
     return;
   }
@@ -60,6 +60,18 @@ export const loadConfig = async (): Promise<Config> => {
     config.plugins = config.plugins.map((plugin) => resolve(plugin));
   }
   return config;
+};
+
+export const getHost = (config: Config​​): string => {
+  const env = process.env.NODE_ENV;
+  let host = `http://localhost:${config.port}`;
+  if (config.runner && env) {
+    host = config.runner[env];
+  }
+  if (!host) {
+    throw Error(`Can't find host in .raml-config.json when env is "${env}"`);
+  }
+  return host;
 };
 
 // copy from: https://github.com/sindresorhus/indent-string

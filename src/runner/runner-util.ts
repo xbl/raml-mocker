@@ -2,6 +2,7 @@ import { isEmpty } from 'lodash';
 import RestAPI from '../models/rest-api';
 import Response from '../models/response';
 import Parameter from '../models/parameter';
+import Config​​ from '../models/config';
 
 export const getResponseByStatusCode = (code: number, responses: Response[]): Response => {
   if (isEmpty(responses)) {
