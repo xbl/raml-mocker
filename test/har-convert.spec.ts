@@ -1,7 +1,6 @@
 import test from 'ava';
-import sinon from 'sinon';
 import fs from '@/util/fs';
-import { read, save } from '@/har-convert';
+import { read } from '@/har-convert';
 import RestAPI from '@/models/rest-api';
 
 test('Given a har file, then get xhr request arr', async (t) => {

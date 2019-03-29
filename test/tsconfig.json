@@ -12,10 +12,10 @@
     "paths": {
       "*": ["node_modules/*", "src/types/*"],
       "@/*": [
-        "./src/*"
+        "../src/*"
       ]
     },
     "lib": ["es7"]
   },
-  "include": ["./src/**/*"]
+  "include": ["../src/**/*", "./**/*"]
 }
