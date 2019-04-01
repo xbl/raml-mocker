@@ -4,7 +4,6 @@ import fs from '@/util/fs';
 import sinon from 'sinon';
 import RestAPI from '@/models/rest-api';
 import { read, mergeRestApiToSpec, save } from '@/har-convert';
-import { tsInterfaces } from 'raml-definition-system';
 
 test('Given a har file, then get xhr request arr', async (t) => {
   const restAPIs: RestAPI[] = [
