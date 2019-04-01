@@ -132,7 +132,7 @@ it('Case Name', async () => {
   sinon.restore();
 });
 
-test.serial('Given restAPIs, When save Then appendFile spec str', async (t) => {
+test.serial('Given restAPIs, When save target is js Then appendFile spec str', async (t) => {
   const restAPIs: RestAPI[] = [
     {
       url: '/api/test/raml/orders/T012019011828586',
@@ -185,6 +185,55 @@ it('Case Name', async () => {
   sinon.replace(fs, 'readFile', callback);
 
   const target = '1.js';
+  sinon.replace(fs, 'appendFile', (fileTarget, str) => {
+    t.is(fileTarget, target);
+    t.is(str, expectResult);
+  });
+
+  await save(restAPIs, target);
+  sinon.restore();
+});
+
+test.serial('Given restAPIs, When save target is raml Then appendFile raml str', async (t) => {
+  const restAPIs: RestAPI[] = [
+    {
+      url: '/api/test/raml/orders/T012019011828586',
+      description: 'get_api_test_raml_orders_T012019011828586',
+      method: 'GET',
+      queryParameters: [{
+        name: 'param1',
+        example: 'value1',
+      }],
+      responses: [
+        {
+          code: 200,
+          body: {
+            mimeType: 'application/json',
+            text: '{"name":"你好"}',
+          },
+        },
+      ],
+    },
+  ];
+
+  const expectResult = `
+  /api/test/raml/orders/T012019011828586:
+  get:
+    description: get_api_test_raml_orders_T012019011828586
+    queryParameters:
+      param1:
+        example: value1
+    responses:
+      200:
+        body:
+          example: |
+            {"name":"你好"}
+`.trim();
+
+  const template = await fs.readFile(path.resolve(__dirname, '../../src/har-convert/template/api.ejs'));
+  sinon.replace(fs, 'readFile', sinon.stub().resolves(template));
+
+  const target = '1.raml';
   sinon.replace(fs, 'appendFile', (fileTarget, str) => {
     t.is(fileTarget, target);
     t.is(str, expectResult);

@@ -15,7 +15,7 @@ const filter = (restApiArr) => {
 const toRaml = async (restAPIArr: RestAPI[]): Promise<string> => {
   const str = await fs.readFile(`${__dirname}/template/api.ejs`, 'utf-8');
   const compiled = template(str, { imports : { indentString, isJSONType }});
-  return compiled({ restAPIArr: filter(restAPIArr) });
+  return compiled({ restAPIArr: filter(restAPIArr) }).trim();
 };
 
 export default toRaml;
