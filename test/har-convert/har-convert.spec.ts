@@ -82,7 +82,7 @@ test.serial('Given restAPIs, When mergeRestApiToSpec Then got spec str', async (
       method: 'GET',
       queryParameters: [{
         name: 'param1',
-        example: 'value1',
+        example: 'value2',
       }],
       responses: [
         {
@@ -102,7 +102,7 @@ const { loadApi } = require('@xbl/raml-mocker');
 
 it('Case Name', async () => {
   const getFn0 = loadApi('get_api_test_raml_orders_T012019011828586');
-  const { status: status0, data: data0 } = await getFn0({},{"param1":"value1"},{});
+  const { status: status0, data: data0 } = await getFn0({},{"param1":"value2"},{});
 
   assert.equal(status0, 200);
   // TODO: assert
