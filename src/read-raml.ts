@@ -183,25 +183,20 @@ export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
       const webApi: RestAPI = { url, method: method.method() as string };
 
       const description = method.description() && method.description().value();
-      // setProps(webApi, 'description', description);
-      description && (webApi.description = description);
+      setProps(webApi, 'description', description);
 
       const controller = getAnnotationByName('controller', method);
-      // setProps(webApi, 'controller', controller);
-      controller && (webApi.controller = controller);
+      setProps(webApi, 'controller', controller);
 
       const runner = getAnnotationByName('runner', method);
-      // setProps(webApi, 'runner', runner);
-      runner && (webApi.runner = runner);
+      setProps(webApi, 'runner', runner);
 
       const uriParameters = getUriParameters(resource, method);
-      // setProps(webApi, 'uriParameters', uriParameters);
-      uriParameters && (webApi.uriParameters = uriParameters);
+      setProps(webApi, 'uriParameters', uriParameters);
 
       webApi.queryParameters = getQueryParameters(method.queryParameters());
       const postBody = getPostBody(method.body());
-      // setProps(webApi, 'body', postBody);
-      postBody && (webApi.body = postBody);
+      setProps(webApi, 'body', postBody);
 
       webApi.responses = [];
       method.responses().forEach((response) => {
@@ -229,7 +224,7 @@ export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
             },
           };
           const schema = getSchemaByType(type);
-          schema && (webApiResp.schema = schema);
+          setProps(webApiResp, 'schema', schema);
           webApi.responses.push(webApiResp);
         });
       });
