@@ -46,11 +46,11 @@ const toRestAPI = (entries: any[]) => entries.map((entry) => {
   });
 });
 
-const mergeRestApiToSpec = async (newRestAPIArr: RestAPI[]): Promise<string> => {
+export const mergeRestApiToSpec = async (newRestAPIArr: RestAPI[]): Promise<string> => {
   const config = await loadConfig();
   const apiJSON = await loadApi(join(config.raml, config.main)) as Api;
   const restApiArr = mergeRestApi(newRestAPIArr, getRestApiArr(apiJSON));
-  return await toSpec(restApiArr);
+  return toSpec(restApiArr);
 };
 
 export const read = (har: string, filter?: string): RestAPI[] => {

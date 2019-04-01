@@ -1,0 +1,16 @@
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+
+/api/test/raml/orders/T012019011828586:
+  get:
+    description: get_api_test_raml_orders_T012019011828586
+    queryParameters:
+      param1:
+        example: value1
+    responses:
+      200:
+        body:
+          example: |
+            {"name":"你好"}
