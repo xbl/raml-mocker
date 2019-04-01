@@ -429,6 +429,7 @@ har-convert -f ./www.npmjs.com.har -o ./test/search.spec.js
 - [x] API 场景测试
 - [x] 自动化增加前置条件，如：登录
 - [x] 读取 HTTP Archive (HAR) format 反向工程
+- [ ] 多场景的契约测试
 - [ ] Mock Server 增加请求参数验证
 - [ ] baseUriParameters
 - [ ] 上传文件的处理
