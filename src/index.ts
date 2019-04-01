@@ -1,7 +1,8 @@
 import { join } from 'path';
 import HttpClient from '@/http-client';
 import { getRestApiArr } from '@/read-raml';
-import { loadConfig, getHost } from '@/util';
+import { getHost } from '@/util';
+import { loadConfig } from '@/util/config-util';
 import { loadApi as loadRamlApi } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 

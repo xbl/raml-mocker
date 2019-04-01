@@ -1,7 +1,8 @@
 import test from 'ava';
 import sinon from 'sinon';
 import RestAPI from '@/models/rest-api';
-import { jsonPath, replaceUriParameters, toExpressUri, loadConfig,
+import { loadConfig } from '@/util/config-util';
+import { jsonPath, replaceUriParameters, toExpressUri,
   indentString, mergeRestApi, urlCompare, getHost } from '@/util';
 import Config from '@/models/config';
 import fs from '@/util/fs';
@@ -262,12 +263,12 @@ test.serial('Given When loadConfig Then got Config object', async (t) => {
 });
 
 test.serial('Given When loadConfig Then got no file Error', async (t) => {
-  const expectResult = 'no file';
+  const expectResult = '在当前目录';
   sinon.replace(fs, 'readFile', sinon.fake.rejects(new Error(expectResult)));
   sinon.replace(process, 'exit', sinon.fake.returns(''));
 
   const error = await t.throwsAsync(loadConfig());
-  t.is(error.message, expectResult);
+  t.truthy(error.message.includes(expectResult));
   sinon.restore();
 });
 

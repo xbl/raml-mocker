@@ -3,7 +3,7 @@
 import path from 'path';
 import chokidar from 'chokidar';
 import { fork } from 'child_process';
-import { loadConfig } from '../util';
+import { loadConfig } from '@/util/config-util';
 
 const start = async () => {
   const config = await loadConfig();

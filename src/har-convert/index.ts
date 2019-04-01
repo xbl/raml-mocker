@@ -9,7 +9,8 @@ import RestAPI from '@/models/rest-api';
 import { loadApi } from 'raml-1-parser';
 import { getRestApiArr } from '@/read-raml';
 import Parameter from '@/models/parameter';
-import { loadConfig, mergeRestApi } from '@/util';
+import { mergeRestApi } from '@/util';
+import { loadConfig } from '@/util/config-util';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 

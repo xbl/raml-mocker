@@ -1,10 +1,7 @@
 import vm from 'vm';
-import { resolve } from 'path';
 import Config from '@/models/config';
 import RestAPI from '@/models/rest-api';
 import pathToRegexp from 'path-to-regexp';
-import chalk from 'chalk';
-import fs from '@/util/fs';
 
 export const isRedirectCode = (code) => code >= 300 && code < 400;
 
@@ -30,35 +27,6 @@ export const toExpressUri = (uri: string): string => {
     result = result.replace(match, `:${expression}`);
   });
   return result;
-};
-
-export const loadConfig = async (): Promise<Config> => {
-  let str;
-  const configFile = '.raml-config.json';
-  const currentPath = process.cwd();
-  try {
-    str = await fs.readFile(resolve(currentPath, `./${configFile}`), 'utf8');
-  } catch (error) {
-    // tslint:disable-next-line no-console
-    console.log(chalk`{red 在当前目录 ${currentPath} 没有找到${configFile}配置文件}`);
-    process.exit(1);
-    return Promise.reject(error);
-  }
-  let config: Config;
-  try {
-    config = JSON.parse(str) as Config;
-  } catch (error) {
-    // tslint:disable-next-line no-console
-    console.log(chalk`{red 解析${configFile}配置文件出错，不是正确的 JSON 格式。}`);
-    process.exit(1);
-    return Promise.reject(error);
-  }
-  config.raml = resolve(config.raml);
-  config.controller = resolve(config.controller);
-  if (Array.isArray(config.plugins)) {
-    config.plugins = config.plugins.map((plugin) => resolve(plugin));
-  }
-  return config;
 };
 
 export const getHost = (config: Config): string => {

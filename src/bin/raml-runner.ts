@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { loadConfig, getHost } from '@/util';
+import { getHost } from '@/util';
+import { loadConfig } from '@/util/config-util';
 import runner from '@/runner';
 import Output from '@/output';
 
