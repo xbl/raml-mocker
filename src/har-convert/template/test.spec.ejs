@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
-it('<%= name %>', async () => {<%
+it('Case Name', async () => {<%
   restAPIArr.forEach((restAPI, index) => {
     const methodName = `${restAPI.method.toLowerCase()}Fn${index}`;
     const uriParam = JSON.stringify(restAPI.uriParameters) || '{}';

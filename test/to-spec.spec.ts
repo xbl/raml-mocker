@@ -44,7 +44,7 @@ test('Given restAPI array, then get spec str', async (t) => {
 const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
-it('abc.js', async () => {
+it('Case Name', async () => {
   const getFn0 = loadApi('get_api_test_raml_orders_T012019011828586');
   const { status: status0, data: data0 } = await getFn0({},{"param1":"value1"},{});
 
@@ -59,7 +59,7 @@ it('abc.js', async () => {
 
 });
 `.trim();
-  const result = await toSpec(restAPIArr, '/a/b/d/abc.js');
+  const result = await toSpec(restAPIArr);
   t.is(result.trim(), expectResult);
 });
 
@@ -109,7 +109,7 @@ test('Given restAPI array and urlParameters, then get spec str', async (t) => {
 const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
-it('abc.js', async () => {
+it('Case Name', async () => {
   const getFn0 = loadApi('get_api_test_raml_orders_T012019011828586');
   const { status: status0, data: data0 } = await getFn0({"id":"T012019011828586"},{"param1":"value1"},{});
 
@@ -124,7 +124,7 @@ it('abc.js', async () => {
 
 });
 `.trim();
-  const result = await toSpec(restAPIArr, '/a/b/d/abc.js');
+  const result = await toSpec(restAPIArr);
   t.is(result.trim(), expectResult);
 });
 
@@ -174,7 +174,7 @@ test('Given restAPI post body is not JSON str, then get spec str', async (t) => 
 const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
-it('abc.js', async () => {
+it('Case Name', async () => {
   const getFn0 = loadApi('get_api_test_raml_orders_T012019011828586');
   const { status: status0, data: data0 } = await getFn0({"id":"T012019011828586"},{"param1":"value1"},{});
 
@@ -189,6 +189,6 @@ it('abc.js', async () => {
 
 });
 `.trim();
-  const result = await toSpec(restAPIArr, '/a/b/d/abc.js');
+  const result = await toSpec(restAPIArr);
   t.is(result.trim(), expectResult);
 });

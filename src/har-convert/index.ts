@@ -46,12 +46,11 @@ const toRestAPI = (entries: any[]) => entries.map((entry) => {
   });
 });
 
-const saveToSpec = async (newRestAPIArr: RestAPI[], target: string) => {
+const mergeRestApiToSpec = async (newRestAPIArr: RestAPI[]): Promise<string> => {
   const config = await loadConfig();
   const apiJSON = await loadApi(join(config.raml, config.main)) as Api;
   const restApiArr = mergeRestApi(newRestAPIArr, getRestApiArr(apiJSON));
-  const specStr = await toSpec(restApiArr, target);
-  await fs.appendFile(target, specStr);
+  return await toSpec(restApiArr);
 };
 
 export const read = (har: string, filter?: string): RestAPI[] => {
@@ -65,12 +64,12 @@ export const read = (har: string, filter?: string): RestAPI[] => {
 
 export const save = async (restAPIArr: RestAPI[], target: string) => {
   const ext = extname(target);
+  let str = '';
   if (ext === '.raml') {
-    const ramlStr = await toRaml(restAPIArr);
-    fs.appendFile(target, ramlStr);
-    return ;
+    str = await toRaml(restAPIArr);
   }
   if (['.js', '.ts'].includes(ext)) {
-    saveToSpec(restAPIArr, target);
+    str = await mergeRestApiToSpec(restAPIArr);
   }
+  fs.appendFile(target, str);
 };
