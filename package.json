@@ -8,7 +8,7 @@
     "copy-assets": "ts-node build/copy",
     "clean": "ts-node build/clean",
     "dev": "tsc --watch",
-    "build": "npm run clean && tsc && npm run chmod && npm run copy-assets",
+    "build": "npm run clean && tsc && npm run relative-path && npm run chmod && npm run copy-assets",
     "lint": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts",
     "lint:fix": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts --fix",
     "chmod": "chmod +x ./dist/bin/*",
@@ -16,7 +16,8 @@
     "test:watch": "ava --watch --fail-fast -v",
     "prepublish": "npm run build",
     "publish": "npm publish --access=public",
-    "publish:next": "npm publish --access=public --tag next"
+    "publish:next": "npm publish --access=public --tag next",
+    "relative-path": "tscpaths -p tsconfig.json -s ./src -o ./dist"
   },
   "main": "dist/index.js",
   "bin": {
@@ -75,6 +76,7 @@
     "sinon": "^7.3.0",
     "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.8.0",
+    "tscpaths": "^0.0.7",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3"
   },
