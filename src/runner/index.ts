@@ -22,6 +22,16 @@ const splitRestApiArr = (apiJSON: Api) => {
   return result;
 };
 
+const doRequest = (httpClient: HttpClient, webApi: RestAPI) => {
+  const body = webApi.body ? webApi.body.text : {};
+  return httpClient.send(
+    webApi,
+    webApi.uriParameters,
+    Parameter.toJSON(webApi.queryParameters),
+    body,
+  );
+};
+
 export default async (config: Config, output: Output, host: string) => {
   const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
   const restApiArr = sortByRunner(splitRestApiArr(apiJSON));
@@ -35,13 +45,7 @@ export default async (config: Config, output: Output, host: string) => {
     const beginTime = Date.now();
     let absoluteUri = webApi.url;
     try {
-      const body = webApi.body ? webApi.body.text : {};
-      const { data, request, status } = await httpClient.send(
-        webApi,
-        webApi.uriParameters,
-        Parameter.toJSON(webApi.queryParameters),
-        body,
-      );
+      const { data, request, status } = await doRequest(httpClient, webApi);
 
       absoluteUri = request.path;
       if (!webApi.responses.length) {
