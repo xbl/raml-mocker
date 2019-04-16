@@ -79,7 +79,7 @@ export default class Runner {
 
   send = async (webApi: RestAPI) => {
     const outputRequest: OutputRequest =
-      new OutputRequest({ path: webApi.url, method: webApi.method, beginTime: Date.now() });
+      new OutputRequest({ path: webApi.url, method: webApi.method });
     try {
       const response = await doRequest(this.httpClient, webApi);
       outputRequest.setRealPath(response.request.path);
