@@ -10,9 +10,11 @@ import HttpClient from '@/http-client';
 import Config from '@/models/config';
 import RestAPI from '@/models/rest-api';
 import Parameter from '@/models/parameter';
+import OutputRequest from '@/models/output-request';
 import { validateSchema } from '@/validate';
 import { getRestApiArr, getDefinitionSchema } from '@/read-raml';
 import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
+import ValidateWarning from './validate-warning';
 
 const splitRestApiArr = (apiJSON: Api) => {
   const result = [];
@@ -32,56 +34,70 @@ const doRequest = (httpClient: HttpClient, webApi: RestAPI) => {
   );
 };
 
-export default async (config: Config, output: Output, host: string) => {
-  const apiJSON = await loadRamlApi(join(config.raml, config.main)) as Api;
-  const restApiArr = sortByRunner(splitRestApiArr(apiJSON));
-  if (isEmpty(restApiArr)) {
-    return ;
+export default class Runner {
+  config: Config;
+  output: Output;
+  definitionSchema: any;
+  httpClient: HttpClient;
+  restApiArr: RestAPI[];
+
+  constructor(config: Config, output: Output, host: string) {
+    this.config = config;
+    this.httpClient = new HttpClient(host);
+    this.output = output;
   }
-  const definitionSchema = getDefinitionSchema(apiJSON);
-  const httpClient = new HttpClient(host);
 
-  const send = async (webApi: RestAPI) => {
-    const beginTime = Date.now();
-    let absoluteUri = webApi.url;
-    try {
-      const { data, request, status } = await doRequest(httpClient, webApi);
-
-      absoluteUri = request.path;
-      if (!webApi.responses.length) {
-        output.push(Output.WARNING, 'No set responses', request, beginTime);
-        return;
-      }
-
-      const resp = getResponseByStatusCode(status, webApi.responses);
-      if (!resp) {
-        throw new Error('Can\'t find code by responses');
-      }
-
-      if (resp.schema) {
-        validateSchema(definitionSchema, resp.schema, data);
-      }
-
-      output.push(Output.SUCCESS, '', request, beginTime);
-    } catch (err) {
-      output.push(
-        Output.ERROR,
-        err.message || err,
-        { path: absoluteUri, method: webApi.method },
-        beginTime,
-      );
+  async start() {
+    const apiJSON = await loadRamlApi(join(this.config.raml, this.config.main)) as Api;
+    this.restApiArr = sortByRunner(splitRestApiArr(apiJSON));
+    if (isEmpty(this.restApiArr)) {
+      return ;
     }
-  };
+    this.definitionSchema = getDefinitionSchema(apiJSON);
+    this.runByRunner();
+  }
 
-  const runByRunner = async () => {
-    restApiArr.forEach(async (webApi) => {
+  validateResponse = (webApi, response) => {
+    const { data, status } = response;
+    if (!webApi.responses.length) {
+      throw new ValidateWarning('No set responses');
+    }
+    const resp = getResponseByStatusCode(status, webApi.responses);
+    if (!resp) {
+      throw new Error(`Can\'t find responses by status ${status}`);
+    }
+    validateSchema(this.definitionSchema, resp.schema, data);
+  }
+
+  logError = (err, outputRequest: OutputRequest) => {
+    if (err instanceof ValidateWarning) {
+      this.output.push(Output.WARNING, outputRequest, err.message);
+      return ;
+    }
+    this.output.push(Output.ERROR, outputRequest, err.message || err);
+  }
+
+  send = async (webApi: RestAPI) => {
+    const outputRequest: OutputRequest =
+      new OutputRequest({ path: webApi.url, method: webApi.method, beginTime: Date.now() });
+    try {
+      const response = await doRequest(this.httpClient, webApi);
+      outputRequest.setRealPath(response.request.path);
+      this.validateResponse(webApi, response);
+      this.output.push(Output.SUCCESS, outputRequest);
+    } catch (err) {
+      this.logError(err, outputRequest);
+    }
+  }
+
+  runByRunner = async () => {
+    this.restApiArr.forEach(async (webApi) => {
       if (webApi.runner) {
-        await send(webApi);
+        await this.send(webApi);
         return;
       }
-      send(webApi);
+      this.send(webApi);
     });
-  };
+  }
 
-  runByRunner();
-};
+}

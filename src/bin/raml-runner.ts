@@ -2,7 +2,7 @@
 
 import { getHost } from '@/util';
 import { loadConfig } from '@/util/config-util';
-import runner from '@/runner';
+import Runner from '@/runner';
 import Output from '@/output';
 
 const start = async () => {
@@ -13,7 +13,8 @@ const start = async () => {
     output.print();
   });
 
-  runner(config, output, host);
+  const runner = new Runner(config, output, host);
+  runner.start();
 };
 
 start();
