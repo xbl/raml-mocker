@@ -14,7 +14,7 @@ const buildErrorMessage = (error: Ajv.ErrorObject, data): string => {
   return msg;
 };
 
-export const validateSchema = (definitionSchema, schema: Schema, data): boolean => {
+export const validateSchema = (definitionSchema: Schema, schema: Schema, data): boolean => {
   if (!schema) {
     return;
   }

@@ -16,8 +16,10 @@ import { validateSchema } from '@/validate';
 import { getRestApiArr, getDefinitionSchema } from '@/read-raml';
 import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
 import ValidateWarning from './validate-warning';
+import { AxiosResponse } from 'axios';
+import Schema from '@/models/schema';
 
-const splitRestApiArr = (apiJSON: Api) => {
+const splitRestApiArr = (apiJSON: Api): RestAPI[] => {
   const result = [];
   getRestApiArr(apiJSON).forEach((restApi: RestAPI) => {
     result.push(...splitByParameter(restApi));
@@ -25,7 +27,7 @@ const splitRestApiArr = (apiJSON: Api) => {
   return result;
 };
 
-const doRequest = (httpClient: HttpClient, webApi: RestAPI) => {
+const doRequest = (httpClient: HttpClient, webApi: RestAPI): Promise<AxiosResponse<any>> => {
   const body = webApi.body ? webApi.body.text : {};
   return httpClient.send(
     webApi,
@@ -38,7 +40,7 @@ const doRequest = (httpClient: HttpClient, webApi: RestAPI) => {
 export default class Runner {
   config: Config;
   output: Output;
-  definitionSchema: any;
+  definitionSchema: Schema;
   httpClient: HttpClient;
   restApiArr: RestAPI[];
 

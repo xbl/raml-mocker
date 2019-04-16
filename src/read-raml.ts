@@ -23,7 +23,7 @@ const setProps = (obj, property, value) => {
   if (value) { obj[property] = value; }
 };
 
-export const getDefinitionSchema = (apiJSON: Api) => {
+export const getDefinitionSchema = (apiJSON: Api): Schema => {
   const $id = '/definitionSchema';
   const definitionSchema = {
     $id,
