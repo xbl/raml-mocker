@@ -1,5 +1,6 @@
 import test from 'ava';
 import Output from '@/output';
+import OutputRequest from '@/models/output-request';
 
 test('When message one line , then title is message', (t) => {
   const message = 'abc';
@@ -21,11 +22,12 @@ ${expectValidInfo}`;
 test('Give push error , then get failCount 1', (t) => {
   const failCount = 1;
   const output = new Output('host');
-  const request = {method: '', path: ''};
-  output.push(Output.ERROR, '', request, 0);
+  const outputRequest: OutputRequest =
+      new OutputRequest({ path: '', method: '' });
+  output.push(Output.ERROR, outputRequest);
   t.is(output.failCount, failCount);
   t.is(output.successCount, 0);
 
-  output.push(Output.SUCCESS, '', request, 0);
+  output.push(Output.SUCCESS, outputRequest);
   t.is(output.successCount, 1);
 });

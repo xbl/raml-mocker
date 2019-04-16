@@ -6,6 +6,7 @@ import { loadApi as loadRamlApi } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 import Output from '@/output';
+import { getHost } from '@/util';
 import HttpClient from '@/http-client';
 import Config from '@/models/config';
 import RestAPI from '@/models/rest-api';
@@ -41,9 +42,9 @@ export default class Runner {
   httpClient: HttpClient;
   restApiArr: RestAPI[];
 
-  constructor(config: Config, output: Output, host: string) {
+  constructor(config: Config, output: Output) {
     this.config = config;
-    this.httpClient = new HttpClient(host);
+    this.httpClient = new HttpClient(getHost(this.config));
     this.output = output;
   }
 

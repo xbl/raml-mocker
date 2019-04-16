@@ -13,7 +13,7 @@ const start = async () => {
     output.print();
   });
 
-  const runner = new Runner(config, output, host);
+  const runner = new Runner(config, output);
   runner.start();
 };
 
