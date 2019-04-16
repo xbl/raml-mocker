@@ -15,6 +15,9 @@ const buildErrorMessage = (error: Ajv.ErrorObject, data): string => {
 };
 
 export const validateSchema = (definitionSchema, schema: Schema, data): boolean => {
+  if (!schema) {
+    return;
+  }
   const ajv = new Ajv();
   let validate: Ajv.ValidateFunction;
   try {

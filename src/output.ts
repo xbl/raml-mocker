@@ -1,5 +1,6 @@
 /* tslint:disable no-console */
 import chalk from 'chalk';
+import OutputRequest from '@/models/output-request';
 
 const typeMap = {
   0: {
@@ -32,7 +33,8 @@ export default class Output {
   }
 
 
-  push = (type, message, request: {method: string, path: string }, beginTime: number) => {
+  push = (type, outputRequest: OutputRequest, message = '') => {
+    const { path​​, method, beginTime} = outputRequest;
     const [, title, validInfo] = Output.processMessage(message);
     const { color, icon } = typeMap[type];
     if (type === Output.ERROR) {
@@ -42,8 +44,8 @@ export default class Output {
     }
     const takeTime = (Date.now() - beginTime).toString();
     console.log(
-      chalk`{${color} ${icon} 请求：[${request.method.toUpperCase()}]} {underline ${
-        request.path
+      chalk`{${color} ${icon} 请求：[${method.toUpperCase()}]} {underline ${
+        path
       }} {gray ${takeTime}ms}`,
     );
     console.log(chalk`{${color} ${title}}`);
