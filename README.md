@@ -29,7 +29,11 @@ yarn start
 # or
 npm start
 ```
-不熟悉 Nodejs 的同学可以参考[这里](https://github.com/xbl/raml-mocker/wiki/%E4%BD%BF%E7%94%A8Docker%E5%90%AF%E5%8A%A8)，使用 Docker 启动。
+![console](https://ws3.sinaimg.cn/large/006tNc79ly1g25qlhesedj30qi084mxr.jpg)
+
+命令行会输出 Mock Server 的地址，不熟悉 Nodejs 的同学可以参考[这里](https://github.com/xbl/raml-mocker/wiki/%E4%BD%BF%E7%94%A8Docker%E5%90%AF%E5%8A%A8)，使用 Docker 启动。
+
+**注意：此地址是 API 接口的 host，需要请求接口完整路径才能返回正确数据。**
 
 #### 验证一下
 
@@ -38,6 +42,12 @@ curl -i http://localhost:3000/api/v1/articles
 # or
 curl -i http://localhost:3000/api/v1/articles/bbb
 ```
+
+或者使用 Postman：
+
+![Postman](https://ws3.sinaimg.cn/large/006tNc79ly1g25qkieflgj31a60riq7t.jpg)
+
+
 
 ### 生成 API 可视化文档
 
@@ -80,24 +90,21 @@ npm run build
 
 ## 入门篇：Mock Server
 
-raml-mocker 可以不写 js 代码生成Mock Server，只需要在response 添加 example:
+在 ./raml/api 目录下创建 books 文件夹：
+
+![目录结构](https://ws2.sinaimg.cn/large/006tNc79ly1g25qv70c0lj30ck0r6768.jpg)
+
+在 books 文件夹中创建 books.raml 文件
 
 ```yaml
-/books:
-  /{id}:
-    post:
+get:
+  responses:
+    200:
       body:
-        application/json:
-          type: abc
-      responses:
-        200:
-          body:
-            application/json:
-              type: song
-              example: !include ./books_200.json
+        example: !include ./books_200.json
 ```
 
-books_200.json
+在 books 文件夹中创建 books_200.json 文件
 
 ```json
 {
@@ -117,7 +124,46 @@ books_200.json
 }
 ```
 
+修改 ./raml/api.raml 
 
+```yaml
+#%RAML 1.0
+---
+title: hello demo API
+baseUri: /
+version: v1
+mediaType: application/json
+
+# 安全设置
+securitySchemes: !include ./securitySchemes.raml
+
+# 自定义资源 types，类似于资源模板，指定 type 可以减少代码，还可以覆盖模板
+resourceTypes: !include ./resourceTypes.raml
+
+# 相当于数据类型，可用于自动化测试作为验证条件
+types: !include ./types.raml
+
+#
+/api/v1:
+  /articles: !include ./api/articles/articles.raml
+  /products: !include ./api/products/products.raml
+  /login: !include ./api/users/login.raml
+  # 添加
+  /books: !include ./api/books/books.raml
+
+```
+
+![](https://ws2.sinaimg.cn/large/006tNc79ly1g25r22yx17j310c0u0gv5.jpg)
+
+请求时是将 /api/v1/books 与 host 拼接出来的 URL，/api/v1 可在文档 api.raml 中修改。
+
+```shell
+curl -i http://localhost:3000/api/v1/books
+```
+
+或者使用Postman：
+
+![Postman](https://ws2.sinaimg.cn/large/006tNc79ly1g25r5avlhfj30u00vcjvi.jpg)
 
 
 
@@ -322,6 +368,7 @@ module.exports = (axios, response) => {
 
 ```yaml
 get:
+	# 请保证 description 唯一
   description: 商品列表
   queryParameters:
     isStar:
@@ -350,7 +397,7 @@ const assert = require('assert');
 const { loadApi } = require('@xbl/raml-mocker');
 
 it('从文章列表到文章详情', async () => {
-  // 根据 `文章列表` 的description 找到 raml 描述的 API
+  // 根据 `文章列表` 的 description 找到 raml 描述的 API
   const getList = loadApi('文章列表');
   const { status, data: list } = await getList();
   const articleId = list[0].articleId;
@@ -364,9 +411,9 @@ it('从文章列表到文章详情', async () => {
 });
 ```
 
-测试框架集成了 [Mocha](https://mochajs.org/)，断言使用 nodejs 自带的 [Assert](https://nodejs.org/dist/latest-v10.x/docs/api/assert.html#assert_assert) 模块，开发者可以选择自己喜欢的断言库。
+测试框架集成了 [Mocha](https://mochajs.org/)，断言使用 Nodejs 自带的 [Assert](https://nodejs.org/dist/latest-v10.x/docs/api/assert.html#assert_assert) 模块，开发者可以选择自己喜欢的断言库。
 
-运行测试
+运行测试：
 
 ```shell
 yarn run test:api
@@ -403,9 +450,11 @@ AioseResponse 文档可参考[这里](https://www.npmjs.com/package/axios#respon
 
 
 
-## HTTP Archive (HAR) 反向工程
+##旧有项目如何使用 raml-mocker 
 
-这部分同样是 2.0 新增的功能，帮助开发者和测试同学可以在已有的历史项目中快速使用 raml-mocker，并生成测试代码片段。关于 har 可参考[这里](https://github.com/xbl/raml-mocker/wiki/HTTP-Archive-(HAR)--%E8%AF%B4%E6%98%8E)。
+#### HTTP Archive (HAR) 反向工程
+
+2.0 新增的功能，帮助开发者和测试同学可以在旧有项目中快速使用 raml-mocker，并生成测试代码片段。请看[视频](http://v.youku.com/v_show/id_XNDA3NzYzOTM2MA==.html?spm=a2h3j.8428770.3416059.1)。
 
 [![视频](http://img.alicdn.com/tfs/TB1ZbM.lOqAXuNjy1XdXXaYcVXa-160-90.png)](http://v.youku.com/v_show/id_XNDA3NzYzOTM2MA==.html?spm=a2h3j.8428770.3416059.1)
 
@@ -423,6 +472,12 @@ har-convert -f ./www.npmjs.com.har -o ./raml/api.raml -filter www.npmjs.com
 har-convert -f ./www.npmjs.com.har -o ./test/search.spec.js
 ```
 
+
+
+可通过录制特定场景的请求可生成该场景的测试片段。
+
+关于 har 可参考[这里](https://github.com/xbl/raml-mocker/wiki/HTTP-Archive-(HAR)--%E8%AF%B4%E6%98%8E)。
+
 ## Road Map
 
 - [x] API 自动化测试
@@ -434,3 +489,8 @@ har-convert -f ./www.npmjs.com.har -o ./test/search.spec.js
 - [ ] baseUriParameters
 - [ ] 上传文件的处理
 
+
+
+## 使用遇到问题？
+
+使用中遇到任何问题，请给[告诉我](https://github.com/xbl/raml-mocker/issues)好吗？
