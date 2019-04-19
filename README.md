@@ -9,6 +9,8 @@
 
 Raml-mocker 是基于 [Raml](https://raml.org/) 的 mock server，Raml 是 RESTfull API 描述语言，同时支持自定义指令。raml-mocker 可以根据 raml 描述文档读取到 API 中的 uri 及 response 中的 example 继而生成 mock server。
 
+在 2.0 版本中增加了 API 接口的测试，所以 Raml-mocker 不仅仅是 mock server，还是一个不错的 API 接口测试工具。
+
 ## 开始
 
 #### 初始化项目
