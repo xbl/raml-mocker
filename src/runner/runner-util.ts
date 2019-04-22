@@ -7,13 +7,7 @@ export const getResponseByStatusCode = (code: number, responses: Response[]): Re
   if (isEmpty(responses)) {
     return;
   }
-  let response;
-  responses.forEach((resp) => {
-    if (resp.code === code) {
-      response = resp;
-    }
-  });
-  return response;
+  return responses.find((resp) => resp.code === code);
 };
 
 export const sortByRunner = (restApiArr: RestAPI[]): RestAPI[] => {
