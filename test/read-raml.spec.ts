@@ -510,8 +510,60 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('Given read raml When /products has uriParameters Then get webAPI array', (t) => {
+test(`Given read raml and response type is xml
+  When post /products has data Then get webAPI array`, (t) => {
   const webAPIArr = [
+    {
+      url: '/products',
+      method: 'post',
+      description: '商品列表',
+      queryParameters: [],
+      body: {
+        mimeType: 'application/json',
+        text: `{
+  "isStar": true
+}`,
+      },
+      responses: [
+        {
+          code: 200,
+          body: {
+            mimeType: 'application/xml',
+            text: `<xml>abc</xml>
+`,
+          },
+        },
+      ],
+    },
+  ];
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+/products:
+  post:
+    description: 商品列表
+    body:
+      example:
+        {
+          isStar: true
+        }
+    responses:
+      200:
+        body:
+          application/xml:
+            example: |
+              <xml>abc</xml>
+`;
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
+
+  const result = getRestApiArr(apiJSON);
+  t.deepEqual(result, webAPIArr);
+});
+
+test('Given read raml When /products has uriParameters Then get webAPI array', (t) => {
+  const expectedResult = [
     {
       url: '/products/{productId}',
       method: 'get',
@@ -555,7 +607,7 @@ mediaType: application/json
   const apiJSON = parseRAMLSync(ramlStr) as Api;
 
   const result = getRestApiArr(apiJSON);
-  t.deepEqual(result, webAPIArr);
+  t.deepEqual(result, expectedResult);
 });
 
 test('Given read raml  When(runner) annotations Then get annotation object', (t) => {
