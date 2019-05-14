@@ -7,7 +7,7 @@ import {
 } from '@/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
-test('when read raml given Product type then get definitionSchema object', (t) => {
+test('Given read raml and Product type When getDefinitionSchema Then get object', (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -40,7 +40,8 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given Product.productId no required type then get definitionSchema object', (t) => {
+test(`Given read raml And Product.productId no required
+  When getDefinitionSchema Then get definitionSchema object`, (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -74,7 +75,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given Product.productId has minLength then get definitionSchema object', (t) => {
+test(`Given read raml And Product.productId has minLength When definitionSchema then got object`, (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -168,7 +169,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given Product of Paragraph then get definitionSchema object', (t) => {
+test('Given read raml And Product of Paragraph When definitionSchema Then get object', (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -230,7 +231,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given Type Array then get definitionSchema object', (t) => {
+test('Given read raml and Type is Array When getDefinitionSchema Then get definitionSchema object', (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -322,7 +323,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given string Array then get definitionSchema object', (t) => {
+test('Given read raml, type is string array When getDefinitionSchema Then get definitionSchema object', (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {
@@ -358,7 +359,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test('when read raml given /products then get webAPI array', (t) => {
+test('Given read raml /products When getRestApiArr() Then get webAPI array', (t) => {
   const webAPIArr = [
     {
       url: '/products',
@@ -401,7 +402,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('when read raml given /products has queryParameter then get webAPI array', (t) => {
+test('Given read raml when /products has queryParameter Then get webAPI array', (t) => {
   const webAPIArr = [
     {
       url: '/products',
@@ -455,7 +456,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('when read raml given post /products has data then get webAPI array', (t) => {
+test('Given read raml When post /products has data Then get webAPI array', (t) => {
   const webAPIArr = [
     {
       url: '/products',
@@ -509,7 +510,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('when read raml given /products has uriParameters then get webAPI array', (t) => {
+test('Given read raml When /products has uriParameters Then get webAPI array', (t) => {
   const webAPIArr = [
     {
       url: '/products/{productId}',
@@ -557,7 +558,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('When read raml given (runner) annotations then get annotation object', (t) => {
+test('Given read raml  When(runner) annotations Then get annotation object', (t) => {
   const expectResult = {
     id: {
       description: 'article id',

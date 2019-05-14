@@ -127,7 +127,7 @@ const getQueryParameters = (queryParameters): Parameter[] => {
   return newParams;
 };
 
-const getPostBody = ([body]: TypeDeclaration[]): Body​​ => {
+const getPostBody = ([body]: TypeDeclaration[]): Body => {
   if (!body || !body.example()) { return; }
   const value = body.example().value();
   if (!value) { return; }
