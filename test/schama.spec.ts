@@ -1,6 +1,6 @@
 import test from 'ava';
 import Ajv from 'ajv';
-import { validateSchema } from '@/validate';
+import SchemaValidate from '@/validate';
 
 test('give single type then validate return true', (t) => {
   const responseBody = {
@@ -194,7 +194,7 @@ test('give string array type then validate return true', (t) => {
 });
 
 
-test('give string array type then validateSchema return true', (t) => {
+test('give string array type then SchemaValidate return true', (t) => {
   const responseBody = [
     {
       productId: 'P00001',
@@ -228,12 +228,12 @@ test('give string array type then validateSchema return true', (t) => {
     items: [$ref],
     additionalItems: $ref,
   };
-
-  const valid = validateSchema(definitionSchema, schema, responseBody);
+  const schemaValidate = new SchemaValidate(definitionSchema);
+  const valid = schemaValidate.validate(schema, responseBody);
   t.true(valid);
 });
 
-test('give string array type then validateSchema throws error', (t) => {
+test('give string array type then SchemaValidate throws error', (t) => {
   const responseBody = [
     {
       productId: 1,
@@ -268,14 +268,15 @@ test('give string array type then validateSchema throws error', (t) => {
     additionalItems: $ref,
   };
 
+  const schemaValidate = new SchemaValidate(definitionSchema);
   const error = t.throws(() => {
-    validateSchema(definitionSchema, schema, responseBody)
+    schemaValidate.validate(schema, responseBody);
   });
   t.truthy(error.message);
 });
 
 
-test('give string array type then validateSchema throws error Missing custom type', (t) => {
+test('give string array type then SchemaValidate throws error Missing custom type', (t) => {
   const responseBody = [
     {
       productId: 1,
@@ -310,8 +311,9 @@ test('give string array type then validateSchema throws error Missing custom typ
     additionalItems: $ref,
   };
 
+  const schemaValidate = new SchemaValidate(definitionSchema);
   const error = t.throws(() => {
-    validateSchema(definitionSchema, schema, responseBody);
+    schemaValidate.validate(schema, responseBody);
   });
   t.truthy(error.message.includes('Missing custom type'));
 });

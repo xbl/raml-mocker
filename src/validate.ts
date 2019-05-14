@@ -14,24 +14,30 @@ const buildErrorMessage = (error: Ajv.ErrorObject, data): string => {
   return msg;
 };
 
-export const validateSchema = (definitionSchema: Schema, schema: Schema, data): boolean => {
-  if (!schema) {
-    return;
+export default class SchemaValidate {
+  private ajv: Ajv.Ajv;
+
+  constructor(definitionSchema: Schema) {
+    const ajv = new Ajv();
+    this.ajv = ajv.addSchema(definitionSchema);
   }
-  const ajv = new Ajv();
-  let validate: Ajv.ValidateFunction;
-  try {
-    validate = ajv.addSchema(definitionSchema).compile(schema);
-  } catch (error) {
-    if (error.missingRef) {
-      throw Error(`Missing custom type "${error.missingRef.split('/').pop()}"`);
+
+  validate(schema: Schema, data): boolean {
+    let validate: Ajv.ValidateFunction;
+    try {
+      validate = this.ajv.compile(schema);
+    } catch (error) {
+      if (error.missingRef) {
+        throw Error(`Missing custom type "${error.missingRef.split('/').pop()}"`);
+      }
+      throw error;
     }
-    throw error;
+
+    const valid = validate(data) as boolean;
+    if (!valid) {
+      const error = validate.errors.pop();
+      throw new Error(buildErrorMessage(error, data));
+    }
+    return valid;
   }
-  const valid = validate(data) as boolean;
-  if (!valid) {
-    const error = validate.errors.pop();
-    throw new Error(buildErrorMessage(error, data));
-  }
-  return valid;
-};
+}

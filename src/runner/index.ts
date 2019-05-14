@@ -12,7 +12,7 @@ import Config from '@/models/config';
 import RestAPI from '@/models/rest-api';
 import Parameter from '@/models/parameter';
 import OutputRequest from '@/models/output-request';
-import { validateSchema } from '@/validate';
+import SchemaValidate from '@/validate';
 import { getRestApiArr, getDefinitionSchema } from '@/read-raml';
 import { getResponseByStatusCode, sortByRunner, splitByParameter } from './runner-util';
 import ValidateWarning from './validate-warning';
@@ -43,6 +43,7 @@ export default class Runner {
   definitionSchema: Schema;
   httpClient: HttpClient;
   restApiArr: RestAPI[];
+  schemaValidate: SchemaValidate;
 
   constructor(config: Config, output: Output) {
     this.config = config;
@@ -57,6 +58,7 @@ export default class Runner {
       return ;
     }
     this.definitionSchema = getDefinitionSchema(apiJSON);
+    this.schemaValidate = new SchemaValidate(this.definitionSchema);
     this.runByRunner();
   }
 
@@ -69,7 +71,7 @@ export default class Runner {
     if (!resp) {
       throw new Error(`Can\'t find responses by status ${status}`);
     }
-    validateSchema(this.definitionSchema, resp.schema, data);
+    this.schemaValidate.validate(resp.schema, data);
   }
 
   logError = (err, outputRequest: OutputRequest) => {
