@@ -25,11 +25,13 @@ export const loadApi = (description: string) => {
     .filter((restApi) => restApi.description === description)
     .pop();
   if (!api) { throw Error(`Can't find API by '${description}'!`); }
-  return async (uriParameters, queryParameter, body) => {
+
+  const execute = async (uriParameters, queryParameter, body) => {
     try {
       return await httpClient.send(api, uriParameters, queryParameter, body);
     } catch (error) {
       throw new Error(`description: '${description}' ${error.message}`);
     }
   };
+  return execute;
 };
