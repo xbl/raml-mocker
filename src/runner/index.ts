@@ -71,7 +71,7 @@ export default class Runner {
     if (!resp) {
       throw new Error(`Can\'t find responses by status ${status}`);
     }
-    this.schemaValidate.validate(resp.schema, data);
+    this.schemaValidate.execute(resp.schema, data);
   }
 
   logError = (err, outputRequest: OutputRequest) => {

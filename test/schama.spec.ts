@@ -229,7 +229,7 @@ test('give string array type then SchemaValidate return true', (t) => {
     additionalItems: $ref,
   };
   const schemaValidate = new SchemaValidate(definitionSchema);
-  const valid = schemaValidate.validate(schema, responseBody);
+  const valid = schemaValidate.execute(schema, responseBody);
   t.true(valid);
 });
 
@@ -270,7 +270,7 @@ test('give string array type then SchemaValidate throws error', (t) => {
 
   const schemaValidate = new SchemaValidate(definitionSchema);
   const error = t.throws(() => {
-    schemaValidate.validate(schema, responseBody);
+    schemaValidate.execute(schema, responseBody);
   });
   t.truthy(error.message);
 });
@@ -313,7 +313,7 @@ test('give string array type then SchemaValidate throws error Missing custom typ
 
   const schemaValidate = new SchemaValidate(definitionSchema);
   const error = t.throws(() => {
-    schemaValidate.validate(schema, responseBody);
+    schemaValidate.execute(schema, responseBody);
   });
   t.truthy(error.message.includes('Missing custom type'));
 });

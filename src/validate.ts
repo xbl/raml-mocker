@@ -22,7 +22,7 @@ export default class SchemaValidate {
     this.ajv = ajv.addSchema(definitionSchema);
   }
 
-  validate(schema: Schema, data): boolean {
+  execute(schema: Schema, data): boolean {
     let validate: Ajv.ValidateFunction;
     try {
       validate = this.ajv.compile(schema);
