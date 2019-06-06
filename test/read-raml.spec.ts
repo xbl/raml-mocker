@@ -1,10 +1,11 @@
 import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
 import {
-  getDefinitionSchema,
   getRestApiArr,
   getAnnotationByName,
 } from '@/read-raml';
+
+import {  getDefinitionSchema } from '@/read-raml/definition-schema';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 test('Given read raml and Product type When getDefinitionSchema Then get object', (t) => {
