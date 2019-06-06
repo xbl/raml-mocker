@@ -6,7 +6,7 @@ import { setProps } from './utils';
 import { BASE_TYPE, ANY_TYPE } from './constant';
 import Body from '../models/body';
 import Parameter from '../models/parameter';
-import { TypeDeclaration, Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { TypeDeclaration, Api, Response as RamlResponse, Resource, Method } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const getSchemaByType = (type): Schema => {
   if (!type) { return undefined; }
@@ -93,62 +93,75 @@ const getUriParameters = (resource, method) => {
   return uriParameters;
 };
 
+const getHeaderLocation = (response: RamlResponse) => {
+  let redirectURL;
+  response.headers().forEach((typeDeclaration) => {
+    if (typeDeclaration.name().toLowerCase() === 'location') {
+      redirectURL = typeDeclaration.type()[0];
+    }
+  });
+  return redirectURL;
+};
+
+const getResponseByBody = (code, body: TypeDeclaration): Response => {
+  const example = body.example();
+  if (!example) { return; }
+  const mimeType = body.name();
+  const type = body.type().pop();
+  const webApiResp: Response = {
+    code,
+    body: {
+      text: example.value(),
+      mimeType,
+    },
+  };
+  const schema = getSchemaByType(type);
+  setProps(webApiResp, 'schema', schema);
+  return webApiResp;
+};
+
+const getRestApiByMethod = (url: string, method: Method, resource: Resource): RestAPI => {
+  const restApi: RestAPI = { url, method: method.method() as string };
+  const description = method.description() && method.description().value();
+  setProps(restApi, 'description', description);
+
+  const controller = getAnnotationByName('controller', method);
+  setProps(restApi, 'controller', controller);
+
+  const runner = getAnnotationByName('runner', method);
+  setProps(restApi, 'runner', runner);
+
+  const uriParameters = getUriParameters(resource, method);
+  setProps(restApi, 'uriParameters', uriParameters);
+
+  restApi.queryParameters = getQueryParameters(method.queryParameters());
+  const postBody = getPostBody(method.body());
+  setProps(restApi, 'body', postBody);
+
+  restApi.responses = [];
+  method.responses().forEach((response) => {
+    const code = parseInt(response.code().value(), 10);
+    // 30x
+    if (isRedirectCode(code)) {
+      const redirectURL = getHeaderLocation(response);
+      restApi.responses.push({ code, redirectURL });
+      return;
+    }
+
+    restApi.responses = response.body()
+      .map((body) => getResponseByBody(code, body))
+      .filter((webApiResp: Response) => webApiResp);
+  });
+  return restApi;
+};
+
 export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
-  const restApiArr: RestAPI[] = [];
-  apiJSON.allResources().forEach((resource) => {
+  let restApiArr: RestAPI[] = [];
+  apiJSON.allResources().forEach((resource: Resource) => {
     const url = resource.absoluteUri() as string;
-
-    resource.methods().forEach((method) => {
-      const webApi: RestAPI = { url, method: method.method() as string };
-
-      const description = method.description() && method.description().value();
-      setProps(webApi, 'description', description);
-
-      const controller = getAnnotationByName('controller', method);
-      setProps(webApi, 'controller', controller);
-
-      const runner = getAnnotationByName('runner', method);
-      setProps(webApi, 'runner', runner);
-
-      const uriParameters = getUriParameters(resource, method);
-      setProps(webApi, 'uriParameters', uriParameters);
-
-      webApi.queryParameters = getQueryParameters(method.queryParameters());
-      const postBody = getPostBody(method.body());
-      setProps(webApi, 'body', postBody);
-
-      webApi.responses = [];
-      method.responses().forEach((response) => {
-        const code = parseInt(response.code().value(), 10);
-        // 30x
-        if (isRedirectCode(code)) {
-          response.headers().forEach((typeDeclaration) => {
-            if (typeDeclaration.name().toLowerCase() === 'location') {
-              const redirectURL = typeDeclaration.type()[0];
-              webApi.responses.push({ code, redirectURL });
-            }
-          });
-          return;
-        }
-        response.body().forEach((body) => {
-          const example = body.example();
-          if (!example) { return; }
-          const mimeType = body.name();
-          const type = body.type().pop();
-          const webApiResp: Response = {
-            code,
-            body: {
-              text: example.value(),
-              mimeType,
-            },
-          };
-          const schema = getSchemaByType(type);
-          setProps(webApiResp, 'schema', schema);
-          webApi.responses.push(webApiResp);
-        });
-      });
-      restApiArr.push(webApi);
-    });
+    restApiArr = resource.methods()
+      .map((method: Method) =>
+        getRestApiByMethod(url, method, resource));
   });
   return restApiArr;
 };
