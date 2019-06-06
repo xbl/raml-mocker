@@ -6,7 +6,8 @@ import { setProps } from './utils';
 import { BASE_TYPE, ANY_TYPE } from './constant';
 import Body from '../models/body';
 import Parameter from '../models/parameter';
-import { TypeDeclaration, Api, Response as RamlResponse, Resource, Method } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { TypeDeclaration, Api, Response as RamlResponse,
+  Resource, Method } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const getSchemaByType = (type): Schema => {
   if (!type) { return undefined; }
