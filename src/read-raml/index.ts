@@ -1,10 +1,10 @@
-import { isRedirectCode } from './util';
-import RestAPI from './models/rest-api';
-import Response from './models/response';
-import Schema from './models/schema';
-import $Ref from './models/$ref';
-import Body from './models/body';
-import Parameter from './models/parameter';
+import { isRedirectCode } from '../util';
+import RestAPI from '../models/rest-api';
+import Response from '../models/response';
+import Schema from '../models/schema';
+import $Ref from '../models/$ref';
+import Body from '../models/body';
+import Parameter from '../models/parameter';
 import { TypeDeclaration, Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const ANY_TYPE = 'any';
