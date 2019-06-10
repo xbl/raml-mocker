@@ -8,6 +8,7 @@ import Body from '../models/body';
 import Parameter from '../models/parameter';
 import { TypeDeclaration, Api, Response as RamlResponse,
   Resource, Method } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { isEmpty } from 'lodash';
 
 const getSchemaByType = (type): Schema => {
   if (!type) { return undefined; }
@@ -68,10 +69,9 @@ export const getAnnotationByName = (name, method) => {
 };
 
 const getUriParameters = (resource, method) => {
-  let uriParameters;
+  const uriParameters = {};
   const params = getAnnotationByName('uriParameters', method);
-  if (params) {
-    if (!uriParameters) { uriParameters = {}; }
+  if (!isEmpty(params)) {
     Object.keys(params).forEach((key) => {
       const param = params[key];
       if (!param) { return; }
@@ -87,7 +87,6 @@ const getUriParameters = (resource, method) => {
     let value = '';
     if (!example) { return; }
     value = example.value();
-    if (!uriParameters) { uriParameters = {}; }
     uriParameters[name] = value;
   });
 
@@ -132,8 +131,7 @@ const getRestApiByMethod = (url: string, method: Method, resource: Resource): Re
   const runner = getAnnotationByName('runner', method);
   setProps(restApi, 'runner', runner);
 
-  const uriParameters = getUriParameters(resource, method);
-  setProps(restApi, 'uriParameters', uriParameters);
+  restApi.uriParameters = getUriParameters(resource, method);
 
   restApi.queryParameters = getQueryParameters(method.queryParameters());
   const postBody = getPostBody(method.body());

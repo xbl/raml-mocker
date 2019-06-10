@@ -367,6 +367,7 @@ test('Given read raml /products When getRestApiArr() Then get webAPI array', (t)
       method: 'get',
       description: '商品列表',
       queryParameters: [],
+      uriParameters: {},
       responses: [
         {
           code: 200,
@@ -407,6 +408,7 @@ test('Given read raml when /products has queryParameter Then get webAPI array', 
   const webAPIArr = [
     {
       url: '/products',
+      uriParameters: {},
       method: 'get',
       description: '商品列表',
       queryParameters: [{
@@ -464,6 +466,7 @@ test('Given read raml When post /products has data Then get webAPI array', (t) =
       method: 'post',
       description: '商品列表',
       queryParameters: [],
+      uriParameters: {},
       body: {
         mimeType: 'application/json',
         text: `{
@@ -519,6 +522,7 @@ test(`Given read raml and response type is xml
       method: 'post',
       description: '商品列表',
       queryParameters: [],
+      uriParameters: {},
       body: {
         mimeType: 'application/json',
         text: `{
