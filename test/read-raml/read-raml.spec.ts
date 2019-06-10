@@ -1,10 +1,6 @@
 import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
-import {
-  getRestApiArr,
-  getAnnotationByName,
-} from '@/read-raml';
-
+import { getRestApiArr, getAnnotationByName } from '@/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 test('Given read raml /products When getRestApiArr() Then get webAPI array', (t) => {
