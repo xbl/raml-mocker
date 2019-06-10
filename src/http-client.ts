@@ -9,8 +9,8 @@ export default class HttpClient {
     axios.defaults.baseURL = host;
   }
 
-  send = async (webApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
-    let requestPath = webApi.url;
+  send = async (restApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
+    let requestPath = restApi.url;
     if (uriParameters) {
       replaceUriParameters(requestPath, (match, expression) => {
         requestPath = requestPath.replace(match, uriParameters[expression]);
@@ -18,12 +18,12 @@ export default class HttpClient {
     }
 
     const response = await axios(requestPath, {
-      method: webApi.method,
+      method: restApi.method,
       data: body,
       params: queryParameter,
     });
 
-    const { runner } = webApi;
+    const { runner } = restApi;
     if (runner) {
       const { after } = runner;
       const afterModule = require(path.resolve(after));
