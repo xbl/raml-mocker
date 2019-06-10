@@ -1,7 +1,8 @@
 import path from 'path';
 import axios from 'axios';
-import { replaceUriParameters } from './util';
+import { isEmpty } from 'lodash';
 import RestAPI from './models/rest-api';
+import { replaceUriParameters } from './util';
 
 export default class HttpClient {
 
@@ -11,7 +12,7 @@ export default class HttpClient {
 
   send = async (restApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
     let requestPath = restApi.url;
-    if (uriParameters) {
+    if (!isEmpty(uriParameters)) {
       replaceUriParameters(requestPath, (match, expression) => {
         requestPath = requestPath.replace(match, uriParameters[expression]);
       });
