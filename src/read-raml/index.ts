@@ -109,7 +109,7 @@ const getResponseByBody = (code, body: TypeDeclaration): Response => {
   if (!example) { return; }
   const mimeType = body.name();
   const type = body.type().pop();
-  const webApiResp: Response = {
+  const restApiResp: Response = {
     code,
     body: {
       text: example.value(),
@@ -117,8 +117,8 @@ const getResponseByBody = (code, body: TypeDeclaration): Response => {
     },
   };
   const schema = getSchemaByType(type);
-  setProps(webApiResp, 'schema', schema);
-  return webApiResp;
+  setProps(restApiResp, 'schema', schema);
+  return restApiResp;
 };
 
 const getRestApiByMethod = (url: string, method: Method, resource: Resource): RestAPI => {
