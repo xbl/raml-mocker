@@ -14,16 +14,16 @@ app.use((req, res, next) => {
   next();
 });
 
-const handler = (req, res, config, webApi: RestAPI) => {
-  if (webApi.controller) {
-    const [controller, methodName] = webApi.controller.split('#');
+const handler = (req, res, config, restApi: RestAPI) => {
+  if (restApi.controller) {
+    const [controller, methodName] = restApi.controller.split('#');
     const moduleCtrl = require(`${config.controller}/${controller}`);
     const fn = moduleCtrl[methodName];
-    if (typeof fn === 'function') { fn.call(app, req, res, webApi); }
+    if (typeof fn === 'function') { fn.call(app, req, res, restApi); }
     return;
   }
 
-  const response = webApi.responses[0];
+  const response = restApi.responses[0];
   if (!response) {
     res.status(404).send('no set response or example');
     return;
@@ -51,10 +51,10 @@ const handler = (req, res, config, webApi: RestAPI) => {
 const setConfig = (config) => {
   const apiJSON = loadApiSync(join(config.raml, config.main)) as Api;
 
-  const webApiArr = getRestApiArr(apiJSON);
-  webApiArr.forEach((webApi) => {
-    app[webApi.method](toExpressUri(webApi.url), (req, res) => {
-      handler(req, res, config, webApi);
+  const restApiArr = getRestApiArr(apiJSON);
+  restApiArr.forEach((restApi) => {
+    app[restApi.method](toExpressUri(restApi.url), (req, res) => {
+      handler(req, res, config, restApi);
     });
   });
 };
