@@ -291,3 +291,87 @@ mediaType: application/json
   const result = getAnnotationByName('runner', method);
   t.deepEqual(result, expectResult);
 });
+
+test('Given raml has two uri When getRestApiArr() Then RestApi[] length is 2', (t) => {
+  const expectResult = {
+    id: {
+      description: 'article id',
+      example: 'aaaa',
+    },
+  };
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+
+/products:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+/products/{productId}:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "b": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
+
+  const result = getRestApiArr(apiJSON);
+  t.is(result.length, 2);
+});
+
+test('Given raml has two uri and multiple methods When getRestApiArr() Then RestApi[] length is 3', (t) => {
+  const expectResult = {
+    id: {
+      description: 'article id',
+      example: 'aaaa',
+    },
+  };
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+
+/products:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+/products/{productId}:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "b": 1
+            }
+  post:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "b": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
+
+  const result = getRestApiArr(apiJSON);
+  t.is(result.length, 3);
+});

@@ -158,9 +158,8 @@ export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
   let restApiArr: RestAPI[] = [];
   apiJSON.allResources().forEach((resource: Resource) => {
     const url = resource.absoluteUri() as string;
-    restApiArr = resource.methods()
-      .map((method: Method) =>
-        getRestApiByMethod(url, method, resource));
+    restApiArr = restApiArr.concat(resource.methods()
+      .map((method: Method) => getRestApiByMethod(url, method, resource)));
   });
   return restApiArr;
 };
