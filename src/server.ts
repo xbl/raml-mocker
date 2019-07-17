@@ -1,5 +1,6 @@
 import { join } from 'path';
 import express from 'express';
+import bodyParser from 'body-parser';
 import { getRestApiArr } from './read-raml';
 import { isRedirectCode, toExpressUri } from './util';
 import RestAPI from './models/rest-api';
@@ -7,6 +8,10 @@ import { loadApiSync } from 'raml-1-parser';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.text({type: '*/*'}));
 
 app.use((req, res, next) => {
   // tslint:disable no-console

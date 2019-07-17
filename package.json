@@ -1,6 +1,6 @@
 {
   "name": "@xbl/raml-mocker",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "engines": {
     "node": ">=8.0.0"
   },
@@ -68,6 +68,7 @@
   "devDependencies": {
     "@types/node": "^11.9.3",
     "ava": "1.0.0-rc.1",
+    "body-parser": "^1.19.0",
     "lodash": "^4.17.13",
     "nyc": "^13.2.0",
     "path-to-regexp": "^3.0.0",
