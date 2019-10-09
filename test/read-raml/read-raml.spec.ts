@@ -2,6 +2,7 @@ import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
 import { getRestApiArr, getAnnotationByName } from '@/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import toSpec from '@/har-convert/to-spec';
 
 test('Given read raml /products When getRestApiArr() Then get webAPI array', (t) => {
   const webAPIArr = [
@@ -47,7 +48,7 @@ mediaType: application/json
   t.deepEqual(result, webAPIArr);
 });
 
-test('Given read raml when /products has queryParameter Then get webAPI array', (t) => {
+test('Given url has queryParameter When read raml Then get webAPI array', (t) => {
   const webAPIArr = [
     {
       url: '/products',
@@ -374,4 +375,63 @@ mediaType: application/json
 
   const result = getRestApiArr(apiJSON);
   t.is(result.length, 3);
+});
+
+
+test('Given raml has 2 response code And example When getRestApiArr() Then RestApi has 2 responses', (t) => {
+  const expectResult = {
+      url: '/products',
+      uriParameters: {},
+      method: 'get',
+      queryParameters: [],
+      responses: [
+        {
+          code: 200,
+          body: {
+            mimeType: 'application/json',
+            text: `{
+  "a": 1
+}
+`,
+          },
+        },
+        {
+          code: 400,
+          body: {
+            mimeType: 'application/json',
+            text: `{
+  "b": 1
+}
+`,
+          },
+        },
+      ],
+    };
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: /
+mediaType: application/json
+
+/products:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+      400:
+        body:
+          example: |
+            {
+              "b": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
+
+  const restApi = getRestApiArr(apiJSON).pop();
+  t.deepEqual(restApi, expectResult);
+  t.is(restApi.responses.length, 2);
 });

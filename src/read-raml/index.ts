@@ -147,9 +147,9 @@ const getRestApiByMethod = (url: string, method: Method, resource: Resource): Re
       return;
     }
 
-    restApi.responses = response.body()
+    restApi.responses = restApi.responses.concat(response.body()
       .map((body) => getResponseByBody(code, body))
-      .filter((webApiResp: Response) => webApiResp);
+      .filter((webApiResp: Response) => webApiResp));
   });
   return restApi;
 };
