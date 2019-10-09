@@ -2,7 +2,7 @@ import { isRedirectCode } from '../util';
 import RestAPI from '../models/rest-api';
 import Response from '../models/response';
 import Schema from '../models/schema';
-import { setProps } from './utils';
+import { setProps, getPathname } from './utils';
 import { BASE_TYPE, ANY_TYPE } from './constant';
 import Body from '../models/body';
 import Parameter from '../models/parameter';
@@ -157,7 +157,7 @@ const getRestApiByMethod = (url: string, method: Method, resource: Resource): Re
 export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
   let restApiArr: RestAPI[] = [];
   apiJSON.allResources().forEach((resource: Resource) => {
-    const url = resource.absoluteUri() as string;
+    const url = getPathname(resource.absoluteUri() as string);
     restApiArr = restApiArr.concat(resource.methods()
       .map((method: Method) => getRestApiByMethod(url, method, resource)));
   });

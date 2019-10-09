@@ -2,7 +2,6 @@ import test from 'ava';
 import { parseRAMLSync } from 'raml-1-parser';
 import { getRestApiArr, getAnnotationByName } from '@/read-raml';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
-import toSpec from '@/har-convert/to-spec';
 
 test('Given read raml /products When getRestApiArr() Then get webAPI array', (t) => {
   const webAPIArr = [
@@ -434,4 +433,46 @@ mediaType: application/json
   const restApi = getRestApiArr(apiJSON).pop();
   t.deepEqual(restApi, expectResult);
   t.is(restApi.responses.length, 2);
+});
+
+
+test('Given raml has base origin When getRestApiArr() Then RestApi just has pathname', (t) => {
+  const expectResult = {
+      url: '/products',
+      uriParameters: {},
+      method: 'get',
+      queryParameters: [],
+      responses: [
+        {
+          code: 200,
+          body: {
+            mimeType: 'application/json',
+            text: `{
+  "a": 1
+}
+`,
+          },
+        },
+      ],
+    };
+  const ramlStr = `
+#%RAML 1.0
+---
+baseUri: http://www.a.com
+mediaType: application/json
+
+/products:
+  get:
+    responses:
+      200:
+        body:
+          example: |
+            {
+              "a": 1
+            }
+  `;
+  const apiJSON = parseRAMLSync(ramlStr) as Api;
+
+  const restApi = getRestApiArr(apiJSON).pop();
+  t.deepEqual(restApi, expectResult);
 });
