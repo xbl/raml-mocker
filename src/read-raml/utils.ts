@@ -5,5 +5,5 @@ export const setProps = (obj, property, value) => {
 };
 
 export const getPathname = (url) => {
-  return parse(url).pathname;
+  return decodeURIComponent(parse(url).pathname);
 };

@@ -12,3 +12,18 @@ test('Given has no origin url When utils.getPathname() Then get pathname', (t) =
   const pathname = getPathname('/abc/1234');
   t.is(pathname, expectedPathname);
 });
+
+test('Given has no origin url And has {id} When utils.getPathname() Then get pathname', (t) => {
+  const expectedPathname = '/abc/1234/{id}';
+  const pathname = getPathname('/abc/1234/{id}');
+  console.log(pathname);
+  t.is(pathname, expectedPathname);
+});
+
+
+test('Given has origin url And has {id} When utils.getPathname() Then get pathname', (t) => {
+  const expectedPathname = '/abc/1234/{id}';
+  const pathname = getPathname('http://localhost/abc/1234/{id}');
+  console.log(pathname);
+  t.is(pathname, expectedPathname);
+});
