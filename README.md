@@ -31,7 +31,7 @@ yarn start
 # or
 npm start
 ```
-![console](https://ws3.sinaimg.cn/large/006tNc79ly1g25qlhesedj30qi084mxr.jpg)
+![console](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjjwpwgwgj30o005c74v.jpg)
 
 命令行会输出 Mock Server 的地址，不熟悉 Nodejs 的同学可以参考[这里](https://github.com/xbl/raml-mocker/wiki/%E4%BD%BF%E7%94%A8Docker%E5%90%AF%E5%8A%A8)，使用 Docker 启动。
 
@@ -47,7 +47,7 @@ curl -i http://localhost:3000/api/v1/articles/bbb
 
 或者使用 Postman：
 
-![Postman](https://ws3.sinaimg.cn/large/006tNc79ly1g25qkieflgj31a60riq7t.jpg)
+![Postman](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjjvm0uvnj30u00ujdo9.jpg)
 
 
 
@@ -61,7 +61,7 @@ npm run build
 
 会在工程下面生成一个 api.html 文件，双击打开即可看到一个 html 文档，如图：
 
-![API 文档](https://ws1.sinaimg.cn/large/006tNbRwly1fw2w6al0lfg30dw0bob0f.gif)
+![API 文档](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjk7bsx7pj31px0u0wt3.jpg)
 
 此功能使用了[raml2html](https://www.npmjs.com/package/raml2html)。
 
@@ -94,16 +94,19 @@ npm run build
 
 在 ./raml/api 目录下创建 books 文件夹：
 
-![目录结构](https://ws2.sinaimg.cn/large/006tNc79ly1g25qv70c0lj30ck0r6768.jpg)
+![目录结构](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjk9ocmy8j30ea0x4q54.jpg)
 
 在 books 文件夹中创建 books.raml 文件
 
 ```yaml
 get:
+  description: 图书列表
   responses:
     200:
       body:
-        example: !include ./books_200.json
+        application/json:
+          type: object
+          example: !include ./books_200.json
 ```
 
 在 books 文件夹中创建 books_200.json 文件
@@ -126,7 +129,7 @@ get:
 }
 ```
 
-修改 ./raml/api.raml 
+修改 ./raml/api.raml
 
 ```yaml
 #%RAML 1.0
@@ -155,17 +158,17 @@ types: !include ./types.raml
 
 ```
 
-![](https://ws2.sinaimg.cn/large/006tNc79ly1g25r22yx17j310c0u0gv5.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjkeq974rj31j20u0q83.jpg)
 
 请求时是将 /api/v1/books 与 host 拼接出来的 URL，/api/v1 可在文档 api.raml 中修改。
 
 ```shell
-curl -i http://localhost:3000/api/v1/books
+curl -X GET http://localhost:3000/api/v1/books
 ```
 
 或者使用Postman：
 
-![Postman](https://ws2.sinaimg.cn/large/006tNc79ly1g25r5avlhfj30u00vcjvi.jpg)
+![Postman](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjkg5ree3j31560u0q6q.jpg)
 
 
 
@@ -207,7 +210,7 @@ Raml-mocker 是在 [expressjs](http://expressjs.com/) 基础上进行开发，re
 
 在 1.1.0 中增加 API 测试，通过在 raml 文件中添加 response 数据格式描述，raml-runner 会发送请求，来验证 response 的数据格式是否符合预期。
 
-![runner](https://ws1.sinaimg.cn/large/006tNbRwly1fyaoa2ikfeg30i60b4afa.gif)
+![runner](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjkka6ktxj30zs0u0dkg.jpg)
 
 
 1. 在 types 文件中编写商品 Type，描述了返回数据的类型，以及对象中字段验证：
@@ -392,7 +395,7 @@ get:
 
 **注意：** description 的字符串会在 loadApi 时使用，所以请保证唯一。
 
-2. 在 test 目录新增 article.spec.js 
+2. 在 test 目录新增 article.spec.js
 
 ```javascript
 const assert = require('assert');
@@ -418,14 +421,14 @@ it('从文章列表到文章详情', async () => {
 运行测试：
 
 ```shell
-yarn run test:api
+npm run test:api
 ```
 
-![运行测试](https://ws3.sinaimg.cn/large/006tKfTcly1g0iq4fyubng30sg0lcqja.gif)
+![运行测试](https://tva1.sinaimg.cn/large/007S8ZIlly1ggjklircrmj30xm0cc0us.jpg)
 
 
 
-### API 
+### API
 
 ```javascript
 loadApi(description: string): Function;
@@ -438,12 +441,12 @@ anonymousFn (uriParameters, queryParameter, body): Promise<AxiosResponse>
  *  id: 1
  *  ...
  * }
- * 
+ *
  * queryParameter: {
  *  pageSize: 20
  *  ...
  * }
- * 
+ *
  * body 是 POST 的数据
  */
 ```
@@ -452,7 +455,7 @@ AioseResponse 文档可参考[这里](https://www.npmjs.com/package/axios#respon
 
 
 
-##旧有项目如何使用 raml-mocker 
+##旧有项目如何使用 raml-mocker
 
 #### HTTP Archive (HAR) 反向工程
 
