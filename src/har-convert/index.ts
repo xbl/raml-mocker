@@ -65,11 +65,19 @@ export const read = (har: string, filter?: string): RestAPI[] => {
 export const save = async (restAPIArr: RestAPI[], target: string) => {
   const ext = extname(target);
   let str = '';
-  if (ext === '.raml') {
+  if (isRamlFile(ext)) {
     str = await toRaml(restAPIArr);
   }
-  if (['.js', '.ts'].includes(ext)) {
+  if (isScriptFile(ext)) {
     str = await mergeRestApiToSpec(restAPIArr);
   }
   fs.appendFile(target, str);
 };
+
+const isScriptFile = (ext: string) => {
+  return ['.js', '.ts'].includes(ext);
+}
+
+const isRamlFile = (ext: string) => {
+  return ext === '.raml';
+}
