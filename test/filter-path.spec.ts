@@ -1,9 +1,10 @@
 import test from 'ava';
 import filterPath from '@/har-convert/filter-path';
+import { HarEntry } from '@/models/harTypes';
 
 test('Given entries, then get filter path entries', async (t) => {
   // tslint:disable:max-line-length
-  const entries = [
+  const entries: HarEntry[] = [
     {
       request: {
         method: 'GET',

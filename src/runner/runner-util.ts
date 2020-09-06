@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { isEmpty } from 'lodash';
 import RestAPI from '../models/rest-api';
 import Response from '../models/response';

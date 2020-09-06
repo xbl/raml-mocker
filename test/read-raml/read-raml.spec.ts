@@ -379,33 +379,33 @@ mediaType: application/json
 
 test('Given raml has 2 response code And example When getRestApiArr() Then RestApi has 2 responses', (t) => {
   const expectResult = {
-      url: '/products',
-      uriParameters: {},
-      method: 'get',
-      queryParameters: [],
-      responses: [
-        {
-          code: 200,
-          body: {
-            mimeType: 'application/json',
-            text: `{
+    url: '/products',
+    uriParameters: {},
+    method: 'get',
+    queryParameters: [],
+    responses: [
+      {
+        code: 200,
+        body: {
+          mimeType: 'application/json',
+          text: `{
   "a": 1
 }
 `,
-          },
         },
-        {
-          code: 400,
-          body: {
-            mimeType: 'application/json',
-            text: `{
+      },
+      {
+        code: 400,
+        body: {
+          mimeType: 'application/json',
+          text: `{
   "b": 1
 }
 `,
-          },
         },
-      ],
-    };
+      },
+    ],
+  };
   const ramlStr = `
 #%RAML 1.0
 ---
@@ -438,23 +438,23 @@ mediaType: application/json
 
 test('Given raml has base origin When getRestApiArr() Then RestApi just has pathname', (t) => {
   const expectResult = {
-      url: '/products',
-      uriParameters: {},
-      method: 'get',
-      queryParameters: [],
-      responses: [
-        {
-          code: 200,
-          body: {
-            mimeType: 'application/json',
-            text: `{
+    url: '/products',
+    uriParameters: {},
+    method: 'get',
+    queryParameters: [],
+    responses: [
+      {
+        code: 200,
+        body: {
+          mimeType: 'application/json',
+          text: `{
   "a": 1
 }
 `,
-          },
         },
-      ],
-    };
+      },
+    ],
+  };
   const ramlStr = `
 #%RAML 1.0
 ---

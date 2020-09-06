@@ -12,16 +12,16 @@ import Parameter from '@/models/parameter';
 import { mergeRestApi } from '@/util';
 import { loadConfig } from '@/util/config-util';
 import { Api } from 'raml-1-parser/dist/parser/artifacts/raml10parserapi';
+import { HarEntry, HarTyped } from '@/models/harTypes';
 
 
-const filterEmpty = (obj) => JSON.parse(JSON.stringify(obj));
+const filterEmpty = (obj: any): RestAPI => JSON.parse(JSON.stringify(obj)) as RestAPI;
 
 const toParameter = (queryStrings: any[]): Parameter[] =>
-  queryStrings.map(({name, value}) => {
-    return { name, example: decodeURIComponent(value)};
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  queryStrings.map(({name, value}) => ({ name, example: decodeURIComponent(value)}));
 
-const toRestAPI = (entries: any[]) => entries.map((entry) => {
+const toRestAPI = (entries: any[]): RestAPI[] => entries.map((entry: HarEntry) => {
   const { request, response } = entry;
   const { url, method, queryString, postData } = request;
   const newUrl = urlUtil.parse(url);
@@ -54,7 +54,7 @@ export const mergeRestApiToSpec = async (newRestAPIArr: RestAPI[]): Promise<stri
 };
 
 export const read = (har: string, filter?: string): RestAPI[] => {
-  const json = JSON.parse(har);
+  const json: HarTyped = JSON.parse(har) as HarTyped;
   let entries = xhrFilter(json.log.entries);
   if (filter) {
     entries = filterPath(entries, filter);
@@ -62,7 +62,7 @@ export const read = (har: string, filter?: string): RestAPI[] => {
   return toRestAPI(entries);
 };
 
-export const save = async (restAPIArr: RestAPI[], target: string) => {
+export const save = async (restAPIArr: RestAPI[], target: string): Promise<void> => {
   const ext = extname(target);
   let str = '';
   if (isRamlFile(ext)) {
@@ -71,13 +71,9 @@ export const save = async (restAPIArr: RestAPI[], target: string) => {
   if (isScriptFile(ext)) {
     str = await mergeRestApiToSpec(restAPIArr);
   }
-  fs.appendFile(target, str);
+  return fs.appendFile(target, str);
 };
 
-const isScriptFile = (ext: string) => {
-  return ['.js', '.ts'].includes(ext);
-}
+const isScriptFile = (ext: string) => ['.js', '.ts'].includes(ext);
 
-const isRamlFile = (ext: string) => {
-  return ext === '.raml';
-}
+const isRamlFile = (ext: string) => ext === '.raml';

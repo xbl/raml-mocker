@@ -17,7 +17,9 @@ export const getDefinitionSchema = (apiJSON: Api): Schema => {
     const jsonObj = clazz.toJSON({ serializeMetadata: false });
     const { properties } = jsonObj[clazzName];
 
-    if (!properties) { return; }
+    if (!properties) {
+      return;
+    }
 
     const requiredArr = [];
     const schemaProperties = {};

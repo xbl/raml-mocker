@@ -1,4 +1,6 @@
-export default (entries: any[], condition: string): any[] =>
+import { HarEntry } from '@/models/harTypes';
+
+export default (entries: HarEntry[], condition: string): any[] =>
   entries
     .filter(({ request }) => {
       const { url } = request;

@@ -9,8 +9,8 @@
     "clean": "ts-node build/clean",
     "dev": "tsc --watch",
     "build": "npm run clean && tsc && npm run relative-path && npm run chmod && npm run copy-assets",
-    "lint": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts",
-    "lint:fix": "tslint -c tslint.json 'src/**/*.ts' ./test/**/*.ts --fix",
+    "lint": "eslint -c .eslintrc.js --ext .ts 'src/**/*.ts' ./test/**/*.ts",
+    "lint:fix": "eslint -c .eslintrc.js --ext .ts 'src/**/*.ts' ./test/**/*.ts --fix",
     "chmod": "chmod +x ./dist/bin/*",
     "test": "nyc ava --fail-fast -v",
     "test:watch": "ava --watch --fail-fast -v",
@@ -26,7 +26,6 @@
     "har-convert": "./dist/bin/har-convert.js"
   },
   "ava": {
-    "compileEnhancements": false,
     "extensions": [
       "ts"
     ],
@@ -35,51 +34,37 @@
       "tsconfig-paths/register"
     ]
   },
-  "nyc": {
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "**/*.d.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "require": [
-      "ts-node/register",
-      "tsconfig-paths/register"
-    ],
-    "reporter": [
-      "html",
-      "text-summary",
-      "json"
-    ],
-    "sourceMap": true,
-    "instrument": true
-  },
   "dependencies": {
     "ajv": "^6.9.1",
     "axios": "^0.18.0",
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
     "express": "^4.16.3",
-    "raml-1-parser": "^1.1.50"
+    "raml-1-parser": "^1.1.67",
+    "tslint": "^6.1.3"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/node": "^11.9.3",
-    "ava": "1.0.0-rc.1",
+    "@typescript-eslint/eslint-plugin": "^4.0.1",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.0.1",
+    "@typescript-eslint/parser": "^4.0.1",
+    "ava": "^3.12.1",
     "body-parser": "^1.19.0",
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
     "lodash": "^4.17.13",
-    "nyc": "^13.2.0",
+    "nyc": "^15.1.0",
     "path-to-regexp": "^3.0.0",
     "prettier": "^1.15.1",
     "shelljs": "^0.8.3",
     "sinon": "^7.3.0",
-    "ts-node": "^8.0.2",
-    "tsconfig-paths": "^3.8.0",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
     "tscpaths": "^0.0.7",
-    "tslint": "^5.12.1",
-    "typescript": "^3.3.3"
+    "typescript": "^4.0.2"
   },
   "repository": {
     "type": "git",

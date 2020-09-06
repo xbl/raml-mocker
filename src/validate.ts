@@ -27,7 +27,7 @@ export default class SchemaValidate {
     try {
       validate = this.ajv.compile(schema);
     } catch (error) {
-      if (error.missingRef) {
+      if (error instanceof Ajv.MissingRefError) {
         throw Error(`Missing custom type "${error.missingRef.split('/').pop()}"`);
       }
       throw error;

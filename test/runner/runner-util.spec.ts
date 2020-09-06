@@ -3,7 +3,7 @@ import { getResponseByStatusCode, sortByRunner, splitByParameter } from '@/runne
 import Response from '@/models/response';
 import RestAPI from '@/models/rest-api';
 
-test('When getResponseByStatusCode, Given Response Array, Then get a Response', async (t) => {
+test('When getResponseByStatusCode, Given Response Array, Then get a Response', (t) => {
   const respArr: Response[] = [
     {
       code: 200,
@@ -23,7 +23,7 @@ test('When getResponseByStatusCode, Given Response Array, Then get a Response', 
   t.deepEqual(result, expectResult);
 });
 
-test('When getResponseByStatusCode, Given Response Array, Then get undefined', async (t) => {
+test('When getResponseByStatusCode, Given Response Array, Then get undefined', (t) => {
   const respArr: Response[] = [
     {
       code: 200,
@@ -40,7 +40,7 @@ test('When getResponseByStatusCode, Given Response Array, Then get undefined', a
   t.deepEqual(result, expectResult);
 });
 
-test('When getResponseByStatusCode, Given empty Response Array, Then get undefined', async (t) => {
+test('When getResponseByStatusCode, Given empty Response Array, Then get undefined', (t) => {
   const respArr: Response[] = undefined;
 
   const expectResult = undefined;
@@ -48,7 +48,7 @@ test('When getResponseByStatusCode, Given empty Response Array, Then get undefin
   t.deepEqual(result, expectResult);
 });
 
-test('When sortByRunner, Given RestApi Array, Then get sort by runner', async (t) => {
+test('When sortByRunner, Given RestApi Array, Then get sort by runner', (t) => {
   const restApiArr: RestAPI[] = [
     {
       url: 'https://abc.com',
@@ -81,7 +81,7 @@ test('When sortByRunner, Given RestApi Array, Then get sort by runner', async (t
 });
 
 
-test('When sortByRunner, Given RestApi undefined Array, Then get undefined', async (t) => {
+test('When sortByRunner, Given RestApi undefined Array, Then get undefined', (t) => {
   const restApiArr: RestAPI[] = undefined;
 
   const expectResult: RestAPI[] = undefined;
@@ -89,18 +89,18 @@ test('When sortByRunner, Given RestApi undefined Array, Then get undefined', asy
   t.deepEqual(result, expectResult);
 });
 
-test('When splitByParameter, Given RestApi with one queryParameter, Then get RestApi Arr', async (t) => {
+test('When splitByParameter, Given RestApi with one queryParameter, Then get RestApi Arr', (t) => {
   const restApi: RestAPI = {
-      url: '/products',
-      method: 'get',
-      description: '商品列表',
-      queryParameters: [{
-        name: 'isStar',
-        example: 'true',
-        required: false,
-        type: 'boolean',
-      }],
-    };
+    url: '/products',
+    method: 'get',
+    description: '商品列表',
+    queryParameters: [{
+      name: 'isStar',
+      example: 'true',
+      required: false,
+      type: 'boolean',
+    }],
+  };
 
   const expectResult: RestAPI[] = [
     {
@@ -125,24 +125,24 @@ test('When splitByParameter, Given RestApi with one queryParameter, Then get Res
   t.deepEqual(result, expectResult);
 });
 
-test('When splitByParameter, Given RestApi with different queryParameter, Then get RestApi Arr', async (t) => {
+test('When splitByParameter, Given RestApi with different queryParameter, Then get RestApi Arr', (t) => {
   const restApi: RestAPI = {
-      url: '/products',
-      method: 'get',
-      description: '商品列表',
-      queryParameters: [{
-        name: 'isStar',
-        example: 'true',
-        required: false,
-        type: 'boolean',
-      },
-      {
-        name: 'isOk',
-        example: 'true',
-        required: false,
-        type: 'boolean',
-      }],
-    };
+    url: '/products',
+    method: 'get',
+    description: '商品列表',
+    queryParameters: [{
+      name: 'isStar',
+      example: 'true',
+      required: false,
+      type: 'boolean',
+    },
+    {
+      name: 'isOk',
+      example: 'true',
+      required: false,
+      type: 'boolean',
+    }],
+  };
 
   const expectResult: RestAPI[] = [
     {
@@ -194,13 +194,13 @@ test('When splitByParameter, Given RestApi with different queryParameter, Then g
   t.deepEqual(result, expectResult);
 });
 
-test('When splitByParameter, Given RestApi with no queryParameter, Then get RestApi Arr', async (t) => {
+test('When splitByParameter, Given RestApi with no queryParameter, Then get RestApi Arr', (t) => {
   const restApi: RestAPI = {
-      url: '/products',
-      method: 'get',
-      description: '商品列表',
-      queryParameters: [],
-    };
+    url: '/products',
+    method: 'get',
+    description: '商品列表',
+    queryParameters: [],
+  };
 
   const result = splitByParameter(restApi);
   t.deepEqual(result, [restApi]);

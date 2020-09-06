@@ -36,8 +36,10 @@ export const loadConfig = async (): Promise<Config> => {
     const config: Config = parseStrToConfig(configFile, str);
     return processConfigPath(config);
   } catch (error) {
-    // tslint:disable-next-line no-console
-    console.log(chalk`{red ${error.message}}`);
+    if (error && error instanceof Error) {
+      // eslint-disable-next-line  no-console
+      console.log(chalk`{red ${error.message}}`);
+    }
     process.exit(1);
     return Promise.reject(error);
   }

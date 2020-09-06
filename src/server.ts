@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.text({type: '*/*'}));
 
 app.use((req, res, next) => {
-  // tslint:disable no-console
+  // eslint-disable  no-console
   console.log('PATH: %s, METHOD: %s', req.path, req.method);
   next();
 });
@@ -24,7 +24,9 @@ const handler = (req, res, config, restApi: RestAPI) => {
     const [controller, methodName] = restApi.controller.split('#');
     const moduleCtrl = require(`${config.controller}/${controller}`);
     const fn = moduleCtrl[methodName];
-    if (typeof fn === 'function') { fn.call(app, req, res, restApi); }
+    if (typeof fn === 'function') {
+      fn.call(app, req, res, restApi);
+    }
     return;
   }
 
@@ -40,7 +42,9 @@ const handler = (req, res, config, restApi: RestAPI) => {
   }
 
   const { body } = response;
-  if (body.mimeType) { res.type(body.mimeType); }
+  if (body.mimeType) {
+    res.type(body.mimeType);
+  }
   res.status(response.code);
   if (Array.isArray(config.plugins)) {
     config.plugins.forEach((plugin) => {

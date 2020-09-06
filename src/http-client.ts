@@ -6,12 +6,13 @@ import { replaceUriParameters } from './util';
 
 export default class HttpClient {
 
-  constructor(host) {
+  constructor(host: string) {
     axios.defaults.baseURL = host;
   }
 
   send = async (restApi: RestAPI, uriParameters, queryParameter = {}, body = {}) => {
     let requestPath = restApi.url;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     if (!isEmpty(uriParameters)) {
       replaceUriParameters(requestPath, (match, expression) => {
         requestPath = requestPath.replace(match, uriParameters[expression]);
@@ -27,11 +28,13 @@ export default class HttpClient {
     const { runner } = restApi;
     if (runner) {
       const { after } = runner;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const afterModule = require(path.resolve(after));
       if (typeof afterModule === 'function') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         await afterModule(axios, response);
       }
     }
     return response;
-  }
+  };
 }

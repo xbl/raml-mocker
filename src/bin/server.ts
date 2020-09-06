@@ -2,11 +2,12 @@
 
 import http from 'http';
 import mocker from '../server';
+import Config from '@/models/config';
 
-process.on('message', (config) => {
+process.on('message', (config: Config) => {
   mocker.setConfig(config);
   const port = config.port || 3000;
-  // tslint:disable no-console
+  // eslint-disable  no-console
   http
     .createServer(mocker.app)
     .listen(port, () =>

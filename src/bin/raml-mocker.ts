@@ -2,18 +2,18 @@
 
 import path from 'path';
 import chokidar from 'chokidar';
-import { fork } from 'child_process';
+import { fork, ChildProcess } from 'child_process';
 import { loadConfig } from '@/util/config-util';
 
 const start = async () => {
   const config = await loadConfig();
-  let server = null;
+  let server: ChildProcess = null;
   const startServer = () => {
     server = fork(path.join(__dirname, './server'));
     server.send(config);
   };
   const restartServer = () => {
-    // tslint:disable no-console
+    // eslint-disable  no-console
     console.log('restart...');
     server.kill('SIGHUP');
     startServer();
@@ -28,4 +28,4 @@ const start = async () => {
     .on('unlink', restartServer);
 };
 
-start();
+void start();

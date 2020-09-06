@@ -71,7 +71,7 @@ types:
   t.deepEqual(getDefinitionSchema(apiJSON), definitionSchema);
 });
 
-test(`Given read raml And Product.productId has minLength When definitionSchema then got object`, (t) => {
+test('Given read raml And Product.productId has minLength When definitionSchema then got object', (t) => {
   const definitionSchema = {
     $id: '/definitionSchema',
     definitions: {

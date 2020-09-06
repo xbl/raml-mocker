@@ -11,13 +11,13 @@ args.forEach((val, index) => {
   }
 });
 
-const harPath = argsMap['-f'];
-const target = argsMap['-o'];
-const filter = argsMap['-filter'];
+const harPath: string = argsMap['-f'] as string;
+const target = argsMap['-o'] as string;
+const filter = argsMap['-filter'] as string;
 
 const convert = async () => {
   if (!harPath || !target) {
-    // tslint:disable no-console
+    // eslint-disable  no-console
     console.log(`
   har 转 raml:
   har-convert -f ./[har 文件].har -o ./raml/[目标].raml -filter /api/v1
@@ -35,7 +35,9 @@ const convert = async () => {
   }
   const har = await fs.readFile(harPath, 'utf-8');
   const restAPIArr = read(har, filter);
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   save(restAPIArr, target);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 convert();

@@ -11,7 +11,9 @@ import { TypeDeclaration, Api, Response as RamlResponse,
 import { isEmpty } from 'lodash';
 
 const getSchemaByType = (type): Schema => {
-  if (!type) { return undefined; }
+  if (!type) {
+    return undefined;
+  }
   const newType = type.replace('[]', '');
   if (newType === ANY_TYPE) {
     return undefined;
@@ -31,12 +33,18 @@ const getSchemaByType = (type): Schema => {
 };
 
 const getQueryParameters = (queryParameters): Parameter[] => {
-  if (!Array.isArray(queryParameters)) { return; }
+  if (!Array.isArray(queryParameters)) {
+    return;
+  }
   const newParams: Parameter[] = [];
   queryParameters.forEach((param) => {
-    if (!param.example()) { return; }
+    if (!param.example()) {
+      return;
+    }
     const value = param.example().value();
-    if (!value) { return; }
+    if (!value) {
+      return;
+    }
     // TODO: 文档中说返回的是字符串，结果返回的是数组：
     // https://raml-org.github.io/raml-js-parser-2/interfaces/_src_raml1_artifacts_raml08parserapi_.parameter.html#type
     let type = param.type();
@@ -49,20 +57,26 @@ const getQueryParameters = (queryParameters): Parameter[] => {
 };
 
 const getPostBody = ([body]: TypeDeclaration[]): Body => {
-  if (!body || !body.example()) { return; }
+  if (!body || !body.example()) {
+    return;
+  }
   const value = body.example().value();
-  if (!value) { return; }
+  if (!value) {
+    return;
+  }
   return {
     mimeType: body.name(),
     text: value,
   };
 };
 
-export const getAnnotationByName = (name, method) => {
+export const getAnnotationByName = (name, method): unknown => {
   let annotationObj;
   method.annotations().forEach((annotation) => {
     const json = annotation.toJSON();
-    if (json.name !== name) { return; }
+    if (json.name !== name) {
+      return;
+    }
     annotationObj = json.structuredValue;
   });
   return annotationObj;
@@ -74,9 +88,13 @@ const getUriParameters = (resource, method) => {
   if (!isEmpty(params)) {
     Object.keys(params).forEach((key) => {
       const param = params[key];
-      if (!param) { return; }
+      if (!param) {
+        return;
+      }
       const example = String(param.example);
-      if (param && example) { uriParameters[key] = example; }
+      if (param && example) {
+        uriParameters[key] = example;
+      }
     });
   }
 
@@ -85,7 +103,9 @@ const getUriParameters = (resource, method) => {
     const name = parameter.name();
     const example = parameter.example();
     let value = '';
-    if (!example) { return; }
+    if (!example) {
+      return;
+    }
     value = example.value();
     uriParameters[name] = value;
   });
@@ -94,7 +114,7 @@ const getUriParameters = (resource, method) => {
 };
 
 const getHeaderLocation = (response: RamlResponse) => {
-  let redirectURL;
+  let redirectURL: string;
   response.headers().forEach((typeDeclaration) => {
     if (typeDeclaration.name().toLowerCase() === 'location') {
       redirectURL = typeDeclaration.type()[0];
@@ -105,7 +125,9 @@ const getHeaderLocation = (response: RamlResponse) => {
 
 const getResponseByBody = (code, body: TypeDeclaration): Response => {
   const example = body.example();
-  if (!example) { return; }
+  if (!example) {
+    return;
+  }
   const mimeType = body.name();
   const type = body.type().pop();
   const restApiResp: Response = {
@@ -121,7 +143,7 @@ const getResponseByBody = (code, body: TypeDeclaration): Response => {
 };
 
 const getRestApiByMethod = (url: string, method: Method, resource: Resource): RestAPI => {
-  const restApi: RestAPI = { url, method: method.method() as string };
+  const restApi: RestAPI = { url, method: method.method() };
   const description = method.description() && method.description().value();
   setProps(restApi, 'description', description);
 
@@ -157,7 +179,7 @@ const getRestApiByMethod = (url: string, method: Method, resource: Resource): Re
 export const getRestApiArr = (apiJSON: Api): RestAPI[] => {
   let restApiArr: RestAPI[] = [];
   apiJSON.allResources().forEach((resource: Resource) => {
-    const url = getPathname(resource.absoluteUri() as string);
+    const url = getPathname(resource.absoluteUri());
     restApiArr = restApiArr.concat(resource.methods()
       .map((method: Method) => getRestApiByMethod(url, method, resource)));
   });

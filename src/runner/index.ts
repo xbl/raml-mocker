@@ -21,7 +21,7 @@ import { AxiosResponse } from 'axios';
 import Schema from '@/models/schema';
 
 const splitRestApiArr = (apiJSON: Api): RestAPI[] => {
-  const result = [];
+  const result: RestAPI[] = [];
   getRestApiArr(apiJSON).forEach((restApi: RestAPI) => {
     result.push(...splitByParameter(restApi));
   });
@@ -60,7 +60,7 @@ export default class Runner {
     }
     this.definitionSchema = getDefinitionSchema(apiJSON);
     this.schemaValidate = new SchemaValidate(this.definitionSchema);
-    this.runByRunner();
+    void this.runByRunner();
   }
 
   validateResponse = (webApi, response) => {
@@ -73,7 +73,7 @@ export default class Runner {
       throw new Error(`Can\'t find responses by status ${status}`);
     }
     this.schemaValidate.execute(resp.schema, data);
-  }
+  };
 
   logError = (err, outputRequest: OutputRequest) => {
     if (err instanceof ValidateWarning) {
@@ -81,7 +81,7 @@ export default class Runner {
       return ;
     }
     this.output.push(Output.ERROR, outputRequest, err.message || err);
-  }
+  };
 
   send = async (webApi: RestAPI) => {
     const outputRequest: OutputRequest =
@@ -94,16 +94,17 @@ export default class Runner {
     } catch (err) {
       this.logError(err, outputRequest);
     }
-  }
+  };
 
-  runByRunner = async () => {
-    this.restApiArr.forEach(async (webApi) => {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  runByRunner = async (): Promise<void> => {
+    for (const webApi of this.restApiArr) {
       if (webApi.runner) {
         await this.send(webApi);
         return;
       }
-      this.send(webApi);
-    });
-  }
+      void this.send(webApi);
+    }
+  };
 
 }

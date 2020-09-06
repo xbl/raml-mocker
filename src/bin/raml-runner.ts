@@ -14,7 +14,7 @@ const start = async () => {
   });
 
   const runner = new Runner(config, output);
-  runner.start();
+  void runner.start();
 };
 
-start();
+void start();
